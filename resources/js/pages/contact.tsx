@@ -1,0 +1,161 @@
+import React from 'react';
+import AppMenuTemplate from '@/layouts/app/app-menu-layout';
+import { Head, usePage, router } from '@inertiajs/react';
+import SectionHeading from '@/components/section-heading';
+import ContactForm from '@/components/contact-form';
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+interface Faq {
+  id: number;
+  question: string;
+  answer: string;
+}
+
+interface PaginationLink {
+  url: string | null;
+  label: string;
+  active: boolean;
+}
+
+interface PageProps {
+  faqs: {
+    data: Faq[];
+    links: PaginationLink[];
+  };
+  [key: string]: unknown;
+}
+
+export default function ContactPage() {
+  const { faqs } = usePage<PageProps>().props;
+
+  const handlePagination = (url: string | null) => {
+    if (url) router.visit(url, { preserveScroll: true });
+  };
+
+  return (
+    <AppMenuTemplate>
+      <Head title="Contactez-nous" />
+
+      {/* Hero Section */}
+      <section className="py-20 md:py-28 text-white">
+        <div className="bg-orange-gk container mt-3 p-6">
+          <div className="max-w-2xl animate-slide-in">
+            <h1 className="text-playfair text-[60px] leading-tight mb-6">Contactez-nous</h1>
+            <p className="text-white/90 text-[20px] mb-8">
+              Nous sommes impatients de discuter de votre projet et de répondre à toutes vos questions. N'hésitez pas à nous contacter.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form & Info Section */}
+      <section className="py-20 bg-white">
+        <div className="container">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <SectionHeading
+                subtitle="Écrivez-nous"
+                title="Envoyez-nous un message"
+                description="Remplissez ce formulaire pour nous parler de vos besoins et nous vous répondrons dans les plus brefs délais."
+              />
+              <ContactForm />
+            </div>
+
+            <div className="space-y-10">
+              <SectionHeading
+                subtitle="Nos coordonnées"
+                title="Comment nous joindre"
+                description="Plusieurs moyens de nous contacter pour discuter de votre projet."
+              />
+
+              <div className="space-y-6">
+                <div className="flex items-start">
+                  <MapPin className="h-6 w-6 text-accent mr-4 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-1">Adresse</h4>
+                    <p className="text-muted-foreground">123 Avenue des Services<br />75000 Paris, France</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <Phone className="h-6 w-6 text-accent mr-4 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-1">Téléphone</h4>
+                    <p className="text-muted-foreground">+33 1 23 45 67 89</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <Mail className="h-6 w-6 text-accent mr-4 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-1">Email</h4>
+                    <p className="text-muted-foreground">contact@guiloservices.fr</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <Clock className="h-6 w-6 text-accent mr-4 mt-1" />
+                  <div>
+                    <h4 className="font-medium mb-1">Horaires</h4>
+                    <p className="text-muted-foreground">
+                      Lundi - Vendredi: 9h00 - 18h00<br />Samedi: 10h00 - 16h00<br />Dimanche: Fermé
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="font-medium mb-4">Nous trouver</h4>
+                <div className="h-64 rounded-lg overflow-hidden shadow-md">
+                <iframe
+                    title="Map"
+                    className="w-full h-full border-0"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.76457430334!2d2.2769948739866728!3d48.85894658138793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!5e0!3m2!1sen!2sus!4v1699374764410!5m2!1sen!2sus"
+                    allowFullScreen
+                    loading="lazy"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section dynamique si données disponibles */}
+      {faqs?.data?.length > 0 && (
+        <section className="py-20 bg-secondary/50">
+          <div className="container">
+            <SectionHeading
+              subtitle="FAQ"
+              title="Questions fréquentes"
+              description="Vous avez des questions ? Nous avons les réponses. Voici quelques questions fréquemment posées par nos clients."
+              centered
+            />
+
+            <div className="max-w-3xl mx-auto mt-10 space-y-6">
+              {faqs.data.map((faq) => (
+                <div key={faq.id} className="bg-white p-6 rounded-lg shadow-sm">
+                  <h4 className="font-medium mb-2">{faq.question}</h4>
+                  <p className="text-muted-foreground">{faq.answer}</p>
+                </div>
+              ))}
+
+              <div className="flex justify-center gap-2 mt-6">
+                {faqs.links.map((link, idx) => (
+                  <Button
+                    key={idx}
+                    variant={link.active ? 'default' : 'outline'}
+                    disabled={!link.url}
+                    onClick={() => handlePagination(link.url)}
+                    dangerouslySetInnerHTML={{ __html: link.label }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+    </AppMenuTemplate>
+  );
+}
