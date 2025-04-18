@@ -3,7 +3,7 @@ import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
+// import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -21,7 +21,8 @@ interface LoginProps {
     canResetPassword: boolean;
 }
 
-export default function Login({ status, canResetPassword }: LoginProps) {
+// export default function Login({ status  , canResetPassword }: LoginProps) {
+   export default function Login({ status }: LoginProps) {
     const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
@@ -62,12 +63,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                     <div className="grid gap-2">
                         <div className="flex items-center">
-                            <Label htmlFor="password">Mot de passe</Label>
+                            {/* <Label htmlFor="password">Mot de passe</Label>
                             {canResetPassword && (
                                 <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
                                     Mot de passe oublié ?
                                 </TextLink>
-                            )}
+                            )} */}
                         </div>
                         <Input
                             id="password"
@@ -105,12 +106,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     </Button>
                 </div>
 
-                <div className="text-muted-foreground text-center text-sm">
+                {/* <div className="text-muted-foreground text-center text-sm">
                     Vous n'avez pas encore de compte ?{' '}
                     <TextLink href={route('register')} tabIndex={5}>
                         Créer un compte
                     </TextLink>
-                </div>
+                </div> */}
             </form>
 
             {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
