@@ -70,6 +70,12 @@ export default function UserManager() {
   });
   const { toast } = useToast();
   const userRole = auth.user.role;
+  const roleLabel: { [key: string]: string } = {
+    admin: 'Admin',
+    editor: 'Éditeur',
+    viewer: 'Visiteur',
+  };
+
 
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -262,7 +268,8 @@ export default function UserManager() {
                   <div>
                     <p>{u.name}</p>
                     <p className="text-sm text-muted-foreground">{u.email}</p>
-                    <p className="text-xs text-blue-500 capitalize">{u.role}</p>
+                    <p className="text-xs text-blue-500 capitalize">{roleLabel[u.role] || u.role}</p>
+
                   </div>
                   {userRole === 'admin' && (
                     <div className="flex gap-2">
@@ -275,7 +282,7 @@ export default function UserManager() {
                     </div>
                   )}
                 </li>
-                
+
                   ))}
                 </ul>
 
