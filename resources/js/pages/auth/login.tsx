@@ -108,7 +108,7 @@ interface LoginProps {
 
                 {/* <div className="text-muted-foreground text-center text-sm">
                     Vous n'avez pas encore de compte ?{' '}
-                    <TextLink href={route('register')} tabIndex={5}>
+                    <TextLink href={route('creation')} tabIndex={5}>
                         Créer un compte
                     </TextLink>
                 </div> */}
