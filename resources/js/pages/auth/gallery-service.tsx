@@ -32,32 +32,42 @@ interface PaginationLink {
   active: boolean;
 }
 
+interface PageProps {
+  types: ServiceType[];
+  items: {
+    data: ServiceItem[];
+    links: PaginationLink[];
+  };
+  auth: {
+    user: {
+      role: 'admin' | 'editor' | 'viewer';
+    };
+  };
+  [key: string]: unknown;
+  flash?: {
+    success?: string;
+  };
+}
+
 export default function ServiceDashboard() {
   const { toast } = useToast();
-  const { types, items, flash } = usePage<{
-    // types: {
-    //   data: ServiceType[];
-    //   links: PaginationLink[];
-    // };
-    types: ServiceType[];
-    items: {
-      data: ServiceItem[];
-      links: PaginationLink[];
-    };
-    flash: { success?: string };
-  }>().props;
+  const { types, items, flash, auth } = usePage<PageProps>().props;
 
   const [editing, setEditing] = useState<ServiceItem | null>(null);
   const [search, setSearch] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [toDeleteId, setToDeleteId] = useState<number | null>(null);
 
-  const { data, setData, reset } = useForm({
+  const { data, setData, reset, processing } = useForm({
     title: '',
     description: '',
     type_id: '',
     image: null as File | null,
   });
+
+  const isAdmin = auth.user.role === 'admin';
+  const isEditor = auth.user.role === 'editor';
+//   const isViewer = auth.user.role === 'viewer';
 
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -128,68 +138,79 @@ export default function ServiceDashboard() {
       <Head title="Services" />
 
       <div className="flex flex-col gap-4 p-4">
-        <div className="flex justify-end">
+
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {(isAdmin || isEditor) && (
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{editing ? 'Modifier' : 'Ajouter'} un service</CardTitle>
+                  <CardDescription>
+                    {editing ? 'Modifier les infos du service' : 'Créer un nouveau service'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
+                    <div>
+                      <Label>Titre</Label>
+                      <Input value={data.title} onChange={(e) => setData('title', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label>Description</Label>
+                      <Input value={data.description} onChange={(e) => setData('description', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label>Type</Label>
+                      <Select value={data.type_id} onValueChange={(value) => setData('type_id', value)}>
+                        <SelectTrigger><SelectValue placeholder="Choisir un type" /></SelectTrigger>
+                        <SelectContent>
+                          {types.map((type) => (
+                            <SelectItem key={type.id} value={type.id.toString()}>
+                              {type.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Image</Label>
+                      <Input type="file" accept="image/*" onChange={(e) => setData('image', e.target.files?.[0] || null)} />
+                    </div>
+                    <div className="flex gap-2 pt-2">
+                      <Button type="submit" className="flex-1" disabled={processing}>
+                        {editing ? <><Edit className="w-4 h-4 mr-2" /> Modifier</> : <><Plus className="w-4 h-4 mr-2" /> Ajouter</>}
+                      </Button>
+                      {editing && (
+                        <Button variant="outline" onClick={resetForm}>Annuler</Button>
+                      )}
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          <div className="md:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Liste des services</CardTitle>
+
+                {/* <div className="flex justify-end">
           <Input
             placeholder="Rechercher un service..."
             className="w-full max-w-sm"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>{editing ? 'Modifier' : 'Ajouter'} un service</CardTitle>
-                <CardDescription>
-                  {editing ? 'Modifier les infos du service' : 'Créer un nouveau service'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
-                  <div>
-                    <Label>Titre</Label>
-                    <Input value={data.title} onChange={(e) => setData('title', e.target.value)} />
-                  </div>
-                  <div>
-                    <Label>Description</Label>
-                    <Input value={data.description} onChange={(e) => setData('description', e.target.value)} />
-                  </div>
-                  <div>
-                    <Label>Type</Label>
-                    <Select value={data.type_id} onValueChange={(value) => setData('type_id', value)}>
-                      <SelectTrigger><SelectValue placeholder="Choisir un type" /></SelectTrigger>
-                      <SelectContent>
-                        {types.map((type) => (
-                        <SelectItem key={type.id} value={type.id.toString()}>
-                            {type.name}
-                        </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Image</Label>
-                    <Input type="file" accept="image/*" onChange={(e) => setData('image', e.target.files?.[0] || null)} />
-                  </div>
-                  <div className="flex gap-2 pt-2">
-                    <Button type="submit" className="flex-1">
-                      {editing ? <><Edit className="w-4 h-4 mr-2" /> Modifier</> : <><Plus className="w-4 h-4 mr-2" /> Ajouter</>}
-                    </Button>
-                    {editing && (
-                      <Button variant="outline" onClick={resetForm}>Annuler</Button>
-                    )}
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="md:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Liste des services</CardTitle>
+        </div> */}
+                <div className="pt-2">
+                                  <Input
+                                    placeholder="Rechercher une question..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                  />
+                                </div>
               </CardHeader>
               <CardContent>
                 <ul className="divide-y">
@@ -207,37 +228,40 @@ export default function ServiceDashboard() {
                           />
                         )}
                       </div>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(item)}>
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => {
-                          setToDeleteId(item.id);
-                          setShowConfirmModal(true);
-                        }}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                      {(isAdmin || isEditor) && (
+                        <div className="flex gap-2">
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(item)}>
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          {isAdmin && (
+                            <Button variant="ghost" size="icon" onClick={() => {
+                              setToDeleteId(item.id);
+                              setShowConfirmModal(true);
+                            }}>
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
               </CardContent>
             </Card>
             <div className="flex justify-center mt-6 gap-2 flex-wrap">
-                {items.links.map((link, index) => (
-                    <Button
-                    key={index}
-                    variant={link.active ? "default" : "outline"}
-                    disabled={!link.url}
-                    onClick={() => {
-                        if (link.url) router.get(link.url);
-                    }}
-                    dangerouslySetInnerHTML={{ __html: link.label }}
-                    className="min-w-[36px]"
-                    />
-                ))}
-                </div>
-
+              {items.links.map((link, index) => (
+                <Button
+                  key={index}
+                  variant={link.active ? 'default' : 'outline'}
+                  disabled={!link.url}
+                  onClick={() => {
+                    if (link.url) router.get(link.url);
+                  }}
+                  dangerouslySetInnerHTML={{ __html: link.label }}
+                  className="min-w-[36px]"
+                />
+              ))}
+            </div>
           </div>
         </div>
 

@@ -33,14 +33,23 @@ interface PageProps {
     data: FaqType[];
     links: PaginationLink[];
   };
-  [key: string]: unknown;
+  auth: {
+    user: {
+      role: 'admin' | 'editor' | 'viewer';
+    };
+  };
   flash?: {
     success?: string;
   };
+  [key: string]: unknown;
 }
 
 export default function ContactFaqManager() {
-  const { faqs, flash } = usePage<PageProps>().props;
+  const { faqs, flash, auth } = usePage<PageProps>().props;
+  const isAdmin = auth.user.role === 'admin';
+  const isEditor = auth.user.role === 'editor';
+//   const isViewer = auth.user.role === 'viewer';
+
   const [editing, setEditing] = useState<FaqType | null>(null);
   const [search, setSearch] = useState('');
   const [faqToDelete, setFaqToDelete] = useState<number | null>(null);
@@ -64,7 +73,6 @@ export default function ContactFaqManager() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (editing) {
       put(`/contact-dashboard/${editing.id}`, {
         preserveScroll: true,
@@ -85,10 +93,7 @@ export default function ContactFaqManager() {
 
   const handleEdit = (faq: FaqType) => {
     setEditing(faq);
-    setData({
-      question: faq.question,
-      answer: faq.answer,
-    });
+    setData({ question: faq.question, answer: faq.answer });
   };
 
   const confirmDelete = () => {
@@ -101,9 +106,9 @@ export default function ContactFaqManager() {
     }
   };
 
-   const handlePageChange = (url: string | null) => {
-      if (url) router.visit(url, { preserveScroll: true });
-    };
+  const handlePageChange = (url: string | null) => {
+    if (url) router.visit(url, { preserveScroll: true });
+  };
 
   const filteredFaqs = faqs.data.filter((faq) =>
     faq.question.toLowerCase().includes(search.toLowerCase())
@@ -115,56 +120,54 @@ export default function ContactFaqManager() {
 
       <div className="flex flex-col gap-4 p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>{editing ? 'Modifier' : 'Ajouter'} une question</CardTitle>
-                <CardDescription>
-                  {editing ? 'Modifiez la FAQ existante' : 'Ajoutez une nouvelle question'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Label htmlFor="question">Question</Label>
-                    <Input
-                      id="question"
-                      value={data.question}
-                      onChange={(e) => setData('question', e.target.value)}
-                      placeholder="Ex: Combien de temps à l'avance dois-je réserver ?"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="answer">Réponse</Label>
-                    <Input
-                      id="answer"
-                      value={data.answer}
-                      onChange={(e) => setData('answer', e.target.value)}
-                      placeholder="Ex: Nous recommandons 3 mois à l'avance..."
-                    />
-                  </div>
+          {(isAdmin || isEditor) && (
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{editing ? 'Modifier' : 'Ajouter'} une question</CardTitle>
+                  <CardDescription>
+                    {editing ? 'Modifiez la FAQ existante' : 'Ajoutez une nouvelle question'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="question">Question</Label>
+                      <Input
+                        id="question"
+                        value={data.question}
+                        onChange={(e) => setData('question', e.target.value)}
+                        placeholder="Ex: Combien de temps à l'avance dois-je réserver ?"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="answer">Réponse</Label>
+                      <Input
+                        id="answer"
+                        value={data.answer}
+                        onChange={(e) => setData('answer', e.target.value)}
+                        placeholder="Ex: Nous recommandons 3 mois à l'avance..."
+                      />
+                    </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Button type="submit" className="flex-1">
-                      {editing ? <><Edit className="h-4 w-4 mr-2" /> Modifier</> : <><Plus className="h-4 w-4 mr-2" /> Ajouter</>}
-                    </Button>
-                    {editing && (
-                      <Button variant="outline" type="button" onClick={resetForm}>
-                        Annuler
+                    <div className="flex gap-2 pt-2">
+                      <Button type="submit" className="flex-1">
+                        {editing ? <><Edit className="h-4 w-4 mr-2" /> Modifier</> : <><Plus className="h-4 w-4 mr-2" /> Ajouter</>}
                       </Button>
-                    )}
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
+                      {editing && (
+                        <Button variant="outline" type="button" onClick={resetForm}>Annuler</Button>
+                      )}
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="flex justify-between items-center">
-                  Liste des questions
-                </CardTitle>
+                <CardTitle className="flex justify-between items-center">Liste des questions</CardTitle>
                 <div className="pt-2">
                   <Input
                     placeholder="Rechercher une question..."
@@ -181,17 +184,21 @@ export default function ContactFaqManager() {
                         <strong>{faq.question}</strong>
                         <p className="text-muted-foreground text-sm">{faq.answer}</p>
                       </div>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(faq)}>
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => {
-                          setFaqToDelete(faq.id);
-                          setShowConfirmModal(true);
-                        }}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      {(isAdmin || isEditor) && (
+                        <div className="flex gap-2">
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(faq)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          {isAdmin && (
+                            <Button variant="ghost" size="icon" onClick={() => {
+                              setFaqToDelete(faq.id);
+                              setShowConfirmModal(true);
+                            }}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -201,16 +208,16 @@ export default function ContactFaqManager() {
                 )}
 
                 <div className="flex justify-center gap-2 mt-6">
-                                  {faqs.links.map((link, idx) => (
-                                    <Button
-                                      key={idx}
-                                      variant={link.active ? 'default' : 'outline'}
-                                      disabled={!link.url}
-                                      dangerouslySetInnerHTML={{ __html: link.label }}
-                                      onClick={() => handlePageChange(link.url)}
-                                    />
-                                  ))}
-                                </div>
+                  {faqs.links.map((link, idx) => (
+                    <Button
+                      key={idx}
+                      variant={link.active ? 'default' : 'outline'}
+                      disabled={!link.url}
+                      dangerouslySetInnerHTML={{ __html: link.label }}
+                      onClick={() => handlePageChange(link.url)}
+                    />
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>

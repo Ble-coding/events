@@ -36,6 +36,11 @@ interface PageProps extends InertiaPageProps {
     current_page: number;
     last_page: number;
   };
+  auth: {
+    user: {
+      role: 'admin' | 'editor' | 'viewer';
+    };
+  };
   flash?: {
     success?: string;
   };
@@ -44,12 +49,14 @@ interface PageProps extends InertiaPageProps {
 export default function ServiceTypeManager() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [typeToDelete, setTypeToDelete] = useState<number | null>(null);
-  const { types, flash } = usePage<PageProps>().props;
+  const { types, flash, auth } = usePage<PageProps>().props;
   const [editingType, setEditingType] = useState<ServiceType | null>(null);
   const [search, setSearch] = useState('');
-  const { data, setData, post, put, reset } = useForm({  name: '',
-    description: '', });
+  const { data, setData, post, put, reset } = useForm({ name: '', description: '' });
   const { toast } = useToast();
+
+  const isAdmin = auth.user.role === 'admin';
+  const isEditor = auth.user.role === 'editor';
 
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -64,12 +71,10 @@ export default function ServiceTypeManager() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!data.name.trim()) {
       toast({ title: 'Veuillez entrer un nom de type de service', variant: 'destructive' });
       return;
     }
-
     if (editingType) {
       put(`/services-types/${editingType.id}`, {
         preserveScroll: true,
@@ -90,10 +95,7 @@ export default function ServiceTypeManager() {
 
   const handleEdit = (type: ServiceType) => {
     setEditingType(type);
-    setData({
-        name: type.name,
-        description: type.description || '',
-      });
+    setData({ name: type.name, description: type.description || '' });
   };
 
   const openDeleteModal = (id: number) => {
@@ -103,9 +105,7 @@ export default function ServiceTypeManager() {
 
   const confirmDelete = () => {
     if (typeToDelete !== null) {
-      router.delete(`/services-types/${typeToDelete}`, {
-        preserveScroll: true,
-      });
+      router.delete(`/services-types/${typeToDelete}`, { preserveScroll: true });
       setShowConfirmModal(false);
       setTypeToDelete(null);
     }
@@ -126,60 +126,56 @@ export default function ServiceTypeManager() {
 
       <div className="flex flex-col gap-4 p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>{editingType ? 'Modifier' : 'Ajouter'} un type de service</CardTitle>
-                <CardDescription>
-                  {editingType
-                    ? 'Modifiez les informations du type'
-                    : 'Ajoutez un nouveau type de service'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">Nom</Label>
-                    <Input
-                      id="name"
-                      value={data.name}
-                      onChange={(e) => setData('name', e.target.value)}
-                      placeholder="Ex: Organisation de mariages"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="description">Description</Label>
-                    <Input
+          {(isAdmin || isEditor) && (
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{editingType ? 'Modifier' : 'Ajouter'} un type de service</CardTitle>
+                  <CardDescription>
+                    {editingType
+                      ? 'Modifiez les informations du type'
+                      : 'Ajoutez un nouveau type de service'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="name">Nom</Label>
+                      <Input
+                        id="name"
+                        value={data.name}
+                        onChange={(e) => setData('name', e.target.value)}
+                        placeholder="Ex: Organisation de mariages"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="description">Description</Label>
+                      <Input
                         id="description"
                         value={data.description}
                         onChange={(e) => setData('description', e.target.value)}
                         placeholder="Ex: Services haut de gamme pour événements privés"
-                    />
+                      />
                     </div>
-
-
-                  <div className="flex gap-2 pt-2">
-                    <Button type="submit" className="flex-1">
-                      {editingType ? (
-                        <>
-                          <Edit className="h-4 w-4 mr-2" /> Modifier
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="h-4 w-4 mr-2" /> Ajouter
-                        </>
-                      )}
-                    </Button>
-                    {editingType && (
-                      <Button variant="outline" type="button" onClick={resetForm}>
-                        Annuler
+                    <div className="flex gap-2 pt-2">
+                      <Button type="submit" className="flex-1">
+                        {editingType ? (
+                          <><Edit className="h-4 w-4 mr-2" /> Modifier</>
+                        ) : (
+                          <><Plus className="h-4 w-4 mr-2" /> Ajouter</>
+                        )}
                       </Button>
-                    )}
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
+                      {editingType && (
+                        <Button variant="outline" type="button" onClick={resetForm}>
+                          Annuler
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           <div>
             <Card>
@@ -195,24 +191,28 @@ export default function ServiceTypeManager() {
               </CardHeader>
               <CardContent>
                 <ul className="divide-y">
-                {filteredTypes.map((type) => (
+                  {filteredTypes.map((type) => (
                     <li key={type.id} className="flex justify-between items-start py-2">
-                        <div className="flex-1">
+                      <div className="flex-1">
                         <span className="block text-sm font-medium">{type.name}</span>
                         {type.description && (
-                            <p className="text-xs text-muted-foreground">{type.description}</p>
+                          <p className="text-xs text-muted-foreground">{type.description}</p>
                         )}
-                        </div>
+                      </div>
+                      {(isAdmin || isEditor) && (
                         <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(type)}>
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(type)}>
                             <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => openDeleteModal(type.id)}>
-                            <Trash2 className="h-4 w-4" />
-                        </Button>
+                          </Button>
+                          {isAdmin && (
+                            <Button variant="ghost" size="icon" onClick={() => openDeleteModal(type.id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
+                      )}
                     </li>
-                ))}
+                  ))}
                 </ul>
 
                 {filteredTypes.length === 0 && (

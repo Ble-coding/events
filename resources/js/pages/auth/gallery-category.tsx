@@ -29,6 +29,11 @@ interface PaginationLink {
 }
 
 interface PageProps extends InertiaPageProps {
+  auth: {
+    user: {
+      role: string;
+    };
+  };
   categories: {
     data: CategoryType[];
     links: PaginationLink[];
@@ -43,11 +48,12 @@ interface PageProps extends InertiaPageProps {
 export default function GalleryCategoryManager() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState<number | null>(null);
-  const { categories, flash } = usePage<PageProps>().props;
+  const { auth, categories, flash } = usePage<PageProps>().props;
   const [editingCategory, setEditingCategory] = useState<CategoryType | null>(null);
   const [search, setSearch] = useState('');
   const { data, setData, post, put, reset } = useForm({ name: '' });
   const { toast } = useToast();
+  const userRole = auth.user.role;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -87,17 +93,21 @@ export default function GalleryCategoryManager() {
   };
 
   const handleEdit = (category: CategoryType) => {
-    setEditingCategory(category);
-    setData('name', category.name);
+    if (userRole === 'admin' || userRole === 'editor') {
+      setEditingCategory(category);
+      setData('name', category.name);
+    }
   };
 
   const openDeleteModal = (id: number) => {
-    setCategoryToDelete(id);
-    setShowConfirmModal(true);
+    if (userRole === 'admin') {
+      setCategoryToDelete(id);
+      setShowConfirmModal(true);
+    }
   };
 
   const confirmDelete = () => {
-    if (categoryToDelete !== null) {
+    if (categoryToDelete !== null && userRole === 'admin') {
       router.delete(`/categories/${categoryToDelete}`, {
         preserveScroll: true,
       });
@@ -120,44 +130,46 @@ export default function GalleryCategoryManager() {
 
       <div className="flex flex-col gap-4 p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>{editingCategory ? 'Modifier' : 'Ajouter'} une catégorie</CardTitle>
-                <CardDescription>
-                  {editingCategory ? 'Modifiez la catégorie' : 'Ajoutez une nouvelle catégorie'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">Nom</Label>
-                    <Input
-                      id="name"
-                      value={data.name}
-                      onChange={(e) => setData('name', e.target.value)}
-                      placeholder="Ex: Mariage"
-                    />
-                  </div>
+          {(userRole === 'admin' || userRole === 'editor') && (
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{editingCategory ? 'Modifier' : 'Ajouter'} une catégorie</CardTitle>
+                  <CardDescription>
+                    {editingCategory ? 'Modifiez la catégorie' : 'Ajoutez une nouvelle catégorie'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="name">Nom</Label>
+                      <Input
+                        id="name"
+                        value={data.name}
+                        onChange={(e) => setData('name', e.target.value)}
+                        placeholder="Ex: Mariage"
+                      />
+                    </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Button type="submit" className="flex-1">
-                      {editingCategory ? (
-                        <><Edit className="h-4 w-4 mr-2" /> Modifier</>
-                      ) : (
-                        <><Plus className="h-4 w-4 mr-2" /> Ajouter</>
-                      )}
-                    </Button>
-                    {editingCategory && (
-                      <Button variant="outline" type="button" onClick={resetForm}>
-                        Annuler
+                    <div className="flex gap-2 pt-2">
+                      <Button type="submit" className="flex-1">
+                        {editingCategory ? (
+                          <><Edit className="h-4 w-4 mr-2" /> Modifier</>
+                        ) : (
+                          <><Plus className="h-4 w-4 mr-2" /> Ajouter</>
+                        )}
                       </Button>
-                    )}
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
+                      {editingCategory && (
+                        <Button variant="outline" type="button" onClick={resetForm}>
+                          Annuler
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           <div>
             <Card>
@@ -178,14 +190,18 @@ export default function GalleryCategoryManager() {
                   {filteredCategories.map((cat) => (
                     <li key={cat.id} className="flex justify-between items-center py-2">
                       <span>{cat.name}</span>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(cat)}>
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => openDeleteModal(cat.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      {(userRole === 'admin' || userRole === 'editor') && (
+                        <div className="flex gap-2">
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(cat)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          {userRole === 'admin' && (
+                            <Button variant="ghost" size="icon" onClick={() => openDeleteModal(cat.id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>

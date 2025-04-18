@@ -8,7 +8,7 @@ import {
     BookOpen,
     Home,
     Folder, HelpCircle,
-     LayoutGrid, Book,
+     LayoutGrid, Book, User,
      QuoteIcon} from 'lucide-react';
 import AppLogoDash from './app-logo-dash';
 
@@ -42,6 +42,11 @@ const mainNavItems: NavItem[] = [
         title: 'Faqs',
         href: '/contact-dashboard',
         icon: HelpCircle,
+    },
+    {
+        title: 'Utilisateurs',
+        href: '/utilisateurs-dashboard',
+        icon: User,
     },
     {
         title: 'Guilo\'s Services',

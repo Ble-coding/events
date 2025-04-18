@@ -30,7 +30,7 @@ Route::get('/services', [ServiceController::class, 'getServices'])->name('servic
 Route::get('/galerie', [GalleryController::class, 'getGaleries'])->name('galerie');
 Route::get('/contact', [ContactController::class, 'getFaq'])->name('contact');
 
-Route::post('/contact-message', [ContactController::class, 'sendMessage']);
+Route::post('/contact-message', [ContactController::class, 'sendMessage'])->name('contact.message');
 
 // Route::get('/galerie', function () {
 //     return Inertia::render('galeries');
@@ -67,6 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('contact-dashboard', ContactController::class);
     Route::resource('services-dashboard', ServiceController::class);
     Route::resource('services-types', ServiceTypeController::class);
+
 });
 
 require __DIR__.'/settings.php';

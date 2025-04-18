@@ -42,8 +42,10 @@ class ContactController extends Controller
             'phone' => 'nullable|string|max:20',
             'message' => 'required|string',
         ]);
+        \Log::info('Formulaire reçu', $validated);
 
-        Mail::to('contact@guiloservices.fr')->send(new ContactMessageMail($validated));
+
+        Mail::to('levisble@gmail.com')->send(new ContactMessageMail($validated));
 
         return redirect()->back()->with('success', 'Nous vous répondrons dans les plus brefs délais.');
 

@@ -7,113 +7,169 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthRegisterLayout from '@/layouts/auth-register-layout';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type RegisterForm = {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
+  name: string;
+  email: string;
+  password: string;
+  tel: string;
+  role: string;
+  password_confirmation: string;
 };
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+  const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    tel: '',
+    role: '',
+  });
+
+  const submit: FormEventHandler = (e) => {
+    e.preventDefault();
+    post(route('register'), {
+      onFinish: () => reset('password', 'password_confirmation'),
     });
+  };
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
-    };
+  return (
+    <AuthRegisterLayout
+      title="Créer un compte"
+      description="Entrez vos informations pour créer un compte"
+    >
+      <Head title="Inscription" />
 
-    return (
-        <AuthLayout title="Create an account" description="Enter your details below to create your account">
-            <Head title="Register" />
-            <form className="flex flex-col gap-6" onSubmit={submit}>
-                <div className="grid gap-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                            id="name"
-                            type="text"
-                            required
-                            autoFocus
-                            tabIndex={1}
-                            autoComplete="name"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                            disabled={processing}
-                            placeholder="Full name"
-                        />
-                        <InputError message={errors.name} className="mt-2" />
-                    </div>
+      <form
+        className="w-full max-w-screen-xl min-w-[850px] mx-auto px-4 md:px-10 flex flex-col gap-8 bg-white p-8 rounded-xl shadow-lg"
+        onSubmit={submit}
+        >
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email address</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            required
-                            tabIndex={2}
-                            autoComplete="email"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            disabled={processing}
-                            placeholder="email@example.com"
-                        />
-                        <InputError message={errors.email} />
-                    </div>
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            required
-                            tabIndex={3}
-                            autoComplete="new-password"
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            disabled={processing}
-                            placeholder="Password"
-                        />
-                        <InputError message={errors.password} />
-                    </div>
 
-                    <div className="grid gap-2">
-                        <Label htmlFor="password_confirmation">Confirm password</Label>
-                        <Input
-                            id="password_confirmation"
-                            type="password"
-                            required
-                            tabIndex={4}
-                            autoComplete="new-password"
-                            value={data.password_confirmation}
-                            onChange={(e) => setData('password_confirmation', e.target.value)}
-                            disabled={processing}
-                            placeholder="Confirm password"
-                        />
-                        <InputError message={errors.password_confirmation} />
-                    </div>
+        {/* Nom & Email */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="name">Nom complet</Label>
+            <Input
+              id="name"
+              type="text"
+              required
+              autoFocus
+              autoComplete="name"
+              value={data.name}
+              onChange={(e) => setData('name', e.target.value)}
+              disabled={processing}
+              placeholder="Votre nom complet"
+            />
+            <InputError message={errors.name} />
+          </div>
 
-                    <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Create account
-                    </Button>
-                </div>
+          <div>
+            <Label htmlFor="email">Adresse e-mail</Label>
+            <Input
+              id="email"
+              type="email"
+              required
+              autoComplete="email"
+              value={data.email}
+              onChange={(e) => setData('email', e.target.value)}
+              disabled={processing}
+              placeholder="exemple@email.com"
+            />
+            <InputError message={errors.email} />
+          </div>
+        </div>
 
-                <div className="text-muted-foreground text-center text-sm">
-                    Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
-                        Log in
-                    </TextLink>
-                </div>
-            </form>
-        </AuthLayout>
-    );
+        {/* Téléphone & Rôle */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="tel">Numéro de téléphone</Label>
+            <Input
+              id="tel"
+              type="tel"
+              required
+              value={data.tel}
+              onChange={(e) => setData('tel', e.target.value)}
+              disabled={processing}
+              placeholder="06 00 00 00 00"
+            />
+            <InputError message={errors.tel} />
+          </div>
+
+          <div>
+            <Label htmlFor="role">Rôle</Label>
+            <Select
+              value={data.role}
+              onValueChange={(value) => setData('role', value)}
+            >
+              <SelectTrigger id="role">
+                <SelectValue placeholder="Sélectionnez un rôle" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="admin">Administrateur</SelectItem>
+                <SelectItem value="editor">Éditeur</SelectItem>
+                <SelectItem value="viewer">Visiteur</SelectItem>
+              </SelectContent>
+            </Select>
+            <InputError message={errors.role} />
+          </div>
+        </div>
+
+        {/* Mot de passe & confirmation */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label htmlFor="password">Mot de passe</Label>
+            <Input
+              id="password"
+              type="password"
+              required
+              autoComplete="new-password"
+              value={data.password}
+              onChange={(e) => setData('password', e.target.value)}
+              disabled={processing}
+              placeholder="Mot de passe"
+            />
+            <InputError message={errors.password} />
+          </div>
+
+          <div>
+            <Label htmlFor="password_confirmation">Confirmer le mot de passe</Label>
+            <Input
+              id="password_confirmation"
+              type="password"
+              required
+              autoComplete="new-password"
+              value={data.password_confirmation}
+              onChange={(e) => setData('password_confirmation', e.target.value)}
+              disabled={processing}
+              placeholder="Confirmation"
+            />
+            <InputError message={errors.password_confirmation} />
+          </div>
+        </div>
+
+        {/* Bouton soumettre */}
+        <Button type="submit" className="w-full" disabled={processing}>
+          {processing && <LoaderCircle className="h-4 w-4 animate-spin mr-2" />}
+          Créer le compte
+        </Button>
+
+        {/* Lien vers la connexion */}
+        <div className="text-muted-foreground text-center text-sm">
+          Vous avez déjà un compte ?{' '}
+          <TextLink href={route('login')}>Se connecter</TextLink>
+        </div>
+      </form>
+    </AuthRegisterLayout>
+  );
 }
