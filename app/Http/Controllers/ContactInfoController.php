@@ -2,30 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactInfo;
 use Illuminate\Http\Request;
-use App\Models\Gallery;
-use App\Models\Service;
 use Inertia\Inertia;
-use App\Models\Contact;
 
-
-class HomeController extends Controller
+class ContactInfoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $services = Service::with('type')->latest()->paginate(4);
-        // ✅ Paginer les médias à 5 par page
-       $galleryItems = Gallery::with('category')->latest()->paginate(3);
-       $contact = Contact::latest()->first();
-
-        return Inertia::render('home', [
-            'services' => $services,
-            'contact' => $contact,
-            'items' => $galleryItems,
-        ]);
+        //
     }
 
     /**

@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Edit, Trash2, Plus } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
+import { LoaderCircle } from 'lucide-react';
 
 interface FaqType {
   id: number;
@@ -54,7 +55,7 @@ export default function ContactFaqManager() {
   const [search, setSearch] = useState('');
   const [faqToDelete, setFaqToDelete] = useState<number | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const { data, setData, post, put, reset } = useForm({
+  const { data, setData, post, put, reset, processing } = useForm({
     question: '',
     answer: '',
   });
@@ -133,7 +134,7 @@ export default function ContactFaqManager() {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <Label htmlFor="question">Question</Label>
-                      <Input
+                      <Input required
                         id="question"
                         value={data.question}
                         onChange={(e) => setData('question', e.target.value)}
@@ -142,7 +143,7 @@ export default function ContactFaqManager() {
                     </div>
                     <div>
                       <Label htmlFor="answer">Réponse</Label>
-                      <Input
+                      <Input required
                         id="answer"
                         value={data.answer}
                         onChange={(e) => setData('answer', e.target.value)}
@@ -152,7 +153,11 @@ export default function ContactFaqManager() {
 
                     <div className="flex gap-2 pt-2">
                       <Button type="submit" className="flex-1">
-                        {editing ? <><Edit className="h-4 w-4 mr-2" /> Modifier</> : <><Plus className="h-4 w-4 mr-2" /> Ajouter</>}
+                        {editing ? <><Edit className="h-4 w-4 mr-2" />
+                          {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                          Modifier</> : <><Plus className="h-4 w-4 mr-2" />
+                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                            Ajouter</>}
                       </Button>
                       {editing && (
                         <Button variant="outline" type="button" onClick={resetForm}>Annuler</Button>

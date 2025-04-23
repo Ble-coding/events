@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {

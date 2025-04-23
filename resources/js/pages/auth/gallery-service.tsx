@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/use-toast';
 import { Edit, Trash2, Plus } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
+import { LoaderCircle } from 'lucide-react';
 
 interface ServiceType {
   id: number;
@@ -58,7 +59,7 @@ export default function ServiceDashboard() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [toDeleteId, setToDeleteId] = useState<number | null>(null);
 
-  const { data, setData, reset, processing } = useForm({
+  const { data, setData, reset, processing, errors} = useForm({
     title: '',
     description: '',
     type_id: '',
@@ -154,11 +155,13 @@ export default function ServiceDashboard() {
                   <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
                     <div>
                       <Label>Titre</Label>
-                      <Input value={data.title} onChange={(e) => setData('title', e.target.value)} />
+                      <Input value={data.title} required onChange={(e) => setData('title', e.target.value)} />
+
                     </div>
                     <div>
                       <Label>Description</Label>
-                      <Input value={data.description} onChange={(e) => setData('description', e.target.value)} />
+                      <Input value={data.description} required onChange={(e) => setData('description', e.target.value)} />
+
                     </div>
                     <div>
                       <Label>Type</Label>
@@ -172,14 +175,19 @@ export default function ServiceDashboard() {
                           ))}
                         </SelectContent>
                       </Select>
+                        {errors.type_id && <p className="text-sm text-red-500 mt-1">{errors.type_id}</p>}
                     </div>
                     <div>
                       <Label>Image</Label>
                       <Input type="file" accept="image/*" onChange={(e) => setData('image', e.target.files?.[0] || null)} />
+                        {errors.image && <p className="text-sm text-red-500 mt-1">{errors.image}</p>}
                     </div>
                     <div className="flex gap-2 pt-2">
                       <Button type="submit" className="flex-1" disabled={processing}>
-                        {editing ? <><Edit className="w-4 h-4 mr-2" /> Modifier</> : <><Plus className="w-4 h-4 mr-2" /> Ajouter</>}
+                        {editing ? <><Edit className="w-4 h-4 mr-2" />
+                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        Modifier</> : <><Plus className="w-4 h-4 mr-2" />
+                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />} Ajouter</>}
                       </Button>
                       {editing && (
                         <Button variant="outline" onClick={resetForm}>Annuler</Button>

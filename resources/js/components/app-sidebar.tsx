@@ -9,7 +9,8 @@ import {
     Home,
     Folder, HelpCircle,
      LayoutGrid, Book, User,
-     QuoteIcon} from 'lucide-react';
+     QuoteIcon,
+     PhoneCall} from 'lucide-react';
 import AppLogoDash from './app-logo-dash';
 
 const mainNavItems: NavItem[] = [
@@ -24,7 +25,7 @@ const mainNavItems: NavItem[] = [
         icon: Folder,
     },
     {
-        title: 'Catégories',
+        title: 'Catégories Galerie',
         href: '/categories',
         icon: BookOpen,
     },
@@ -47,6 +48,11 @@ const mainNavItems: NavItem[] = [
         title: 'Utilisateurs',
         href: '/utilisateurs-dashboard',
         icon: User,
+    },
+    {
+        title: 'Infos de Contact',
+        href: '/contact-infos',
+        icon: PhoneCall,
     },
     {
         title: 'Guilo\'s Services',

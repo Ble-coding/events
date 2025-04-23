@@ -123,12 +123,23 @@ export function AppMenu() {
               </Link>
             ))}
 
-            <Link
-              href="/admin"
-              className="py-2 px-4 rounded-md font-medium flex items-center text-guilo border border-guilo/30 hover:bg-guilo/10"
-            >
-              <Lock className="w-4 h-4 mr-2" /> Admin
-            </Link>
+
+{auth.user ? (
+  <Link
+    href={route('dashboard')}
+    className="py-2 px-4 rounded-md font-medium flex items-center text-guilo border border-guilo/30 hover:bg-guilo/10"
+  >
+    <Lock className="w-4 h-4 mr-2" /> Admin
+  </Link>
+) : (
+  <Link
+    href="/login"
+    className="py-2 px-4 rounded-md font-medium flex items-center text-guilo border border-guilo/30 hover:bg-guilo/10"
+  >
+    <Lock className="w-4 h-4 mr-2" /> Admin
+  </Link>
+)}
+
           </nav>
         </div>
       )}

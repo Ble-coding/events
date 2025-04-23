@@ -4,6 +4,8 @@ import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ConfirmModal from '@/components/confirm-modal';
+import { LoaderCircle } from 'lucide-react';
+
 import {
   Card,
   CardContent,
@@ -52,7 +54,7 @@ export default function ServiceTypeManager() {
   const { types, flash, auth } = usePage<PageProps>().props;
   const [editingType, setEditingType] = useState<ServiceType | null>(null);
   const [search, setSearch] = useState('');
-  const { data, setData, post, put, reset } = useForm({ name: '', description: '' });
+  const { data, setData, post, put, reset, processing } = useForm({ name: '', description: '' });
   const { toast } = useToast();
 
   const isAdmin = auth.user.role === 'admin';
@@ -142,7 +144,7 @@ export default function ServiceTypeManager() {
                     <div>
                       <Label htmlFor="name">Nom</Label>
                       <Input
-                        id="name"
+                        id="name" required autoFocus
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                         placeholder="Ex: Organisation de mariages"
@@ -160,9 +162,12 @@ export default function ServiceTypeManager() {
                     <div className="flex gap-2 pt-2">
                       <Button type="submit" className="flex-1">
                         {editingType ? (
-                          <><Edit className="h-4 w-4 mr-2" /> Modifier</>
+                          <><Edit className="h-4 w-4 mr-2" />
+                               {processing && <LoaderCircle className="h-4 w-4 animate-spin" />} Modifier</>
                         ) : (
-                          <><Plus className="h-4 w-4 mr-2" /> Ajouter</>
+                          <><Plus className="h-4 w-4 mr-2" />
+                               {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                               Ajouter</>
                         )}
                       </Button>
                       {editingType && (

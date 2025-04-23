@@ -16,7 +16,7 @@ export default function Hero({
   title,
   description,
     //   image = 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&q=80&w=2070',
-    image = '/images/slide.avif',
+    image = '/images/slide.png',
   actionLabel = 'Découvrir nos services',
   actionLink = '/services',
   className,

@@ -6,11 +6,22 @@ import ContactForm from '@/components/contact-form';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+
 interface Faq {
   id: number;
   question: string;
   answer: string;
 }
+
+interface ContactInfo {
+    address: string;
+    phone: string;
+    email: string;
+    weekday_hours: string;
+    saturday_hours: string;
+    sunday_hours: string;
+  }
+
 
 interface PaginationLink {
   url: string | null;
@@ -24,10 +35,11 @@ interface PageProps {
     links: PaginationLink[];
   };
   [key: string]: unknown;
+  contact: ContactInfo | null;
 }
 
 export default function ContactPage() {
-  const { faqs } = usePage<PageProps>().props;
+    const { faqs, contact } = usePage<PageProps>().props;
 
   const handlePagination = (url: string | null) => {
     if (url) router.visit(url, { preserveScroll: true });
@@ -74,7 +86,7 @@ export default function ContactPage() {
                   <MapPin className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
                     <h4 className="font-medium mb-1">Adresse</h4>
-                    <p className="text-muted-foreground">123 Avenue des Services<br />75000 Paris, France</p>
+                    <p className="text-muted-foreground">{contact?.address ?? 'Adresse non disponible'}</p>
                   </div>
                 </div>
 
@@ -82,7 +94,7 @@ export default function ContactPage() {
                   <Phone className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
                     <h4 className="font-medium mb-1">Téléphone</h4>
-                    <p className="text-muted-foreground">+33 1 23 45 67 89</p>
+                    <p className="text-muted-foreground">{contact?.phone ?? 'Téléphone non disponible'}</p>
                   </div>
                 </div>
 
@@ -90,7 +102,7 @@ export default function ContactPage() {
                   <Mail className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
                     <h4 className="font-medium mb-1">Email</h4>
-                    <p className="text-muted-foreground">contact@guiloservices.fr</p>
+                    <p className="text-muted-foreground">{contact?.email ?? 'Email non disponible'}</p>
                   </div>
                 </div>
 
@@ -99,7 +111,9 @@ export default function ContactPage() {
                   <div>
                     <h4 className="font-medium mb-1">Horaires</h4>
                     <p className="text-muted-foreground">
-                      Lundi - Vendredi: 9h00 - 18h00<br />Samedi: 10h00 - 16h00<br />Dimanche: Fermé
+                        Lundi - Vendredi: {contact?.weekday_hours ?? 'N/A'}<br />
+                        Samedi: {contact?.saturday_hours ?? 'N/A'}<br />
+                        Dimanche: {contact?.sunday_hours ?? 'N/A'}
                     </p>
                   </div>
                 </div>

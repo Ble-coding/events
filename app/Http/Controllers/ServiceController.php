@@ -8,6 +8,7 @@ use App\Models\ServiceType;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Contact;
 
 class ServiceController extends Controller
 {
@@ -29,9 +30,11 @@ class ServiceController extends Controller
     public function getServices()
     {
         $services = Service::with('type')->latest()->paginate(5);
+        $contact = Contact::latest()->first();
 
         return Inertia::render('services', [
             'services' => $services,
+            'contact' => $contact,
         ]);
     }
 

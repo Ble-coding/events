@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Contact;
 
 class GalleryController extends Controller
 {
@@ -28,9 +29,11 @@ class GalleryController extends Controller
     public function getGaleries()
     {
         $galeries = Gallery::with('category')->latest()->get();
+        $contact = Contact::latest()->first();
 
         return Inertia::render('galeries', [
             'galeries' => $galeries,
+            'contact' => $contact
         ]);
     }
 

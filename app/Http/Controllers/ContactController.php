@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Faq;
 use App\Mail\ContactMessageMail;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Contact;
 
 
 class ContactController extends Controller
@@ -24,12 +25,22 @@ class ContactController extends Controller
         ]);
     }
 
+    // Afficher les informations (pour l'admin ou l'affichage public si besoin)
+    public function indexInfo()
+    {
+        $contact = Contact::latest()->first();
+        return Inertia::render('auth/contact-info', ['contact' => $contact]);
+    }
+
+
     public function getFaq()
     {
         $faqs = Faq::latest()->paginate(5);
+        $contact = Contact::latest()->first();
 
         return Inertia::render('contact', [
             'faqs' => $faqs,
+            'contact' => $contact
         ]);
     }
 
@@ -75,6 +86,24 @@ class ContactController extends Controller
         return redirect()->back()->with('success', 'FAQ ajoutée avec succès.');
     }
 
+     // Enregistrer les informations (cas si aucune n'existe encore)
+     public function storeInfo(Request $request)
+     {
+         $validated = $request->validate([
+             'address' => 'nullable|string|max:255',
+             'phone' => 'nullable|string|max:50',
+             'email' => 'nullable|email|max:255',
+             'weekday_hours' => 'nullable|string|max:100',
+             'saturday_hours' => 'nullable|string|max:100',
+             'sunday_hours' => 'nullable|string|max:100',
+         ]);
+
+         $contact = Contact::create($validated);
+
+         return redirect()->route('contact-infos.index')->with('success', 'Informations ajoutées.');
+     }
+
+
     /**
      * Display the specified resource.
      */
@@ -106,6 +135,28 @@ class ContactController extends Controller
         return redirect()->back()->with('success', 'FAQ mise à jour avec succès.');
     }
 
+
+    public function updateInfo(Request $request)
+    {
+        $validated = $request->validate([
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:50',
+            'email' => 'nullable|email|max:255',
+            'weekday_hours' => 'nullable|string|max:100',
+            'saturday_hours' => 'nullable|string|max:100',
+            'sunday_hours' => 'nullable|string|max:100',
+        ]);
+
+        $contact = Contact::latest()->first();
+        if ($contact) {
+            $contact->update($validated);
+        } else {
+            Contact::create($validated); // fallback si aucun enregistrement
+        }
+
+        return redirect()->route('contact-infos.index')->with('success', 'Informations mises à jour.');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -115,5 +166,13 @@ class ContactController extends Controller
 
         return redirect()->back()->with('success', 'FAQ supprimée avec succès.');
 
+    }
+
+    // Supprimer un contact (soft delete)
+    public function destroyInfo(Contact $contact)
+    {
+        $contact->delete();
+
+        return redirect()->route('contact-infos.index')->with('success', 'Informations supprimées.');
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\ContactController;
 
+
 // Route::get('/', function () {
 //     return Inertia::render('welcome');
 // })->name('home');
@@ -65,6 +66,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('gallery/{gallery}', [GalleryController::class, 'destroy']);
 
     Route::resource('contact-dashboard', ContactController::class);
+
+    Route::get('contact-infos', [ContactController::class, 'indexInfo'])->name('contact-infos.index');
+    Route::post('/contact-infos', [ContactController::class, 'storeInfo'])->name('contact-infos.store');
+    Route::put('/contact-infos', [ContactController::class, 'updateInfo'])->name('contact-infos.update');
+    Route::delete('/contact-infos/{contact}', [ContactController::class, 'destroyInfo'])->name('contact-infos.destroy');
+
     Route::resource('services-dashboard', ServiceController::class);
     Route::resource('services-types', ServiceTypeController::class);
 

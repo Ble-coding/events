@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ConfirmModal from '@/components/confirm-modal';
+import { LoaderCircle } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -21,6 +22,12 @@ interface CategoryType {
   id: number;
   name: string;
 }
+
+// type CategoryType = {
+//     name: string;
+//     id?: number;
+//     // [key: string]: any;
+//   };
 
 interface PaginationLink {
   url: string | null;
@@ -51,7 +58,7 @@ export default function GalleryCategoryManager() {
   const { auth, categories, flash } = usePage<PageProps>().props;
   const [editingCategory, setEditingCategory] = useState<CategoryType | null>(null);
   const [search, setSearch] = useState('');
-  const { data, setData, post, put, reset } = useForm({ name: '' });
+  const { data, setData, post, put, reset, processing  } = useForm({ name: '' });
   const { toast } = useToast();
   const userRole = auth.user.role;
 
@@ -143,20 +150,25 @@ export default function GalleryCategoryManager() {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <Label htmlFor="name">Nom</Label>
-                      <Input
+                      <Input required
                         id="name"
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                         placeholder="Ex: Mariage"
                       />
+
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                      <Button type="submit" className="flex-1">
+                      <Button type="submit" className="flex-1" disabled={processing}>
                         {editingCategory ? (
-                          <><Edit className="h-4 w-4 mr-2" /> Modifier</>
+                          <><Edit className="h-4 w-4 mr-2" />
+                          {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                           Modifier</>
                         ) : (
-                          <><Plus className="h-4 w-4 mr-2" /> Ajouter</>
+                          <><Plus className="h-4 w-4 mr-2" />
+                          {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                          Ajouter</>
                         )}
                       </Button>
                       {editingCategory && (

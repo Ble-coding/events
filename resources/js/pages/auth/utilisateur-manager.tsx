@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Edit, Trash2, Plus } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
+import { LoaderCircle } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -62,7 +63,7 @@ export default function UserManager() {
   const { auth, utilisateurs, flash } = usePage<PageProps>().props;
   const [editingUser, setEditingUser] = useState<UserType | null>(null);
   const [search, setSearch] = useState('');
-  const { data, setData, post, put, reset } = useForm({
+  const { data, setData, post, put, reset, processing} = useForm({
     name: '',
     email: '',
     tel: '',
@@ -171,7 +172,7 @@ export default function UserManager() {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <Label htmlFor="name">Nom</Label>
-                      <Input
+                      <Input required
                         id="name"
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
@@ -180,7 +181,7 @@ export default function UserManager() {
                     </div>
                     <div>
                       <Label htmlFor="email">Email</Label>
-                      <Input
+                      <Input required
                         id="email"
                         type="email"
                         value={data.email}
@@ -229,11 +230,13 @@ export default function UserManager() {
                       <Button type="submit" className="flex-1">
                         {editingUser ? (
                           <>
-                            <Edit className="h-4 w-4 mr-2" /> Modifier
+                            <Edit className="h-4 w-4 mr-2" />
+                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />} Modifier
                           </>
                         ) : (
                           <>
-                            <Plus className="h-4 w-4 mr-2" /> Ajouter
+                            <Plus className="h-4 w-4 mr-2" />
+                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />} Ajouter
                           </>
                         )}
                       </Button>
