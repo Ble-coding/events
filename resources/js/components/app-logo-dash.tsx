@@ -10,7 +10,7 @@ export default function AppLogoDash() {
         <img
             src="/logo.png"
             alt="Guil'O Services"
-            className="h-14 w-14 object-contain"
+            className="w-full h-full object-contain"
         />
       </div>
       {/* <div className="ml-3">
