@@ -24,6 +24,7 @@ interface Contact {
   weekday_hours: string;
   saturday_hours: string;
   sunday_hours: string;
+  map_src: string;
 }
 
 interface PageProps extends InertiaPageProps {
@@ -42,6 +43,7 @@ export default function ContactInfoManager() {
     weekday_hours: contact?.weekday_hours ?? '',
     saturday_hours: contact?.saturday_hours ?? '',
     sunday_hours: contact?.sunday_hours ?? '',
+    map_src: contact?.map_src ?? '',
   });
 
   const { toast } = useToast();
@@ -89,6 +91,7 @@ export default function ContactInfoManager() {
                   id="address"
                   value={data.address}
                   onChange={(e) => setData('address', e.target.value)}
+                   placeholder="Adresse 123 Avenue des Services 75000 Paris, France"
                 />
               </div>
 
@@ -98,6 +101,7 @@ export default function ContactInfoManager() {
                   id="phone"
                   value={data.phone}
                   onChange={(e) => setData('phone', e.target.value)}
+                  placeholder="+33 1 23 45 67 89"
                 />
               </div>
 
@@ -108,6 +112,7 @@ export default function ContactInfoManager() {
                   type="email"
                   value={data.email}
                   onChange={(e) => setData('email', e.target.value)}
+                  placeholder="contact@guiloservices.fr"
                 />
               </div>
 
@@ -117,6 +122,7 @@ export default function ContactInfoManager() {
                   id="weekday_hours"
                   value={data.weekday_hours}
                   onChange={(e) => setData('weekday_hours', e.target.value)}
+                   placeholder="Lundi - Vendredi: 9h00 - 18h00"
                 />
               </div>
 
@@ -126,6 +132,7 @@ export default function ContactInfoManager() {
                   id="saturday_hours"
                   value={data.saturday_hours}
                   onChange={(e) => setData('saturday_hours', e.target.value)}
+                  placeholder="Samedi: 10h00 - 16h00"
                 />
               </div>
 
@@ -135,8 +142,35 @@ export default function ContactInfoManager() {
                   id="sunday_hours"
                   value={data.sunday_hours}
                   onChange={(e) => setData('sunday_hours', e.target.value)}
+                placeholder="Dimanche: Fermé"
                 />
               </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="map_src">
+                    Lien Google Maps (iframe) <span className="text-muted-foreground text-xs">(embed uniquement)</span>
+                </Label>
+                <Input
+                    id="map_src"
+                    value={data.map_src}
+                    onChange={(e) => setData('map_src', e.target.value)}
+                    placeholder="https://www.google.com/maps/embed?pb=..."
+                />
+                {data.map_src?.startsWith("https://www.google.com/maps/embed") && (
+                    <div className="h-64 mt-2 rounded-md overflow-hidden shadow">
+                    <iframe
+                        title="Prévisualisation carte"
+                        src={data.map_src}
+                        className="w-full h-full border-0"
+                        allowFullScreen
+                        loading="lazy"
+                    ></iframe>
+                    </div>
+                )}
+                {!data.map_src?.startsWith("https://www.google.com/maps/embed") && data.map_src && (
+                    <p className="text-xs text-red-500">⚠️ Le lien doit être un lien *embed* Google Maps valide.</p>
+                )}
+                </div>
 
               <div className="pt-4">
                 <Button type="submit" className="w-full" disabled={processing}>

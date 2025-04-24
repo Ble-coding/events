@@ -96,9 +96,10 @@ class ContactController extends Controller
              'weekday_hours' => 'nullable|string|max:100',
              'saturday_hours' => 'nullable|string|max:100',
              'sunday_hours' => 'nullable|string|max:100',
+             'map_src' => 'nullable|string|max:2048', // ✅ Ajout ici
          ]);
 
-         $contact = Contact::create($validated);
+         Contact::create($validated);
 
          return redirect()->route('contact-infos.index')->with('success', 'Informations ajoutées.');
      }
@@ -145,17 +146,20 @@ class ContactController extends Controller
             'weekday_hours' => 'nullable|string|max:100',
             'saturday_hours' => 'nullable|string|max:100',
             'sunday_hours' => 'nullable|string|max:100',
+            'map_src' => 'nullable|string|max:2048', // ✅ Ajout ici aussi
         ]);
 
         $contact = Contact::latest()->first();
+
         if ($contact) {
             $contact->update($validated);
         } else {
-            Contact::create($validated); // fallback si aucun enregistrement
+            Contact::create($validated);
         }
 
         return redirect()->route('contact-infos.index')->with('success', 'Informations mises à jour.');
     }
+
 
     /**
      * Remove the specified resource from storage.

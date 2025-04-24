@@ -20,6 +20,7 @@ interface ContactInfo {
     weekday_hours: string;
     saturday_hours: string;
     sunday_hours: string;
+    map_src: string;
   }
 
 
@@ -122,13 +123,14 @@ export default function ContactPage() {
               <div className="mt-8">
                 <h4 className="font-medium mb-4">Nous trouver</h4>
                 <div className="h-64 rounded-lg overflow-hidden shadow-md">
-                <iframe
-                    title="Map"
-                    className="w-full h-full border-0"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.76457430334!2d2.2769948739866728!3d48.85894658138793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!5e0!3m2!1sen!2sus!4v1699374764410!5m2!1sen!2sus"
-                    allowFullScreen
-                    loading="lazy"
-                  ></iframe>
+                  <iframe
+                        title="Map"
+                        className="w-full h-full border-0"
+                        src={contact?.map_src || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.76457430334!2d2.2769948739866728!3d48.85894658138793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis%2C%20France!5e0!3m2!1sen!2sus!4v1699374764410!5m2!1sen!2sus"} // 👈 Dynamique
+                        allowFullScreen
+                        loading="lazy"
+                    ></iframe>
+
                 </div>
               </div>
             </div>

@@ -17,5 +17,6 @@ class Contact extends Model
         'weekday_hours',
         'saturday_hours',
         'sunday_hours',
+        'map_src', // 👈 Ajout du champ ici
     ];
 }
