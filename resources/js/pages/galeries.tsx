@@ -7,14 +7,16 @@ import GalleryItem from '@/components/gallery-item';
 import AppMenuTemplate from '@/layouts/app/app-menu-layout';
 
 interface Gallery {
-  id: number;
-  title: string;
-  url: string;
-  category: {
     id: number;
-    name: string;
-  };
-}
+    title: string;
+    url: string;
+    type: 'image' | 'video';
+    category: {
+      id: number;
+      name: string;
+    };
+  }
+
 
 interface PageProps {
   galeries: Gallery[];
@@ -83,12 +85,14 @@ export default function GalleryPage() {
               key={item.id}
               className="animate-on-scroll transition-all duration-700 ease-out opacity-100 translate-y-0"
             >
-              <GalleryItem
+             <GalleryItem
+                type={item.type}
                 image={item.url}
                 title={item.title}
                 category={item.category?.name}
                 className="h-full"
-              />
+                />
+
             </div>
           ))}
         </div>

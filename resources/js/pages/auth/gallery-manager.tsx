@@ -158,8 +158,18 @@ export default function GalleryDashboard() {
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Galerie" />
 
-
       <div className="flex flex-col gap-4 p-4">
+        <div className="flex justify-end">
+          <Input
+            placeholder="Rechercher par titre ou catégorie..."
+            className="w-full max-w-sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+
+
         {(isAdmin || isEditor) && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Formulaire */}
@@ -231,14 +241,7 @@ export default function GalleryDashboard() {
                     <CardHeader>
                     <CardTitle>Galerie</CardTitle>
                     <CardDescription>Vos médias ajoutés</CardDescription>
-                    <div className="pt-2">
-                        <Input
-                        placeholder="Rechercher par titre ou catégorie..."
-                        className="w-full max-w-sm"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
+
                     </CardHeader>
                     <CardContent>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

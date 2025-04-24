@@ -19,13 +19,14 @@ interface ServiceType {
 }
 
 interface GalleryItemType {
-  id: number;
-  title: string;
-  url: string;
-  category: {
-    name: string;
-  };
-}
+    id: number;
+    title: string;
+    url: string;
+    type: 'image' | 'video'; // 👈 ajoute cette ligne
+    category: {
+      name: string;
+    };
+  }
 
 interface HomePageProps {
     items: {
@@ -137,12 +138,14 @@ export default function Home() {
                 key={item.id}
                 className="gallery-item opacity-0 translate-y-4 transition-all duration-700 ease-out"
               >
-                <GalleryItem
-                  image={item.url}
-                  title={item.title}
-                  category={item.category?.name || 'Sans catégorie'}
-                  className="h-full"
+              <GalleryItem
+                type={item.type}
+                image={item.url}
+                title={item.title}
+                category={item.category?.name}
+                className="h-full"
                 />
+
               </div>
             ))}
           </div>
