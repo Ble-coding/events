@@ -3,6 +3,7 @@ import { type BreadcrumbItem } from '@/types';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Head, Link, usePage, router } from '@inertiajs/react';
+import CallToActionWithButton from '@/components/call-to-action';
 import { ChevronRight } from 'lucide-react';
 
 import { Button } from "@/components/ui/button";
@@ -305,22 +306,15 @@ export default function Home() {
       </section> */}
 
       {/* CTA Section */}
-<section className="py-16 bg-dark-gk text-white">
-  <div className="container mx-auto px-4 text-center">
-    <h2 className="text-3xl md:text-4xl font-serif font-bold">
-      Prêt à créer un événement inoubliable ?
-    </h2>
-    <p className="text-lg max-w-2xl mx-auto">
-      Contactez-nous dès aujourd'hui pour discuter de votre projet et commencer à créer des souvenirs exceptionnels.
-    </p>
-
-    <Button asChild variant="outline" className="mt-6">
-      <Link href="/contact" className="inline-flex items-center button-orange">
-        Demander un devis gratuit <ChevronRight className="ml-2 h-4 w-4" />
-      </Link>
-    </Button>
-  </div>
-</section>
+      <CallToActionWithButton
+        title="Prêt à créer un événement inoubliable ?"
+        description="Contactez-nous dès aujourd'hui pour discuter de votre projet et commencer à créer des souvenirs exceptionnels."
+        buttonText="Demander un devis gratuit"
+        buttonLink="/contact"
+        bgColorClass="bg-dark-gk"  // Utilisez la couleur de fond que vous souhaitez
+        textColorClass="text-white"
+        buttonVariant="outline"  // Vous pouvez changer le style du bouton ici
+      />
 
       </div>
     </AppLayoutTemplate>

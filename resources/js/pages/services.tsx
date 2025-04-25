@@ -2,9 +2,10 @@ import AppMenuLayout from '@/layouts/app/app-menu-layout';
 import { Head, Link, usePage, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { type BreadcrumbItem } from '@/types';
-
+// import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SectionHeading from '@/components/section-heading';
+import CallToActionWithButton from '@/components/call-to-action';
 
 interface ServiceType {
   id: number;
@@ -172,17 +173,15 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-accent-test text-white">
-        <div className="container text-center">
-          <h2 className="text-3xl md:text-4xl font-medium mb-6 text-white">Prêt à créer un événement inoubliable ?</h2>
-          <p className="text-white/90 text-lg max-w-2xl mx-auto mb-8">
-            Contactez-nous dès aujourd'hui pour discuter de votre projet. Notre équipe est impatiente de donner vie à vos idées.
-          </p>
-          <Button asChild size="lg" className="bg-white text-accent hover:bg-white/90 rounded-full px-8">
-            <Link href="/contact">Demander un devis</Link>
-          </Button>
-        </div>
-      </section>
+      <CallToActionWithButton
+        title="Prêt à créer un événement inoubliable ?"
+        description="Contactez-nous dès aujourd'hui pour discuter de votre projet et commencer à créer des souvenirs exceptionnels."
+        buttonText="Demander un devis gratuit"
+        buttonLink="/contact"
+        bgColorClass="bg-dark-gk"  // Utilisez la couleur de fond que vous souhaitez
+        textColorClass="text-white"
+        buttonVariant="outline"  // Vous pouvez changer le style du bouton ici
+      />
     </AppMenuLayout>
   );
 }
