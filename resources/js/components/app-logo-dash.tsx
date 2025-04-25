@@ -7,11 +7,12 @@ export default function AppLogoDash() {
       className="flex items-center pl-2 transition-opacity hover:opacity-90"
     >
      <div className="flex w-24 h-16 items-center justify-center rounded-md overflow-hidden">
-        <img
-            src="/logo.png"
-            alt="Guil'O Services"
-            className="w-full h-full object-contain"
-        />
+     <img
+  src="/logo.png"
+  alt="Guil'O Services"
+  className="max-w-[80%] max-h-[80%] object-contain mx-auto"
+/>
+
       </div>
       {/* <div className="ml-3">
         <span className="block font-playfair text-guilo text-lg font-medium leading-none">

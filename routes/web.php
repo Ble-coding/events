@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\TestimonialController;
 
 
 // Route::get('/', function () {
@@ -30,6 +31,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/services', [ServiceController::class, 'getServices'])->name('services');
 Route::get('/galerie', [GalleryController::class, 'getGaleries'])->name('galerie');
 Route::get('/contact', [ContactController::class, 'getFaq'])->name('contact');
+// Route::get('/testimonial', [TestimonialController::class, 'getTestimonial'])->name('testimonial');
 
 Route::post('/contact-message', [ContactController::class, 'sendMessage'])->name('contact.message');
 
@@ -74,6 +76,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('services-dashboard', ServiceController::class);
     Route::resource('services-types', ServiceTypeController::class);
+    Route::resource('testimonials-dashboard', TestimonialController::class);
 
 });
 

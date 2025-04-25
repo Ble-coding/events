@@ -3,6 +3,7 @@ import { Head, useForm, router, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea'; // assure-toi de l'importer
 import ConfirmModal from '@/components/confirm-modal';
 import { LoaderCircle } from 'lucide-react';
 
@@ -152,12 +153,12 @@ export default function ServiceTypeManager() {
                     </div>
                     <div>
                       <Label htmlFor="description">Description</Label>
-                      <Input
-                        id="description"
+                    <Textarea
+                        id="description" required
                         value={data.description}
                         onChange={(e) => setData('description', e.target.value)}
                         placeholder="Ex: Services haut de gamme pour événements privés"
-                      />
+                    />
                     </div>
                     <div className="flex gap-2 pt-2">
                       <Button type="submit" className="flex-1">

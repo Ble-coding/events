@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ConfirmModal from '@/components/confirm-modal';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle
 } from '@/components/ui/card';
@@ -155,12 +156,21 @@ export default function ServiceDashboard() {
                   <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
                     <div>
                       <Label>Titre</Label>
-                      <Input value={data.title} required onChange={(e) => setData('title', e.target.value)} />
+                      <Input value={data.title} required onChange={(e) => setData('title', e.target.value)}
+                      placeholder="Coffrets cadeaux" />
 
                     </div>
                     <div>
                       <Label>Description</Label>
-                      <Input value={data.description} required onChange={(e) => setData('description', e.target.value)} />
+                      {/* <Input value={data.description} required onChange={(e) => setData('description', e.target.value)} />
+                        */}
+
+                       <Textarea
+                                              id="description" required
+                                              value={data.description}
+                                              onChange={(e) => setData('description', e.target.value)}
+                                              placeholder="Offrez des coffrets élégants"
+                                          />
 
                     </div>
                     <div>

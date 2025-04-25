@@ -3,6 +3,7 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Card,
   CardContent,
@@ -25,6 +26,9 @@ interface Contact {
   saturday_hours: string;
   sunday_hours: string;
   map_src: string;
+  social_links: {
+    [key: string]: string; // ✅ rend les plateformes dynamiques
+  };
 }
 
 interface PageProps extends InertiaPageProps {
@@ -44,7 +48,15 @@ export default function ContactInfoManager() {
     saturday_hours: contact?.saturday_hours ?? '',
     sunday_hours: contact?.sunday_hours ?? '',
     map_src: contact?.map_src ?? '',
+    social_links: contact?.social_links ?? {
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        youtube: '',
+        tiktok: '',
+      },
   });
+
 
   const { toast } = useToast();
 
@@ -122,7 +134,7 @@ export default function ContactInfoManager() {
                   id="weekday_hours"
                   value={data.weekday_hours}
                   onChange={(e) => setData('weekday_hours', e.target.value)}
-                   placeholder="Lundi - Vendredi: 9h00 - 18h00"
+                   placeholder="9h00 - 18h00"
                 />
               </div>
 
@@ -132,7 +144,7 @@ export default function ContactInfoManager() {
                   id="saturday_hours"
                   value={data.saturday_hours}
                   onChange={(e) => setData('saturday_hours', e.target.value)}
-                  placeholder="Samedi: 10h00 - 16h00"
+                  placeholder="10h00 - 16h00"
                 />
               </div>
 
@@ -142,16 +154,40 @@ export default function ContactInfoManager() {
                   id="sunday_hours"
                   value={data.sunday_hours}
                   onChange={(e) => setData('sunday_hours', e.target.value)}
-                placeholder="Dimanche: Fermé"
+                placeholder="Fermé"
                 />
               </div>
+
+            <div className="grid gap-2">
+            <Label>Liens Réseaux Sociaux</Label>
+            {Object.entries(data.social_links).map(([platform, value]) => (
+                <div key={platform}>
+                <Label htmlFor={`social-${platform}`} className="capitalize">{platform}</Label>
+                <Input
+                    id={`social-${platform}`}
+                    value={value}
+                    onChange={(e) => setData('social_links', {
+                    ...data.social_links,
+                    [platform]: e.target.value
+                    })}
+                    placeholder={`https://${platform}.com/...`}
+                />
+                </div>
+            ))}
+            </div>
 
               <div className="grid gap-2">
                 <Label htmlFor="map_src">
                     Lien Google Maps (iframe) <span className="text-muted-foreground text-xs">(embed uniquement)</span>
                 </Label>
-                <Input
+                {/* <Input
                     id="map_src"
+                    value={data.map_src}
+                    onChange={(e) => setData('map_src', e.target.value)}
+                    placeholder="https://www.google.com/maps/embed?pb=..."
+                /> */}
+                 <Textarea
+                    id="map_src" required
                     value={data.map_src}
                     onChange={(e) => setData('map_src', e.target.value)}
                     placeholder="https://www.google.com/maps/embed?pb=..."

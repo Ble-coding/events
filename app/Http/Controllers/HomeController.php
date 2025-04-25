@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Gallery;
 use App\Models\Service;
+use App\Models\Testimonial;
 use Inertia\Inertia;
 use App\Models\Contact;
 
@@ -20,11 +21,16 @@ class HomeController extends Controller
         // ✅ Paginer les médias à 5 par page
        $galleryItems = Gallery::with('category')->latest()->paginate(3);
        $contact = Contact::latest()->first();
+       $servicesFooter = Service::latest()->take(4)->get();
+         $testimonials = Testimonial::latest()->paginate(3);
+
 
         return Inertia::render('home', [
             'services' => $services,
             'contact' => $contact,
             'items' => $galleryItems,
+            'servicesFooter' => $servicesFooter,
+            'testimonials' => $testimonials,
         ]);
     }
 

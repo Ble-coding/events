@@ -9,7 +9,7 @@ import {
     Home,
     Folder, HelpCircle,
      LayoutGrid, Book, User,
-     QuoteIcon,
+     QuoteIcon, Handshake,
      PhoneCall} from 'lucide-react';
 import AppLogoDash from './app-logo-dash';
 
@@ -37,13 +37,23 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Types de Services',
         href: '/services-types',
-        icon: QuoteIcon,
+        icon: Handshake,
     },
     {
         title: 'Faqs',
         href: '/contact-dashboard',
         icon: HelpCircle,
     },
+    {
+        title: 'Témoignages',
+        href: '/testimonials-dashboard',
+        icon: QuoteIcon,
+    },
+    // {
+    //     title: 'Réservations',
+    //     href: '/reservations-dashboard',
+    //     icon: PhoneCall,
+    // },
     {
         title: 'Utilisateurs',
         href: '/utilisateurs-dashboard',

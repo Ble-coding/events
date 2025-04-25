@@ -9,7 +9,7 @@ use App\Models\Faq;
 use App\Mail\ContactMessageMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Contact;
-
+use App\Models\Service;
 
 class ContactController extends Controller
 {
@@ -37,10 +37,12 @@ class ContactController extends Controller
     {
         $faqs = Faq::latest()->paginate(5);
         $contact = Contact::latest()->first();
+        $servicesFooter = Service::latest()->take(4)->get();
 
         return Inertia::render('contact', [
             'faqs' => $faqs,
-            'contact' => $contact
+            'contact' => $contact,
+            'servicesFooter' => $servicesFooter
         ]);
     }
 
@@ -97,6 +99,8 @@ class ContactController extends Controller
              'saturday_hours' => 'nullable|string|max:100',
              'sunday_hours' => 'nullable|string|max:100',
              'map_src' => 'nullable|string|max:2048', // ✅ Ajout ici
+             'social_links' => 'nullable|array',
+             'social_links.*' => 'nullable|url|max:2048',
          ]);
 
          Contact::create($validated);
@@ -147,6 +151,8 @@ class ContactController extends Controller
             'saturday_hours' => 'nullable|string|max:100',
             'sunday_hours' => 'nullable|string|max:100',
             'map_src' => 'nullable|string|max:2048', // ✅ Ajout ici aussi
+            'social_links' => 'nullable|array',
+            'social_links.*' => 'nullable|url|max:2048',
         ]);
 
         $contact = Contact::latest()->first();

@@ -1,24 +1,65 @@
 // components/footer.tsx
 
-import React from 'react';
+import { FaFacebook, FaInstagram, FaTiktok, FaTwitter, FaYoutube } from 'react-icons/fa';
+
+
 
 interface ContactInfo {
   address: string;
   phone: string;
   email: string;
+  social_links: {
+    [key: string]: string; // ✅ rend les plateformes dynamiques
+  };
 }
+interface Service {
+    id: number;
+    title: string;
+  }
 
-const Footer = ({ contact }: { contact: ContactInfo | null }) => {
+
+
+const Footer = ({ contact, services, }: { contact: ContactInfo | null;
+    services: Service[]; }) => {
   return (
     <footer className="bg-[#EA7A0B] text-white py-12">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Colonne 1 - Présentation */}
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">Guil'O Services</h3>
             <p className="max-w-xs">
               Des prestations sur mesure pour vos évènements, avec une attention particulière aux détails et à vos envies.
             </p>
+            <div className="flex space-x-4">
+                {contact?.social_links?.facebook && (
+                    <a href={contact.social_links.facebook} target="_blank" rel="noopener noreferrer">
+                    <FaFacebook size={20} />
+                    </a>
+                )}
+                {contact?.social_links?.instagram && (
+                    <a href={contact.social_links.instagram} target="_blank" rel="noopener noreferrer">
+                    <FaInstagram size={20} />
+                    </a>
+                )}
+                {contact?.social_links?.twitter && (
+                    <a href={contact.social_links.twitter} target="_blank" rel="noopener noreferrer">
+                    <FaTwitter size={20} />
+                    </a>
+                )}
+                 {contact?.social_links?.youtube && (
+                    <a href={contact.social_links.youtube} target="_blank" rel="noopener noreferrer">
+                    <FaYoutube size={20} />
+                    </a>
+                )}
+                 {contact?.social_links?.tiktok && (
+                    <a href={contact.social_links.tiktok} target="_blank" rel="noopener noreferrer">
+                    <FaTiktok size={20} />
+                    </a>
+                )}
+
+                </div>
+
           </div>
 
           {/* Colonne 2 - Liens rapides */}
@@ -34,6 +75,21 @@ const Footer = ({ contact }: { contact: ContactInfo | null }) => {
 
           {/* Colonne 3 - Contact dynamique */}
           <div className="space-y-4">
+            <h4 className="text-lg font-semibold">Services</h4>
+            <nav className="flex flex-col space-y-2">
+            {services.map((service) => (
+      <a
+        key={service.id}
+        href="/services"
+        className="hover:underline"
+      >
+        {service.title}
+      </a>
+    ))}
+            </nav>
+          </div>
+            {/* Colonne 4 - Contact dynamique */}
+            <div className="space-y-4">
             <h4 className="text-lg font-semibold">Contact</h4>
             <div className="space-y-2">
               <p>Téléphone: {contact?.phone ?? 'Non disponible'}</p>

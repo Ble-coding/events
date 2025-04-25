@@ -10,6 +10,11 @@ class Contact extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $casts = [
+        'social_links' => 'array',
+    ];
+
+
     protected $fillable = [
         'address',
         'phone',
@@ -18,5 +23,6 @@ class Contact extends Model
         'saturday_hours',
         'sunday_hours',
         'map_src', // 👈 Ajout du champ ici
+        'social_links',
     ];
 }
