@@ -26,6 +26,7 @@ interface ServiceItem {
   description: string;
   image?: string;
   type: ServiceType;
+  features?: string[]; // ✅ Ajouté ici
 }
 
 interface PaginationLink {
@@ -59,12 +60,27 @@ export default function ServiceDashboard() {
   const [search, setSearch] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [toDeleteId, setToDeleteId] = useState<number | null>(null);
+  const [featureList, setFeatureList] = useState<string[]>(['']);
 
+const handleAddFeature = () => setFeatureList([...featureList, '']);
+
+const handleRemoveFeature = (index: number) => {
+    const newList = [...featureList];
+    newList.splice(index, 1);
+    setFeatureList(newList);
+  };
+
+  const handleChangeFeature = (index: number, value: string) => {
+    const newList = [...featureList];
+    newList[index] = value;
+    setFeatureList(newList);
+  };
   const { data, setData, reset, processing, errors} = useForm({
     title: '',
     description: '',
     type_id: '',
     image: null as File | null,
+    features: [] as string[], // 👈 ajouter ceci
   });
 
   const isAdmin = auth.user.role === 'admin';
@@ -84,14 +100,23 @@ export default function ServiceDashboard() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
     formData.append('type_id', data.type_id);
-    if (data.image) formData.append('image', data.image);
+
+    if (data.image) {
+      formData.append('image', data.image);
+    }
+
+    // On envoie chaque élément de features individuellement
+    featureList.forEach((feature, index) => {
+      formData.append(`features[${index}]`, feature);
+    });
 
     if (editing) {
-      formData.append('_method', 'PUT');
+      formData.append('_method', 'PUT'); // Laravel comprend PUT via POST + _method
       router.post(`/services-dashboard/${editing.id}`, formData, {
         forceFormData: true,
         onSuccess: resetForm,
@@ -104,10 +129,13 @@ export default function ServiceDashboard() {
     }
   };
 
+
   const resetForm = () => {
     reset();
     setEditing(null);
+    setFeatureList(['']);
   };
+
 
   const handleEdit = (item: ServiceItem) => {
     setEditing(item);
@@ -116,8 +144,11 @@ export default function ServiceDashboard() {
       description: item.description,
       type_id: item.type.id.toString(),
       image: null,
+      features: item.features || [], // ✅ Ajouté ici
     });
+    setFeatureList(item.features && item.features.length > 0 ? item.features : ['']);
   };
+
 
   const confirmDelete = () => {
     if (toDeleteId !== null) {
@@ -166,11 +197,11 @@ export default function ServiceDashboard() {
                         */}
 
                        <Textarea
-                                              id="description" required
-                                              value={data.description}
-                                              onChange={(e) => setData('description', e.target.value)}
-                                              placeholder="Offrez des coffrets élégants"
-                                          />
+                        id="description" required
+                        value={data.description}
+                        onChange={(e) => setData('description', e.target.value)}
+                        placeholder="Offrez des coffrets élégants"
+                    />
 
                     </div>
                     <div>
@@ -192,6 +223,31 @@ export default function ServiceDashboard() {
                       <Input type="file" accept="image/*" onChange={(e) => setData('image', e.target.files?.[0] || null)} />
                         {errors.image && <p className="text-sm text-red-500 mt-1">{errors.image}</p>}
                     </div>
+                    <div>
+  <Label>Fonctionnalités (features)</Label>
+  {featureList.map((feature, index) => (
+    <div key={index} className="flex gap-2 mb-2">
+      <Input
+        value={feature}
+        onChange={(e) => handleChangeFeature(index, e.target.value)}
+        placeholder="Ex: Coordination avec les lieux de culte"
+      />
+      <Button
+        type="button"
+        variant="destructive"
+        onClick={() => handleRemoveFeature(index)}
+        disabled={featureList.length === 1} // empêcher suppression si 1 seul champ
+      >
+        Supprimer
+      </Button>
+    </div>
+  ))}
+  <Button type="button" onClick={handleAddFeature}>
+    Ajouter une fonctionnalité
+  </Button>
+</div>
+
+
                     <div className="flex gap-2 pt-2">
                       <Button type="submit" className="flex-1" disabled={processing}>
                         {editing ? <><Edit className="w-4 h-4 mr-2" />
@@ -245,6 +301,14 @@ export default function ServiceDashboard() {
                             className="w-32 h-20 object-cover mt-2 rounded"
                           />
                         )}
+                        {item.features && item.features.length > 0 && (
+                        <ul className="text-xs mt-2 list-disc list-inside text-muted-foreground">
+                            {item.features.map((f, idx) => (
+                            <li key={idx}>{f}</li>
+                            ))}
+                        </ul>
+                        )}
+
                       </div>
                       {(isAdmin || isEditor) && (
                         <div className="flex gap-2">

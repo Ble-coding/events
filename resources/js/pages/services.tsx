@@ -15,6 +15,7 @@ interface ServiceType {
   type?: {
     name: string;
   };
+  features?: string[]; // ✅ Ajouté ici
 }
 
 interface PageProps {
@@ -100,6 +101,28 @@ export default function ServicesPage() {
                 <div className="space-y-4 animate-slide-in" style={{ animationDelay: '0.2s' }}>
                   <h3 className="text-2xl font-medium text-primary">{service.title}</h3>
                   <p className="text-muted-foreground">{service.description}</p>
+                  {service.features && service.features.length > 0 && (
+  <ul className="list-none mt-4 space-y-2">
+    {service.features.map((feature, idx) => (
+      <li key={idx} className="flex items-start text-muted-foreground text-sm">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span>{feature}</span>
+      </li>
+    ))}
+  </ul>
+)}
+
                   <Button asChild variant="outline" className="rounded-full">
                     <Link href="/contact">Demander plus d'informations</Link>
                   </Button>

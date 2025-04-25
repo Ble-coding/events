@@ -11,7 +11,11 @@ class Service extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title', 'type_id', 'description', 'image'];
+    protected $fillable = ['title', 'type_id', 'description', 'image', 'features'];
+
+    protected $casts = [
+        'features' => 'array',
+    ];
 
     public function type()
     {

@@ -285,6 +285,42 @@ export default function Home() {
 
 
 
+     {/* CTA Section */}
+     {/* <section className="py-16 bg-dark-gk  text-accent m-0">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-6">
+            Prêt à créer un événement inoubliable ?
+          </h2>
+          <p className="text-lg mb-8 max-w-2xl mx-auto">
+            Contactez-nous dès aujourd'hui pour discuter de votre projet et commencer à créer des souvenirs exceptionnels.
+          </p>
+
+
+          <Button asChild variant="outline">
+              <Link href="/contact" className="inline-flex items-center button-orange">
+              Demander un devis gratuit <ChevronRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+        </div>
+      </section> */}
+
+      {/* CTA Section */}
+<section className="py-16 bg-dark-gk text-white">
+  <div className="container mx-auto px-4 text-center">
+    <h2 className="text-3xl md:text-4xl font-serif font-bold">
+      Prêt à créer un événement inoubliable ?
+    </h2>
+    <p className="text-lg max-w-2xl mx-auto">
+      Contactez-nous dès aujourd'hui pour discuter de votre projet et commencer à créer des souvenirs exceptionnels.
+    </p>
+
+    <Button asChild variant="outline" className="mt-6">
+      <Link href="/contact" className="inline-flex items-center button-orange">
+        Demander un devis gratuit <ChevronRight className="ml-2 h-4 w-4" />
+      </Link>
+    </Button>
+  </div>
+</section>
 
       </div>
     </AppLayoutTemplate>

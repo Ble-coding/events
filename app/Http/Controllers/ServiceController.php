@@ -60,6 +60,8 @@ class ServiceController extends Controller
             'description' => 'required|string',
             'type_id' => 'required|exists:service_types,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'features' => 'nullable|array',
+            'features.*' => 'string|max:255',
         ]);
 
         if ($request->hasFile('image')) {
@@ -98,6 +100,8 @@ class ServiceController extends Controller
             'description' => 'required|string',
             'type_id' => ['required', Rule::exists('service_types', 'id')],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,avif|max:5120',
+            'features' => 'nullable|array',
+            'features.*' => 'string|max:255',
         ]);
 
         if ($request->hasFile('image')) {
@@ -108,6 +112,8 @@ class ServiceController extends Controller
         \Log::info('Content Length', [
             'length' => $request->server('CONTENT_LENGTH'),
         ]);
+
+
 
         $services_dashboard->update($validated);
 
