@@ -419,36 +419,90 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
 
                     {/* SCHEDULE */}
-                    <div className="space-y-2 pt-4">
-                    <Label>Programme</Label>
-                    {(data.schedule.length === 0 ? [''] : data.schedule).map((item, idx) => (
-                        <div key={idx} className="flex gap-2">
-                        <Input
-                            value={item}
-                            placeholder="14h00 - Accueil des participants"
-                            onChange={(e) => updateSchedule(idx, e.target.value)}
-                        />
-                        <Button variant="destructive" type="button" onClick={() => removeSchedule(idx)}>X</Button>
-                        </div>
-                    ))}
-                    <Button variant="outline" type="button" onClick={addSchedule}>Ajouter un créneau</Button>
+                <div className="space-y-2 pt-4">
+                <Label>Programme</Label>
+                {data.schedule.length === 0 ? (
+                    <div className="flex gap-2">
+                    <Input
+                        value=""
+                        placeholder="14h00 - Accueil des participants"
+                        onChange={(e) => updateSchedule(0, e.target.value)}
+                    />
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        disabled
+                    >
+                        X
+                    </Button>
                     </div>
+                ) : (
+                    data.schedule.map((item, idx) => (
+                    <div key={idx} className="flex gap-2">
+                        <Input
+                        value={item}
+                        placeholder="14h00 - Accueil des participants"
+                        onChange={(e) => updateSchedule(idx, e.target.value)}
+                        />
+                        <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => removeSchedule(idx)}
+                        disabled={data.schedule.length === 1} // ❗️ bloquer suppression si 1 seul
+                        >
+                        X
+                        </Button>
+                    </div>
+                    ))
+                )}
+                <Button variant="outline" type="button" onClick={addSchedule}>
+                    Ajouter un créneau
+                </Button>
+                </div>
+
 
                    {/* HIGHLIGHTS */}
-                <div className="space-y-2 pt-4">
-                <Label>Points forts</Label>
-                {(data.highlights.length === 0 ? [''] : data.highlights).map((item, idx) => (
-  <div key={idx} className="flex gap-2">
-    <Input
-      value={item}
-      placeholder="Rencontre avec l'équipe"
-      onChange={(e) => updateHighlight(idx, e.target.value)}
-    />
-    <Button variant="destructive" type="button" onClick={() => removeHighlight(idx)}>X</Button>
-  </div>
-))}
-<Button variant="outline" type="button" onClick={addHighlight}>Ajouter un point fort</Button>
-</div>
+            <div className="space-y-2 pt-4">
+            <Label>Points forts</Label>
+            {data.highlights.length === 0 ? (
+                <div className="flex gap-2">
+                <Input
+                    value=""
+                    placeholder="Rencontre avec l'équipe"
+                    onChange={(e) => updateHighlight(0, e.target.value)}
+                />
+                <Button
+                    type="button"
+                    variant="destructive"
+                    disabled
+                >
+                    X
+                </Button>
+                </div>
+            ) : (
+                data.highlights.map((item, idx) => (
+                <div key={idx} className="flex gap-2">
+                    <Input
+                    value={item}
+                    placeholder="Rencontre avec l'équipe"
+                    onChange={(e) => updateHighlight(idx, e.target.value)}
+                    />
+                    <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => removeHighlight(idx)}
+                    disabled={data.highlights.length === 1}
+                    >
+                    X
+                    </Button>
+                </div>
+                ))
+            )}
+            <Button variant="outline" type="button" onClick={addHighlight}>
+                Ajouter un point fort
+            </Button>
+            </div>
+
 
 
 <div className="flex items-center gap-2 pt-4">

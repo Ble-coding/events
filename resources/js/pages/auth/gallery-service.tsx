@@ -238,11 +238,11 @@ const handleRemoveFeature = (index: number) => {
         onClick={() => handleRemoveFeature(index)}
         disabled={featureList.length === 1} // empêcher suppression si 1 seul champ
       >
-        Supprimer
+        X
       </Button>
     </div>
   ))}
-  <Button type="button" onClick={handleAddFeature}>
+  <Button type="button" variant="outline" onClick={handleAddFeature}>
     Ajouter une fonctionnalité
   </Button>
 </div>

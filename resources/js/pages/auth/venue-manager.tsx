@@ -311,36 +311,90 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
 
 
             {/* FEATURES */}
-            <div className="space-y-2 pt-4">
-            <Label>Caractéristiques</Label>
-            {(data.features?.length === 0 ? [''] : data.features || []).map((feature, idx) => (
-                <div key={idx} className="flex gap-2">
-                <Input
-                    value={feature}
-                    placeholder="Capacité d'accueil, équipements disponibles"
-                    onChange={(e) => updateFeature(idx, e.target.value)}
-                />
-                <Button variant="destructive" type="button" onClick={() => removeFeature(idx)}>X</Button>
-                </div>
-            ))}
-            <Button variant="outline" type="button" onClick={addFeature}>Ajouter une caractéristique</Button>
+        <div className="space-y-2 pt-4">
+        <Label>Caractéristiques</Label>
+        {data.features.length === 0 ? (
+            <div className="flex gap-2">
+            <Input
+                value=""
+                placeholder="Capacité d'accueil, équipements disponibles"
+                onChange={(e) => updateFeature(0, e.target.value)}
+            />
+            <Button
+                type="button"
+                variant="destructive"
+                disabled
+            >
+                X
+            </Button>
             </div>
+        ) : (
+            data.features.map((feature, idx) => (
+            <div key={idx} className="flex gap-2">
+                <Input
+                value={feature}
+                placeholder="Capacité d'accueil, équipements disponibles"
+                onChange={(e) => updateFeature(idx, e.target.value)}
+                />
+                <Button
+                type="button"
+                variant="destructive"
+                onClick={() => removeFeature(idx)}
+                disabled={data.features.length === 1}
+                >
+                X
+                </Button>
+            </div>
+            ))
+        )}
+        <Button variant="outline" type="button" onClick={addFeature}>
+            Ajouter une caractéristique
+        </Button>
+        </div>
+
 
             {/* AVAILABLE SERVICES */}
-            <div className="space-y-2 pt-4">
-            <Label>Services disponibles</Label>
-            {(data.availables?.length === 0 ? [''] : data.availables || []).map((service, idx) => (
-                <div key={idx} className="flex gap-2">
-                <Input
-                    value={service}
-                    placeholder="Location de matériel"
-                    onChange={(e) => updateAvailableService(idx, e.target.value)}
-                />
-                <Button variant="destructive" type="button" onClick={() => removeAvailableService(idx)}>X</Button>
-                </div>
-            ))}
-            <Button variant="outline" type="button" onClick={addAvailableService}>Ajouter un service disponible</Button>
+        <div className="space-y-2 pt-4">
+        <Label>Services disponibles</Label>
+        {data.availables.length === 0 ? (
+            <div className="flex gap-2">
+            <Input
+                value=""
+                placeholder="Location de matériel"
+                onChange={(e) => updateAvailableService(0, e.target.value)}
+            />
+            <Button
+                type="button"
+                variant="destructive"
+                disabled
+            >
+                X
+            </Button>
             </div>
+        ) : (
+            data.availables.map((service, idx) => (
+            <div key={idx} className="flex gap-2">
+                <Input
+                value={service}
+                placeholder="Location de matériel"
+                onChange={(e) => updateAvailableService(idx, e.target.value)}
+                />
+                <Button
+                type="button"
+                variant="destructive"
+                onClick={() => removeAvailableService(idx)}
+                disabled={data.availables.length === 1}
+                >
+                X
+                </Button>
+            </div>
+            ))
+        )}
+        <Button variant="outline" type="button" onClick={addAvailableService}>
+            Ajouter un service disponible
+        </Button>
+        </div>
+
 
 
                 <div className="flex items-center gap-2 pt-4">
