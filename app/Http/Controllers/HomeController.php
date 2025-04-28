@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Gallery;
+use App\Models\Event;
 use App\Models\Service;
 use App\Models\Testimonial;
 use Inertia\Inertia;
 use App\Models\Contact;
+use App\Models\Venue;
+use Carbon\Carbon;
 
 
 class HomeController extends Controller
@@ -23,14 +26,26 @@ class HomeController extends Controller
        $contact = Contact::latest()->first();
        $servicesFooter = Service::latest()->take(4)->get();
          $testimonials = Testimonial::latest()->paginate(3);
+         $events = Event::with('category')
+         ->where('date', '>=', Carbon::now())
+         ->orderBy('date', 'asc')
+         ->paginate(2);
+         $venue = Venue::where('type', 'image')
+        //  ->where('is_active', 1)
+         ->latest()
+         ->first(); // ⚡ PRENDS LE PREMIER !! PAS ->get()
 
 
+
+        //  dd($venue );
         return Inertia::render('home', [
             'services' => $services,
             'contact' => $contact,
             'items' => $galleryItems,
             'servicesFooter' => $servicesFooter,
             'testimonials' => $testimonials,
+            'events' => $events,
+            'venue' => $venue, // ⬅️ pas de tableau "data"
         ]);
     }
 

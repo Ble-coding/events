@@ -8,8 +8,8 @@ import {
     BookOpen,
     Home,
     Folder, HelpCircle,
-     LayoutGrid, Book, User,
-     QuoteIcon, Handshake,
+     LayoutGrid, Book, User, Calendar,
+     QuoteIcon, Handshake, Building2,
      PhoneCall} from 'lucide-react';
 import AppLogoDash from './app-logo-dash';
 
@@ -25,10 +25,21 @@ const mainNavItems: NavItem[] = [
         icon: Folder,
     },
     {
-        title: 'Catégories Galerie',
+        title: 'Catégories',
         href: '/categories',
         icon: BookOpen,
     },
+    {
+        title: 'Evénements',
+        href: '/events-dashboard',
+        icon: Calendar,
+    },
+    {
+        title: 'Salles',
+        href: '/venues-dashboard',
+        icon: Building2,
+    },
+
     {
         title: 'Services',
         href: '/services-dashboard',
@@ -49,11 +60,6 @@ const mainNavItems: NavItem[] = [
         href: '/testimonials-dashboard',
         icon: QuoteIcon,
     },
-    // {
-    //     title: 'Réservations',
-    //     href: '/reservations-dashboard',
-    //     icon: PhoneCall,
-    // },
     {
         title: 'Utilisateurs',
         href: '/utilisateurs-dashboard',

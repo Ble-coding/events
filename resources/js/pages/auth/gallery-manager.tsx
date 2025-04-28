@@ -53,7 +53,7 @@ interface PageProps {
 export default function GalleryDashboard() {
   const { toast } = useToast();
   const { items, categories, flash, auth } = usePage<PageProps>().props;
-
+  const [selectedCategory, setSelectedCategory] = useState<number | 'all'>('all');
   const [search, setSearch] = useState('');
   const [editingItem, setEditingItem] = useState<GalleryItemType | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -150,9 +150,15 @@ export default function GalleryDashboard() {
 
   const filteredItems = items.data.filter(
     (item) =>
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.category.name.toLowerCase().includes(search.toLowerCase())
-  );
+      item.title.toLowerCase().includes(search.toLowerCase())
+    // ||
+    //   item.category.name.toLowerCase().includes(search.toLowerCase())
+  )
+  .filter((event) => {
+    if (selectedCategory === 'all') return true;
+    return event.category_id === selectedCategory;
+  })
+  ;
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -161,11 +167,29 @@ export default function GalleryDashboard() {
       <div className="flex flex-col gap-4 p-4">
         <div className="flex justify-end">
           <Input
-            placeholder="Rechercher par titre ou catégorie..."
+            placeholder="Rechercher par titre ..."
             className="w-full max-w-sm"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+                <Select
+              value={selectedCategory === 'all' ? 'all' : String(selectedCategory)}
+              onValueChange={(value) => {
+                setSelectedCategory(value === 'all' ? 'all' : Number(value));
+              }}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Catégorie" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes les catégories</SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={String(cat.id)}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
         </div>
 
 
@@ -185,7 +209,9 @@ export default function GalleryDashboard() {
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
                             <Label htmlFor="title">Titre</Label>
-                            <Input id="title" value={data.title} onChange={(e) => setData('title', e.target.value)} required />
+                            <Input id="title"
+                            placeholder="Baby Shower"
+                            value={data.title} onChange={(e) => setData('title', e.target.value)} required />
                             </div>
                             <div>
                             <Label>Catégorie</Label>
@@ -214,7 +240,10 @@ export default function GalleryDashboard() {
                             </div>
                             <div>
                             <Label htmlFor="url">Ou URL</Label>
-                            <Input id="url" value={data.url} onChange={(e) => setData('url', e.target.value)} />
+                            <Input id="url"
+                            placeholder="https://example.com/video.mp4"
+                            // type="url"
+                            value={data.url} onChange={(e) => setData('url', e.target.value)} />
                             </div>
                             <div className="flex gap-2 pt-2">
                             <Button type="submit" className="flex-1" disabled={processing}>

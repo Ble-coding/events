@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Head, usePage } from '@inertiajs/react';
 
-import SectionHeading from '@/components/section-heading';
+// import SectionHeading from '@/components/section-heading';
 import GalleryItem from '@/components/gallery-item';
 import AppMenuTemplate from '@/layouts/app/app-menu-layout';
 
@@ -52,12 +52,21 @@ export default function GalleryPage() {
     <AppMenuTemplate>
       <Head title="Galerie" />
 
+        {/* Hero Section */}
+        <section className="py-20 md:py-28 text-white">
+        <div className="bg-orange-gk container mt-3 p-6">
+          <div className="max-w-2xl animate-slide-in">
+            <h1 className="text-playfair text-[60px] leading-tight mb-6">Notre Galerie</h1>
+            <p className="text-white/90 text-[20px] mb-8">
+            Découvrez nos créations et réalisations
+            </p>
+          </div>
+        </div>
+      </section>
+
+
       <div className="container py-12 md:py-20">
-        <SectionHeading
-          title="Notre Galerie"
-          subtitle="Découvrez nos créations et réalisations"
-          centered
-        />
+
 
         {/* Filtres */}
         <div className="mb-12 flex flex-wrap justify-center gap-2">

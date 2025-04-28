@@ -1,6 +1,6 @@
 // components/footer.tsx
 
-import { FaFacebook, FaInstagram, FaTiktok, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaLinkedin, FaTelegram, FaTiktok, FaTwitter, FaWhatsapp, FaYoutube } from 'react-icons/fa';
 
 
 
@@ -58,6 +58,23 @@ const Footer = ({ contact, services, }: { contact: ContactInfo | null;
                     </a>
                 )}
 
+            {contact?.social_links?.linkedin && (
+                    <a href={contact.social_links.linkedin} target="_blank" rel="noopener noreferrer">
+                    <FaLinkedin size={20} />
+                    </a>
+                )}
+
+                {contact?.social_links?.telegram && (
+                    <a href={contact.social_links.telegram} target="_blank" rel="noopener noreferrer">
+                    <FaTelegram size={20} />
+                    </a>
+                )}
+                {contact?.social_links?.whatsapp && (
+                    <a href={contact.social_links.whatsapp} target="_blank" rel="noopener noreferrer">
+                    <FaWhatsapp size={20} />
+                    </a>
+                )}
+
                 </div>
 
           </div>
@@ -66,9 +83,11 @@ const Footer = ({ contact, services, }: { contact: ContactInfo | null;
           <div className="space-y-4">
             <h4 className="text-lg font-semibold">Liens rapides</h4>
             <nav className="flex flex-col space-y-2">
-              <a href="/" className="hover:underline">Accueil</a>
+              {/* <a href="/" className="hover:underline">Accueil</a> */}
               <a href="/services" className="hover:underline">Services</a>
               <a href="/galerie" className="hover:underline">Galerie</a>
+              <a href="/events" className="hover:underline">Événements</a>
+              <a href="/venues" className="hover:underline">Salles</a>
               <a href="/contact" className="hover:underline">Contact</a>
             </nav>
           </div>

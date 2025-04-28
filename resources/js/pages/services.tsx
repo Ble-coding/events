@@ -6,6 +6,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Button } from '@/components/ui/button';
 import SectionHeading from '@/components/section-heading';
 import CallToActionWithButton from '@/components/call-to-action';
+import { ChevronRight } from 'lucide-react';
 
 interface ServiceType {
   id: number;
@@ -124,8 +125,9 @@ export default function ServicesPage() {
   </ul>
 )}
 
-                  <Button asChild variant="outline" className="rounded-full">
-                    <Link href="/contact">Demander plus d'informations</Link>
+                  <Button asChild variant="outline">
+                    <Link href="/contact">Demander plus d'informations
+                    <ChevronRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </div>
               </div>

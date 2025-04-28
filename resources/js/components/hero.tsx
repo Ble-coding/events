@@ -17,8 +17,8 @@ export default function Hero({
   description,
     //   image = 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&q=80&w=2070',
     image = '/images/slide.png',
-  actionLabel = 'Découvrir nos services',
-  actionLink = '/services',
+  actionLabel = 'Découvrir nos evénements',
+  actionLink = '/events',
   className,
 }: HeroProps) {
   return (
@@ -41,7 +41,7 @@ export default function Hero({
       {/* Contenu */}
       <div className={cn("container relative z-10 text-center px-4 py-20", "animate-fade-in")}>
         <div className="max-w-3xl mx-auto">
-            <h1 className="text-white text-4xl md:text-6xl font-bold mb-6 leading-tight font-playfair">
+            <h1 className="text-white text-4xl md:text-6xl font-bold  mb-6 leading-tight font-playfair">
                 {title}
             </h1>
             <p className="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto">

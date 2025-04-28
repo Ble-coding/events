@@ -12,4 +12,13 @@ class Category extends Model
 
 
     protected $fillable = ['name'];
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+    public function galleries()
+    {
+        return $this->hasMany(Gallery::class);
+    }
 }

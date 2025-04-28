@@ -39,7 +39,24 @@ interface PageProps extends InertiaPageProps {
 }
 
 export default function ContactInfoManager() {
+
   const { contact, flash } = usePage<PageProps>().props;
+  const defaultSocialLinks = {
+    facebook: '',
+    instagram: '',
+    twitter: '',
+    youtube: '',
+    tiktok: '',
+    linkedin: '',
+    telegram: '',
+    whatsapp: '',
+  };
+
+  const mergedSocialLinks = {
+    ...defaultSocialLinks,
+    ...(contact?.social_links || {}),
+  };
+
   const { data, setData, post, put, processing } = useForm({
     address: contact?.address ?? '',
     phone: contact?.phone ?? '',
@@ -48,13 +65,7 @@ export default function ContactInfoManager() {
     saturday_hours: contact?.saturday_hours ?? '',
     sunday_hours: contact?.sunday_hours ?? '',
     map_src: contact?.map_src ?? '',
-    social_links: contact?.social_links ?? {
-        facebook: '',
-        instagram: '',
-        twitter: '',
-        youtube: '',
-        tiktok: '',
-      },
+    social_links: mergedSocialLinks, // 🔥 ici
   });
 
 
@@ -64,6 +75,8 @@ export default function ContactInfoManager() {
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Contact', href: '/contact-info' },
   ];
+
+
 
   useEffect(() => {
     if (flash?.success) {
@@ -83,6 +96,7 @@ export default function ContactInfoManager() {
   };
 
   return (
+
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Informations de Contact" />
 

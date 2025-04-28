@@ -9,6 +9,20 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\VenueController;
+
+
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
+
+// Route::fallback(function () {
+//     return Inertia::render('not-found')->toResponse(request())->setStatusCode(404);
+// });
+
+
 
 
 // Route::get('/', function () {
@@ -27,6 +41,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // })->name('services');
 
 
+
+Route::get('/events', [EventController::class, 'getEvents'])->name('events');
+Route::get('/events/{event}', [EventController::class, 'getEventsShow'])->name('events.show');
+
+Route::get('/venues', [VenueController::class, 'getVenues'])->name('venues');
+Route::get('/venues/{venue}', [VenueController::class, 'getVenuesShow'])->name('venues.show');
 
 Route::get('/services', [ServiceController::class, 'getServices'])->name('services');
 Route::get('/galerie', [GalleryController::class, 'getGaleries'])->name('galerie');
@@ -77,6 +97,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('services-dashboard', ServiceController::class);
     Route::resource('services-types', ServiceTypeController::class);
     Route::resource('testimonials-dashboard', TestimonialController::class);
+    Route::resource('events-dashboard', EventController::class);
+    Route::resource('venues-dashboard', VenueController::class);
 
 });
 

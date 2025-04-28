@@ -12,6 +12,7 @@ import SectionHeading from '@/components/section-heading';
 import GalleryItem from '@/components/gallery-item';
 import ServiceCard from '@/components/service-card';
 import TestimonialCard from '@/components/testimonial-card';
+import EventCard from '@/components/event-card'; // au lieu de event-card
 
 
 interface ServiceType {
@@ -32,12 +33,41 @@ interface GalleryItemType {
   }
 
 
+  interface VenueDetailsType {
+    id: number;
+    name: string;
+    location: string;
+    capacity: number;
+    url: string;
+    type: 'image' | 'video';
+    description: string;
+    features?: string[];
+    availables?: string[];
+    isActive: boolean;
+  }
+
+
 interface TestimonialType {
     id: number;
     content: string;
     author: string;
     role: string;
     avatar: string;
+  }
+
+interface EventDetailsType {
+    id: number;
+    title: string;
+    date: string;
+    category_id: number;
+    location: string;
+    url: string;
+    type: 'image' | 'video';
+    description: string;
+    schedule?: string[];
+    highlights?: string[];
+    isActive: boolean;
+    category?: { id: number; name: string }; // ? pour éviter erreur si jamais absent
   }
 
 
@@ -53,7 +83,12 @@ interface HomePageProps {
     services: {
       data: ServiceType[];
     };
+    events: {
+      data: EventDetailsType[];
+    };
     testimonials: Paginated<TestimonialType>;
+    venue: VenueDetailsType | null;
+
     [key: string]: unknown; // 👈 ajoute ceci
   }
 
@@ -68,7 +103,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Home() {
-    const { items, services, testimonials } = usePage<HomePageProps>().props;
+    const { items, services, testimonials, events, venue } = usePage<HomePageProps>().props;
 
   const { ref: servicesRef, inView: servicesInView } = useInView({
     threshold: 0.1,
@@ -76,6 +111,11 @@ export default function Home() {
   });
 
   const { ref: galleryRef, inView: galleryInView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const { ref: eventRef, inView: eventInView } = useInView({
     threshold: 0.1,
     triggerOnce: true,
   });
@@ -103,6 +143,20 @@ export default function Home() {
       });
     }
   }, [galleryInView]);
+
+
+  useEffect(() => {
+    if (eventInView) {
+      const elements = document.querySelectorAll('.event-item');
+      elements.forEach((el, i) => {
+        setTimeout(() => {
+          el.classList.remove('opacity-0', 'translate-y-4');
+          el.classList.add('opacity-100', 'translate-y-0');
+        }, i * 150);
+      });
+    }
+  }, [eventInView]);
+
 
   return (
     <AppLayoutTemplate breadcrumbs={breadcrumbs}>
@@ -283,6 +337,142 @@ export default function Home() {
         ))}
         </div>
         </div>)}
+
+        {/* Section Événements */}
+        {events?.data?.length > 0 && (
+        <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-6 bg-secondary/40">
+          <SectionHeading
+            title="Nos Événements"
+            subtitle="Découvrez nos événements passés et à venir"
+            centered
+          />
+         <div ref={eventRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+  {events.data.map((event) => (
+    <div
+      key={event.id}
+      className="event-item opacity-0 translate-y-4 transition-all duration-700 ease-out"
+    >
+      <EventCard
+        id={event.id}
+        title={event.title}
+        date={event.date}
+        location={event.location}
+        url={event.url}
+        type={event.type}
+        description={event.description}
+        // schedule={event.schedule}
+        // highlights={event.highlights}
+        isActive={event.isActive}
+      />
+    </div>
+  ))}
+</div>
+
+          <div className="text-center mt-12">
+            <Button asChild variant="outline">
+              <Link href="/events" className="inline-flex items-center">
+                Explorer tous les événements <ChevronRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+        )}
+
+
+ {/* Info Section */}
+      <section className="py-16 bg-gray-50 dark:bg-guilo-black/20">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              {/* <h2 className="section-title"></h2> */}
+              <h2 className="font-bold text-xl mb-2">Comment choisir la salle idéale ?</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Le choix de la salle est une décision cruciale pour la réussite de votre événement. Notre équipe vous accompagne dans cette sélection en tenant compte de vos besoins spécifiques.
+              </p>
+              <div className="space-y-4 mb-6">
+                <div className="flex items-start">
+                <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clipRule="evenodd"
+          />
+        </svg>
+                  <div>
+                    <h3 className="text-lg font-medium">Définir vos besoins</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Nombre d'invités, style d'événement, budget, localisation et services requis.</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clipRule="evenodd"
+          />
+        </svg>
+                  <div>
+                    <h3 className="text-lg font-medium">Visiter plusieurs options</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Nous organisons des visites des lieux qui correspondent à vos critères.</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clipRule="evenodd"
+          />
+        </svg>
+                  <div>
+                    <h3 className="text-lg font-medium">Vérifier la disponibilité</h3>
+                    <p className="text-gray-600 dark:text-gray-300">Réservez suffisamment à l'avance pour sécuriser votre date idéale.</p>
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="text-center mt-12">
+            <Button asChild>
+              <Link href="/venues" className="inline-flex items-center button-orange">
+                Voir nos salles <ChevronRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+
+
+
+            </div>
+            <div className="rounded-xl overflow-hidden shadow-xl aspect-[16/9]">
+  {venue && venue.url && (
+    <img
+      src={venue.url}
+      alt={venue.name || "Salle d'événement"}
+      className="w-full h-full object-cover"
+    />
+  )}
+</div>
+
+          </div>
+        </div>
+      </section>
+
+
 
 
 
