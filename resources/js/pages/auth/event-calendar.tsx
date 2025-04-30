@@ -623,7 +623,8 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
             (events.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {events.map((event) => (
-                  <div key={event.id} className="border rounded-lg overflow-hidden bg-white shadow relative">
+                  <div key={event.id} className="border rounded-lg overflow-hidden
+                   dark:bg-accent/10     bg-white shadow relative">
                     <div className="aspect-video relative">
                       {event.type === 'image' ? (
                         <img src={event.url} alt={event.title} className="w-full h-full object-cover" />

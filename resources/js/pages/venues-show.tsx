@@ -91,7 +91,7 @@ export default function VenueDetails() {
               )}
 
               {/* Infos principales */}
-              <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-300 mt-4">
+              <div className="flex flex-wrap items-center gap-4 paragraph mt-4">
                 <span className="inline-flex items-center gap-2">
                   <Building className="h-5 w-5 text-primary" />
                   {venue.capacity} personnes
@@ -100,7 +100,7 @@ export default function VenueDetails() {
               </div>
 
               {/* Description */}
-              <p className="text-gray-600 dark:text-gray-300 text-lg">{venue.description}</p>
+              <p className="paragraph text-lg">{venue.description}</p>
 
               {/* Bouton Réserver (si disponible) */}
               {venue.is_active && (
@@ -119,7 +119,7 @@ export default function VenueDetails() {
 
             {/* Caractéristiques */}
             {venue.features && venue.features.length > 0 && (
-              <div className="bg-white dark:bg-guilo-black/60 rounded-xl p-8">
+              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Caractéristiques</h2>
                 <ul className="space-y-4">
                   {venue.features.map((feature, index) => (
@@ -146,7 +146,7 @@ export default function VenueDetails() {
 
             {/* Services Disponibles */}
             {venue.availables && venue.availables.length > 0 && (
-              <div className="bg-white dark:bg-guilo-black/60 rounded-xl p-8">
+              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Services Disponibles</h2>
                 <ul className="space-y-4">
                   {venue.availables.map((service, index) => (

@@ -177,10 +177,10 @@ export default function Home() {
             subtitle="Bienvenue chez Guil'O Services"
             centered
           />
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="paragraph">
                 Depuis notre création, Guil'O Services s'est imposé comme une référence dans l'organisation d'événements. Notre passion pour l'excellence et notre souci du détail font de chaque projet une expérience unique.
               </p>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="paragraph">
                 Notre équipe créative et dévouée travaille sans relâche pour transformer vos envies en réalités exceptionnelles, qu'il s'agisse d'un mariage élégant, d'une fête d'anniversaire inoubliable ou d'une cérémonie solennelle.
               </p>
               <p className="font-medium mb-6">
@@ -380,97 +380,105 @@ export default function Home() {
 
 
  {/* Info Section */}
-      <section className="py-16 bg-gray-50 dark:bg-guilo-black/20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<section className="py-16 bg-gray-50 dark:bg-black">
+  <div className="container mx-auto px-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 className="font-bold text-xl mb-2 text-black dark:text-white">
+          Comment choisir la salle idéale ?
+        </h2>
+        <p className="paragraph mb-6">
+          Le choix de la salle est une décision cruciale pour la réussite de votre événement.
+          Notre équipe vous accompagne dans cette sélection en tenant compte de vos besoins spécifiques.
+        </p>
+
+        <div className="space-y-4 mb-6">
+          <div className="flex items-start">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
             <div>
-              {/* <h2 className="section-title"></h2> */}
-              <h2 className="font-bold text-xl mb-2">Comment choisir la salle idéale ?</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Le choix de la salle est une décision cruciale pour la réussite de votre événement. Notre équipe vous accompagne dans cette sélection en tenant compte de vos besoins spécifiques.
+              <h3 className="text-lg font-medium text-black dark:text-white">Définir vos besoins</h3>
+              <p className="paragraph">
+                Nombre d'invités, style d'événement, budget, localisation et services requis.
               </p>
-              <div className="space-y-4 mb-6">
-                <div className="flex items-start">
-                <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clipRule="evenodd"
-          />
-        </svg>
-                  <div>
-                    <h3 className="text-lg font-medium">Définir vos besoins</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Nombre d'invités, style d'événement, budget, localisation et services requis.</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clipRule="evenodd"
-          />
-        </svg>
-                  <div>
-                    <h3 className="text-lg font-medium">Visiter plusieurs options</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Nous organisons des visites des lieux qui correspondent à vos critères.</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clipRule="evenodd"
-          />
-        </svg>
-                  <div>
-                    <h3 className="text-lg font-medium">Vérifier la disponibilité</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Réservez suffisamment à l'avance pour sécuriser votre date idéale.</p>
-                  </div>
-                </div>
-              </div>
-
-
-              <div className="text-center mt-12">
-            <Button asChild>
-              <Link href="/venues" className="inline-flex items-center button-orange">
-                Voir nos salles <ChevronRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            </div>
           </div>
 
-
-
+          <div className="flex items-start">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div>
+              <h3 className="text-lg font-medium text-black dark:text-white">Visiter plusieurs options</h3>
+              <p className="paragraph">
+                Nous organisons des visites des lieux qui correspondent à vos critères.
+              </p>
             </div>
-            <div className="rounded-xl overflow-hidden shadow-xl aspect-[16/9]">
-  {venue && venue.url && (
-    <img
-      src={venue.url}
-      alt={venue.name || "Salle d'événement"}
-      className="w-full h-full object-cover"
-    />
-  )}
-</div>
+          </div>
 
+          <div className="flex items-start">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div>
+              <h3 className="text-lg font-medium text-black dark:text-white">Vérifier la disponibilité</h3>
+              <p className="paragraph">
+                Réservez suffisamment à l'avance pour sécuriser votre date idéale.
+              </p>
+            </div>
           </div>
         </div>
-      </section>
+
+        <div className="text-center mt-12">
+          <Button asChild>
+            <Link href="/venues" className="inline-flex items-center button-orange">
+              Voir nos salles <ChevronRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Image Section */}
+      <div className="rounded-xl overflow-hidden shadow-xl aspect-[16/9]">
+        {venue && venue.url && (
+          <img
+            src={venue.url}
+            alt={venue.name || "Salle d'événement"}
+            className="w-full h-full object-cover"
+          />
+        )}
+      </div>
+    </div>
+  </div>
+</section>
 
 
 

@@ -63,7 +63,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form & Info Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-accent/10">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-12">
             <div>
@@ -151,7 +151,7 @@ export default function ContactPage() {
 
             <div className="max-w-3xl mx-auto mt-10 space-y-6">
               {faqs.data.map((faq) => (
-                <div key={faq.id} className="bg-white p-6 rounded-lg shadow-sm">
+                <div key={faq.id} className="bg-white dark:bg-accent/10 p-6 rounded-lg shadow-sm">
                   <h4 className="font-medium mb-2">{faq.question}</h4>
                   <p className="text-muted-foreground">{faq.answer}</p>
                 </div>

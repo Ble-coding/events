@@ -102,7 +102,7 @@ export default function EventDetails() {
               )}
 
               {/* Infos : Date - Lieu - Catégorie */}
-              <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-300 mt-4">
+              <div className="flex flex-wrap items-center gap-4 paragraph mt-4">
                 <span className="inline-flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-primary" />
                   {event.date}
@@ -116,7 +116,7 @@ export default function EventDetails() {
               </div>
 
               {/* Description */}
-              <p className="text-gray-600 dark:text-gray-300 text-lg">{event.description}</p>
+              <p className="paragraph text-lg">{event.description}</p>
 
               {/* Bouton Réserver (si actif uniquement) */}
               {isEventCurrentlyActive(event) && (
@@ -135,7 +135,7 @@ export default function EventDetails() {
 
             {/* Programme */}
             {event.schedule && event.schedule.length > 0 && (
-              <div className="bg-white dark:bg-guilo-black/60 rounded-xl p-8">
+              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Programme</h2>
                 <ul className="space-y-4">
                   {event.schedule.map((item, index) => (
@@ -162,7 +162,7 @@ export default function EventDetails() {
 
             {/* Points forts */}
             {event.highlights && event.highlights.length > 0 && (
-              <div className="bg-white dark:bg-guilo-black/60 rounded-xl p-8">
+              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Points forts</h2>
                 <ul className="space-y-4">
                   {event.highlights.map((highlight, index) => (

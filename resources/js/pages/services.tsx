@@ -72,7 +72,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-accent/10 ">
         <div className="container">
           <SectionHeading
             subtitle="Ce que nous proposons"

@@ -70,7 +70,7 @@ const ContactForm = () => {
                 onChange={(e) => setData('name', e.target.value)}
                 placeholder="Votre nom"
                 required
-                className="bg-white/70 backdrop-blur-sm"
+                className="bg-white/70 dark:bg-accent/10 backdrop-blur-sm"
               />
               {errors?.name && <p className="text-red-500 text-sm">{errors.name}</p>}
             </div>
@@ -85,7 +85,7 @@ const ContactForm = () => {
                 onChange={(e) => setData('email', e.target.value)}
                 placeholder="Votre email"
                 required
-                className="bg-white/70 backdrop-blur-sm"
+                className="bg-white/70 dark:bg-accent/10 backdrop-blur-sm"
               />
               {errors?.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
@@ -99,7 +99,7 @@ const ContactForm = () => {
               value={data.phone}
               onChange={(e) => setData('phone', e.target.value)}
               placeholder="Votre téléphone"
-              className="bg-white/70 backdrop-blur-sm"
+              className="bg-white/70 dark:bg-accent/10 backdrop-blur-sm"
             />
             {errors?.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
           </div>
@@ -114,7 +114,7 @@ const ContactForm = () => {
               onChange={(e) => setData('message', e.target.value)}
               required
               placeholder="Votre message"
-              className="resize-none bg-white/70 backdrop-blur-sm"
+              className="resize-none dark:bg-accent/10 bg-white/70 backdrop-blur-sm"
             />
             {errors?.message && <p className="text-red-500 text-sm">{errors.message}</p>}
           </div>

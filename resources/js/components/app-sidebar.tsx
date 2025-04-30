@@ -6,10 +6,11 @@ import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
     BookOpen,
-    Home,
+    // Home,
     Folder, HelpCircle,
-     LayoutGrid, Book, User, Calendar,
-     QuoteIcon, Handshake, Building2,
+     LayoutGrid,
+      Book, User, Calendar,
+     QuoteIcon, Handshake, Building2, Newspaper ,
      PhoneCall} from 'lucide-react';
 import AppLogoDash from './app-logo-dash';
 
@@ -51,6 +52,11 @@ const mainNavItems: NavItem[] = [
         icon: Handshake,
     },
     {
+        title: 'Blogs',
+        href: '/blogs-dashboard',
+        icon: Newspaper,
+    },
+    {
         title: 'Faqs',
         href: '/contact-dashboard',
         icon: HelpCircle,
@@ -70,11 +76,11 @@ const mainNavItems: NavItem[] = [
         href: '/contact-infos',
         icon: PhoneCall,
     },
-    {
-        title: 'Guilo\'s Services',
-        href: '/',
-        icon: Home,
-    },
+    // {
+    //     title: 'Guilo\'s Services',
+    //     href: '/',
+    //     icon: Home,
+    // },
 ];
 
 // const footerNavItems: NavItem[] = [

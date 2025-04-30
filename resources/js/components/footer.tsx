@@ -88,7 +88,7 @@ const Footer = ({ contact, services, }: { contact: ContactInfo | null;
               <a href="/galerie" className="hover:underline">Galerie</a>
               <a href="/events" className="hover:underline">Événements</a>
               <a href="/venues" className="hover:underline">Salles</a>
-              <a href="/contact" className="hover:underline">Contact</a>
+              <a href="/blogs" className="hover:underline">Blogs</a>
             </nav>
           </div>
 

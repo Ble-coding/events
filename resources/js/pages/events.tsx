@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppMenuTemplate from '@/layouts/app/app-menu-layout';
 import { Button } from '@/components/ui/button';
 // import SectionHeading from '@/components/section-heading';
+import CallToActionWithButton from '@/components/call-to-action';
 interface Event {
   id: number;
   title: string;
@@ -97,7 +98,7 @@ export default function Events() {
       </section>
 
 
-           <section  className="py-20 bg-white">
+           <section  className="py-20 bg-white  dark:bg-accent/10">
         <div className="container">
           {/* Barre de filtres */}
           <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -174,6 +175,17 @@ export default function Events() {
         </div>
       </section>
 
+
+    {/* Call to Action */}
+    <CallToActionWithButton
+        title="Besoin de plus d'inspirations ?"
+        description="Explorez notre collection complète d'articles pour enrichir votre projet."
+        buttonText="Voir tous les articles"
+        buttonLink="/blogs"
+        bgColorClass="bg-dark-gk"
+        textColorClass="text-white"
+        buttonVariant="outline"
+      />
         </AppMenuTemplate>
 
 

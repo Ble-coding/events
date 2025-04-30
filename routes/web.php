@@ -11,6 +11,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\VenueController;
+use App\Http\Controllers\BlogController;
 
 
 
@@ -40,6 +41,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 //     return Inertia::render('services');
 // })->name('services');
 
+
+
+
+Route::get('/blogs', [BlogController::class, 'getBlogs'])->name('blogs');
+Route::get('/blogs/{blog}', [BlogController::class, 'getBlogsShow'])->name('blogs.show');
 
 
 Route::get('/events', [EventController::class, 'getEvents'])->name('events');
@@ -99,6 +105,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('testimonials-dashboard', TestimonialController::class);
     Route::resource('events-dashboard', EventController::class);
     Route::resource('venues-dashboard', VenueController::class);
+    Route::resource('blogs-dashboard', BlogController::class);
 
 });
 

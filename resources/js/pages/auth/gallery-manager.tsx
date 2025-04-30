@@ -157,8 +157,7 @@ export default function GalleryDashboard() {
   .filter((event) => {
     if (selectedCategory === 'all') return true;
     return event.category_id === selectedCategory;
-  })
-  ;
+  });
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -277,7 +276,7 @@ export default function GalleryDashboard() {
                         {filteredItems.map((item) => (
                         <div
                             key={item.id}
-                            className="border rounded-lg overflow-hidden bg-white shadow"
+                            className="border rounded-lg overflow-hidden bg-white  dark:bg-accent/10 shadow"
                         >
                             <div className="aspect-video relative">
                             {item.type === 'image' ? (

@@ -89,7 +89,7 @@ export default function Venues() {
       </section>
 
       {/* Section Salles */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-accent/10">
         <div className="container">
 
           {/* Barre de Filtres */}

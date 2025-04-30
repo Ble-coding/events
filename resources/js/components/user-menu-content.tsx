@@ -3,7 +3,7 @@ import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { type User } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LogOut, Settings } from 'lucide-react';
+import { LogOut, Settings, Home } from 'lucide-react';
 
 interface UserMenuContentProps {
     user: User;
@@ -26,6 +26,14 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                         <Settings className="mr-2" />
                         Paramètres
                     </Link>
+                </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                    <a className="block w-full" href="/" type="button" target='_blank' onClick={cleanup}>
+                        <Home className="mr-2" />
+                        Guilo's Services
+                    </a>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

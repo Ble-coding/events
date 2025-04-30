@@ -23,6 +23,7 @@ const navLinks = [
   { name: 'Galerie', href: '/galerie' },
   { name: 'Événements', href: '/events' },
   { name: 'Salles', href: '/venues' },
+  { name: 'Blogs', href: '/blogs' },
 
   { name: 'Contact', href: '/contact' },
 ]
@@ -52,11 +53,14 @@ export function AppMenu() {
 
   return (
     <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 py-3 transition-all duration-300',
-        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-white'
-      )}
-    >
+  className={cn(
+    'fixed top-0 left-0 right-0 z-50 py-3 transition-all duration-300',
+    isScrolled
+      ? 'bg-white/90 dark:bg-[#070504]/90 backdrop-blur-md shadow-sm'
+      : 'bg-white dark:bg-[#070504]'
+  )}
+>
+
       <div className="container flex items-center justify-between">
         <AppLogo />
 
@@ -64,16 +68,16 @@ export function AppMenu() {
        {/* Desktop Menu */}
         <nav className="hidden md:flex items-center space-x-8">
         {navLinks.map((link) => (
-            <Link
-            key={link.href}
-            href={link.href}
-            className={cn(
-                'nav-link py-2 font-medium transition-colors',
-                isActive(link.href) ? 'text-guilo' : 'text-primary hover:text-guilo'
-            )}
-            >
-            {link.name}
-            </Link>
+           <Link
+           key={link.href}
+           href={link.href}
+           className={cn(
+             'nav-link py-2 font-medium',
+             isActive(link.href) && 'nav-link-active'
+           )}
+         >
+           {link.name}
+         </Link>
         ))}
 
         {/* Show login only if NOT connected */}
@@ -114,13 +118,13 @@ export function AppMenu() {
       href={link.href}
       className={cn(
         'py-2 px-4 rounded-md font-medium transition-colors',
-        isActive(link.href)
-          ? 'bg-guilo/10 text-guilo'
-          : 'text-primary hover:bg-guilo/5 hover:text-guilo'
+        isActive(link.href) && 'nav-link-active'
       )}
     >
       {link.name}
     </Link>
+
+
   ))}
 
   {/* Admin button in mobile */}

@@ -59,6 +59,75 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+
+/* === Navigation Desktop === */
+.nav-link {
+    color: #EA7A0B !important; /* orange en mode light */
+    transition: color 0.3s ease;
+  }
+  .nav-link:hover {
+    color: #EA7A0B !important;
+  }
+  .nav-link-active {
+    color: #000 !important; /* noir si actif */
+  }
+
+  /* === Navigation en mode sombre === */
+  .dark .nav-link {
+    color: white !important;
+  }
+  .dark .nav-link:hover {
+    color: white !important;
+  }
+  .dark .nav-link-active {
+    color: #EA7A0B !important; /* actif orange */
+  }
+
+
+/* Light mode — déjà ok */
+.text-card-title {
+    color: #020817 !important;
+  }
+
+  .text-muted-foreground {
+    color: #657086 !important;
+  }
+
+  /* Dark mode forcé */
+  .dark .text-card-title,
+  .dark .text-muted-foreground,
+  .dark .text-accent {
+    color: white !important;
+  }
+  .dark .text-gray-900 {
+    color: #111827 !important; /* noir Tailwind par défaut */
+  }
+
+  .dark .text-gray-500 {
+    color: #6B7280 !important;
+  }
+
+  .dark .text-gray-600 {
+    color: #4B5563 !important;
+  }
+
+  .paragraph {
+    @apply text-gray-600 mb-6;
+  }
+
+  .dark .paragraph {
+    @apply text-white;
+  }
+
+
+
+
+
+
+
+
+
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

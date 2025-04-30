@@ -271,7 +271,7 @@ export default function UserManager() {
                   <div>
                     <p>{u.name}</p>
                     <p className="text-sm text-muted-foreground">{u.email}</p>
-                    <p className="text-xs text-blue-500 capitalize">{roleLabel[u.role] || u.role}</p>
+                    <p className="text-xs text-primary capitalize">{roleLabel[u.role] || u.role}</p>
 
                   </div>
                   {userRole === 'admin' && (
