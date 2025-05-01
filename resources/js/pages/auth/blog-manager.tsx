@@ -263,8 +263,9 @@ export default function BlogManager() {
                       </Select>
         </div>
 
-        {(isAdmin || isEditor) && (
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {(isAdmin || isEditor) && (
             <Card>
               <CardHeader>
                 <CardTitle>{editingBlog ? 'Modifier' : 'Ajouter'} un blog</CardTitle>
@@ -369,7 +370,7 @@ export default function BlogManager() {
                 </form>
               </CardContent>
             </Card>
-
+        )}
             {/* Liste Blogs */}
             <div className="md:col-span-2">
               <Card>
@@ -460,7 +461,7 @@ export default function BlogManager() {
               </Card>
             </div>
           </div>
-        )}
+
 
         <ConfirmModal
           open={showConfirmModal}

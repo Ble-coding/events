@@ -254,8 +254,9 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
     onChange={(e) => setMaxCapacity(e.target.value === '' ? '' : Number(e.target.value))}
   />
         </div>
-        {(isAdmin || isEditor) && (
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {(isAdmin || isEditor) && (
           <Card>
             <CardHeader>
               <CardTitle>{editingVenue ? 'Modifier' : 'Ajouter'} une salle</CardTitle>
@@ -408,7 +409,7 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
               </form>
             </CardContent>
           </Card>
-
+        )}
           {/* Liste des salles */}
           <div className="md:col-span-2">
             <Card>
@@ -500,7 +501,7 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
             </Card>
           </div>
         </div>
-            )}
+
 
         <ConfirmModal
           open={showConfirmModal}

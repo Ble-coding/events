@@ -352,9 +352,10 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
   </Select>
         </div>
 
-        {(isAdmin || isEditor) && (
+
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {(isAdmin || isEditor) && (
             <div>
               <Card>
                 <CardHeader>
@@ -540,7 +541,7 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
                 </CardContent>
               </Card>
             </div>
-
+        )}
             {/* List events */}
             <div className="md:col-span-2">
               {filteredEvents.length === 0 ? (
@@ -692,7 +693,7 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
               )}
             </div>
           </div>
-        )}
+
 
         <ConfirmModal
           open={showConfirmModal}

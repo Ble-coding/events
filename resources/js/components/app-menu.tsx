@@ -110,7 +110,8 @@ export function AppMenu() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg shadow-md animate-fade-in">
+        <div className="md:hidden absolute top-full left-0 right-0
+        dark:bg-[#070504]/95 bg-white/95 backdrop-blur-lg shadow-md animate-fade-in">
         <nav className="container py-6 flex flex-col space-y-4">
   {navLinks.map((link) => (
     <Link

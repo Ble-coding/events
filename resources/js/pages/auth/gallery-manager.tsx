@@ -193,9 +193,10 @@ export default function GalleryDashboard() {
 
 
 
-        {(isAdmin || isEditor) && (
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Formulaire */}
+            {(isAdmin || isEditor) && (
             <div>
                     <Card>
                         <CardHeader>
@@ -254,7 +255,9 @@ export default function GalleryDashboard() {
                         </form>
                         </CardContent>
                     </Card>
-                    </div>
+
+            </div>
+              )}
 
             {/* Liste des galeries */}
             <div className="md:col-span-2">
@@ -348,7 +351,7 @@ export default function GalleryDashboard() {
                 )}
             </div>
             </div>
-        )}
+
 
         <ConfirmModal
             open={showConfirmModal}

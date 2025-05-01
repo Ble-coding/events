@@ -18,7 +18,7 @@ class UtilisateurController extends Controller
 
     // public function __construct()
     // {
-    //     $this->middleware('auth'); 
+    //     $this->middleware('auth');
     // }
 
     public function index(): Response
@@ -79,6 +79,8 @@ class UtilisateurController extends Controller
             'role' => 'required|string|in:admin,editor,viewer',
             // on enlève password
         ]);
+
+
 
         $utilisateurs_dashboard->update([
             'name' => $validated['name'],

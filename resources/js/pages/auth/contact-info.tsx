@@ -36,11 +36,16 @@ interface PageProps extends InertiaPageProps {
   flash?: {
     success?: string;
   };
+  auth: { user: { role: 'admin' | 'editor' | 'viewer' } };
 }
 
 export default function ContactInfoManager() {
 
-  const { contact, flash } = usePage<PageProps>().props;
+  const { contact, flash, auth } = usePage<PageProps>().props;
+  const isAdmin = auth.user.role === 'admin';
+  const isEditor = auth.user.role === 'editor';
+  const isViewer = auth.user.role  === 'viewer';
+const isReadOnly = isViewer && !(isAdmin || isEditor);
   const defaultSocialLinks = {
     facebook: '',
     instagram: '',
@@ -101,6 +106,7 @@ export default function ContactInfoManager() {
       <Head title="Informations de Contact" />
 
       <div className="flex flex-col gap-4 p-4">
+      {/* {(isAdmin || isEditor) && ( */}
         <Card>
           <CardHeader>
             <CardTitle>Informations de Contact</CardTitle>
@@ -117,6 +123,7 @@ export default function ContactInfoManager() {
                   id="address"
                   value={data.address}
                   onChange={(e) => setData('address', e.target.value)}
+                  disabled={isReadOnly}
                    placeholder="Adresse 123 Avenue des Services 75000 Paris, France"
                 />
               </div>
@@ -124,7 +131,7 @@ export default function ContactInfoManager() {
               <div>
                 <Label htmlFor="phone">Téléphone</Label>
                 <Input
-                  id="phone"
+                  id="phone" disabled={isReadOnly}
                   value={data.phone}
                   onChange={(e) => setData('phone', e.target.value)}
                   placeholder="+33 1 23 45 67 89"
@@ -135,7 +142,7 @@ export default function ContactInfoManager() {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
-                  type="email"
+                  type="email" disabled={isReadOnly}
                   value={data.email}
                   onChange={(e) => setData('email', e.target.value)}
                   placeholder="contact@guiloservices.fr"
@@ -145,7 +152,7 @@ export default function ContactInfoManager() {
               <div>
                 <Label htmlFor="weekday_hours">Heures (Semaine)</Label>
                 <Input
-                  id="weekday_hours"
+                  id="weekday_hours" disabled={isReadOnly}
                   value={data.weekday_hours}
                   onChange={(e) => setData('weekday_hours', e.target.value)}
                    placeholder="9h00 - 18h00"
@@ -156,7 +163,7 @@ export default function ContactInfoManager() {
                 <Label htmlFor="saturday_hours">Heures (Samedi)</Label>
                 <Input
                   id="saturday_hours"
-                  value={data.saturday_hours}
+                  value={data.saturday_hours} disabled={isReadOnly}
                   onChange={(e) => setData('saturday_hours', e.target.value)}
                   placeholder="10h00 - 16h00"
                 />
@@ -165,7 +172,7 @@ export default function ContactInfoManager() {
               <div>
                 <Label htmlFor="sunday_hours">Heures (Dimanche)</Label>
                 <Input
-                  id="sunday_hours"
+                  id="sunday_hours" disabled={isReadOnly}
                   value={data.sunday_hours}
                   onChange={(e) => setData('sunday_hours', e.target.value)}
                 placeholder="Fermé"
@@ -177,7 +184,7 @@ export default function ContactInfoManager() {
             {Object.entries(data.social_links).map(([platform, value]) => (
                 <div key={platform}>
                 <Label htmlFor={`social-${platform}`} className="capitalize">{platform}</Label>
-                <Input
+                <Input disabled={isReadOnly}
                     id={`social-${platform}`}
                     value={value}
                     onChange={(e) => setData('social_links', {
@@ -200,7 +207,7 @@ export default function ContactInfoManager() {
                     onChange={(e) => setData('map_src', e.target.value)}
                     placeholder="https://www.google.com/maps/embed?pb=..."
                 /> */}
-                 <Textarea
+                 <Textarea disabled={isReadOnly}
                     id="map_src" required
                     value={data.map_src}
                     onChange={(e) => setData('map_src', e.target.value)}
@@ -222,16 +229,19 @@ export default function ContactInfoManager() {
                 )}
                 </div>
 
+                {(isAdmin || isEditor) && (
               <div className="pt-4">
-                <Button type="submit" className="w-full" disabled={processing}>
+              <Button type="submit" className="w-full" disabled={processing || isReadOnly}>
+
                   <Save className="h-4 w-4 mr-2" />
                   {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                   {contact ? 'Mettre à jour' : 'Enregistrer'}
                 </Button>
-              </div>
+              </div> )}
             </form>
           </CardContent>
         </Card>
+        {/* )} */}
       </div>
     </AppLayout>
   );
