@@ -68,6 +68,8 @@ export default function Venues() {
       return venue.capacity >= min && venue.capacity <= max;
     });
 
+
+
   const handlePageChange = (url: string | null) => {
     if (url) router.visit(url, { preserveScroll: true });
   };

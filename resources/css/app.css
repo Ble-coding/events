@@ -112,7 +112,7 @@
   }
 
   .paragraph {
-    @apply text-gray-600 mb-6;
+    @apply text-gray-600;
   }
 
   .dark .paragraph {

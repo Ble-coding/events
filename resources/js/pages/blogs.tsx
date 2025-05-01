@@ -40,17 +40,24 @@ export default function Blogs() {
   const { blogs } = usePage<PageProps>().props;
 
   const [search, setSearch] = useState('');
-//   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
+  const [selectedDate, setSelectedDate] = useState('');
+    //   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
 
-  const filteredBlogs = blogs.data
+
     // .filter(blog => {
     //   if (statusFilter === 'published') return blog.is_active;
     //   if (statusFilter === 'draft') return !blog.is_active;
     //   return true;
     // })
-    .filter(blog => {
+
+    const filteredBlogs = blogs.data
+    .filter((blog: BlogType) => {
       if (!search) return true;
       return blog.title.toLowerCase().includes(search.toLowerCase());
+    })
+    .filter((blog: BlogType) => {
+      if (!selectedDate) return true;
+      return blog.date.startsWith(selectedDate);
     });
 
   const handlePageChange = (url: string | null) => {
@@ -83,6 +90,13 @@ export default function Blogs() {
         onChange={(e) => setSearch(e.target.value)}
         className="w-full md:w-1/3 bg-white dark:bg-black border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
       />
+                 <Input
+        type="month"
+        value={selectedDate}
+        onChange={(e) => setSelectedDate(e.target.value)}
+        className="w-full md:w-1/4"
+      />
+
     </div>
 
     {/* Résultat des Blogs */}

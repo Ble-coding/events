@@ -45,6 +45,21 @@ const VenueCard = ({
       )}
 
       {/* Badge Disponibilité */}
+
+
+          {/* Badge Actif/Inactif */}
+          <div className="absolute top-4 right-4">
+        {is_active ? (
+          <div className="flex items-center gap-1 text-green-600 bg-white dark:bg-black rounded-full px-2 py-1 text-xs">
+            <CheckCircle className="h-4 w-4" /> Disponible
+          </div>
+        ) : (
+          <div className="flex items-center gap-1 text-red-600 bg-white dark:bg-black rounded-full px-2 py-1 text-xs">
+            <XCircle className="h-4 w-4" /> Indisponible
+          </div>
+        )}
+      </div>
+        {/*
       <div className="absolute top-4 right-4">
         {is_active ? (
           <div className="flex items-center gap-1 text-green-600 bg-white dark:bg-black dark:text-white rounded-full px-2 py-1 text-xs">
@@ -55,7 +70,7 @@ const VenueCard = ({
             <XCircle className="h-4 w-4" /> Indisponible
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Badge Capacité */}
       <div className="absolute top-4 left-4 bg-white dark:bg-black dark:text-white text-black rounded-lg px-3 py-1.5 text-sm font-medium flex items-center">
