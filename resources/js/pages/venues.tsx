@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Calendar } from 'lucide-react';
 import { Head, usePage, router
     // , Link
@@ -36,37 +36,46 @@ interface PageProps {
     links: PaginationLink[];
   };
   [key: string]: unknown;
+  allvenuItems: Venue[];
 }
 
 export default function Venues() {
-  const { venues } = usePage<PageProps>().props;
+  const { venues, allvenuItems } = usePage<PageProps>().props;
+
+
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [minCapacity, setMinCapacity] = useState('');
   const [maxCapacity, setMaxCapacity] = useState('');
+  const hasSearch =
+  search.trim().length > 0 ||
+  minCapacity.trim().length > 0 ||
+  maxCapacity.trim().length > 0 ||
+  statusFilter !== 'all';
 
-  const filteredVenues = venues.data
-    .filter(venue => {
-      if (statusFilter === 'active') return venue.is_active;
-      if (statusFilter === 'inactive') return !venue.is_active;
-      return true;
-    })
-    .filter(venue => {
-      if (!search) return true;
-      return (
-        venue.name.toLowerCase().includes(search.toLowerCase()) ||
-        venue.location.toLowerCase().includes(search.toLowerCase())
-      );
-    })
-    .filter(venue => {
-      if (!minCapacity && !maxCapacity) return true;
+const filteredVenues = useMemo(() => {
+  const term = search.trim().toLowerCase();
+  const list = allvenuItems ?? venues.data;
 
-      const min = minCapacity ? parseInt(minCapacity) : 0;
-      const max = maxCapacity ? parseInt(maxCapacity) : Infinity;
+  return list.filter((venue) => {
+    const matchesSearch =
+      venue.name.toLowerCase().includes(term) ||
+      venue.location.toLowerCase().includes(term);
 
-      return venue.capacity >= min && venue.capacity <= max;
-    });
+    const matchesStatus =
+      statusFilter === 'all' ||
+      (statusFilter === 'active' && venue.is_active) ||
+      (statusFilter === 'inactive' && !venue.is_active);
+
+    const min = minCapacity ? parseInt(minCapacity, 10) : 0;
+    const max = maxCapacity ? parseInt(maxCapacity, 10) : Infinity;
+    const matchesCapacity = venue.capacity >= min && venue.capacity <= max;
+
+    return matchesSearch && matchesStatus && matchesCapacity;
+  });
+}, [search, statusFilter, minCapacity, maxCapacity, allvenuItems, venues.data]);
+
 
 
 
@@ -104,7 +113,7 @@ export default function Venues() {
             />
 
             <Input
-              type="number"
+              type="number" min="0"
               placeholder="Capacité min"
               value={minCapacity}
               onChange={(e) => setMinCapacity(e.target.value)}
@@ -112,7 +121,7 @@ export default function Venues() {
             />
 
             <Input
-              type="number"
+              type="number" min="0"
               placeholder="Capacité max"
               value={maxCapacity}
               onChange={(e) => setMaxCapacity(e.target.value)}
@@ -136,32 +145,34 @@ export default function Venues() {
 
           {/* Résultat des salles */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredVenues.length > 0 ? (
-              filteredVenues.map((venue) => (
-                <VenueCard
-                  key={venue.id}
-                  id={venue.id}
-                  name={venue.name}
-                  location={venue.location}
-                  capacity={venue.capacity}
-                  url={venue.url}
-                  type={venue.type}
-                  description={venue.description}
-                  is_active={venue.is_active}
-                />
-              ))
-            ) : (
-              <div className="text-center col-span-full py-12">
-                <Calendar className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-xl font-medium mb-2">Aucune salle trouvée</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Essayez d'ajuster votre recherche ou vos filtres.
-                </p>
-              </div>
-            )}
+          {(hasSearch ? filteredVenues : venues.data).length > 0 ? (
+  (hasSearch ? filteredVenues : venues.data).map((venue: Venue) => (
+    <VenueCard
+      key={venue.id}
+      id={venue.id}
+      name={venue.name}
+      location={venue.location}
+      capacity={venue.capacity}
+      url={venue.url}
+      type={venue.type}
+      description={venue.description}
+      is_active={venue.is_active}
+    />
+  ))
+) : (
+  <div className="text-center col-span-full py-12">
+    <Calendar className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+    <h3 className="text-xl font-medium mb-2">Aucune salle trouvée</h3>
+    <p className="text-gray-600 dark:text-gray-300">
+      Essayez d'ajuster votre recherche ou vos filtres.
+    </p>
+  </div>
+)}
+
           </div>
 
           {/* Pagination */}
+          {!hasSearch && (
           <div className="flex justify-center gap-2 mt-12">
             {venues.links.map((link, idx) => (
               <Button
@@ -173,7 +184,7 @@ export default function Venues() {
               />
             ))}
           </div>
-
+  )}
         </div>
       </section>
 

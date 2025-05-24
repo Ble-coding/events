@@ -23,25 +23,27 @@ class BlogController extends Controller
         return Inertia::render('auth/blog-manager', [
             'blogs' => $blogItems,
             'categories' => $categories,
+            'allblogItems' => Blog::latest()->get(),
         ]);
     }
 
     public function getBlogs()
 {
-    $blogs = Blog::where('is_active', true)->latest()->paginate(6);
+    $blogs = Blog::with('category')->where('is_active', true)->latest()->paginate(6);
     $contact = Contact::latest()->first();
     $servicesFooter = Service::latest()->take(6)->get();
 
     return Inertia::render('blogs', [
         'blogs' => $blogs,
         'contact' => $contact,
+        'allblogItems' => Blog::latest()->get(),
         'servicesFooter' => $servicesFooter,
     ]);
 }
 
     public function getBlogsShow(Blog $blog)
     {
-        $otherBlogs = Blog::where('id', '!=', $blog->id)
+        $otherBlogs = Blog::with('category')->where('id', '!=', $blog->id)
             ->latest()
             ->take(2)
             ->get(['id', 'title', 'date']);
@@ -49,7 +51,7 @@ class BlogController extends Controller
             $servicesFooter = Service::latest()->take(4)->get();
 
         return Inertia::render('blogs-show', [
-            'blog' => $blog,
+            'blog' => $blog->load('category'),
             'otherBlogs' => $otherBlogs,
             'contact' => $contact,
             'servicesFooter' => $servicesFooter,

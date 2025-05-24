@@ -24,6 +24,7 @@ class ServiceController extends Controller
 
         return Inertia::render('auth/gallery-service', [
             'types' => $types,
+            'allserviceItems' => Service::with('type')->latest()->get(),
             'items' => $serviceItems,
         ]);
     }
@@ -37,6 +38,7 @@ class ServiceController extends Controller
         return Inertia::render('services', [
             'services' => $services,
             'contact' => $contact,
+            'allserviceItems' => Service::with('type')->latest()->get(),
             'servicesFooter' => Service::latest()->take(4)->get(),
         ]);
     }

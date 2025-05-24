@@ -20,6 +20,7 @@ class TestimonialController extends Controller
 
         return Inertia::render('auth/testimonial-section', [
             'testimonials' => $testimonialItems,
+            'alltestimonialItems' => Testimonial::latest()->get(),
         ]);
 
     }

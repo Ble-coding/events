@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Calendar } from 'lucide-react';
 import { Head, usePage, router } from '@inertiajs/react';
 import AppMenuTemplate from '@/layouts/app/app-menu-layout';
@@ -34,31 +34,31 @@ interface PageProps {
     links: PaginationLink[];
   };
   [key: string]: unknown;
+  allblogItems: BlogType[];
 }
 
 export default function Blogs() {
-  const { blogs } = usePage<PageProps>().props;
+  const { blogs, allblogItems } = usePage<PageProps>().props;
+
+//   const [search, setSearch] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
 
   const [search, setSearch] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
-    //   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
+
+  const hasSearch = search.trim().length > 0 || selectedDate !== '';
 
 
-    // .filter(blog => {
-    //   if (statusFilter === 'published') return blog.is_active;
-    //   if (statusFilter === 'draft') return !blog.is_active;
-    //   return true;
-    // })
+  const filteredBlogs = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    const list = allblogItems ?? blogs.data;
 
-    const filteredBlogs = blogs.data
-    .filter((blog: BlogType) => {
-      if (!search) return true;
-      return blog.title.toLowerCase().includes(search.toLowerCase());
-    })
-    .filter((blog: BlogType) => {
-      if (!selectedDate) return true;
-      return blog.date.startsWith(selectedDate);
+    return list.filter((blog) => {
+      const matchesSearch = blog.title.toLowerCase().includes(term);
+      const matchesDate = !selectedDate || blog.date.startsWith(selectedDate);
+      return matchesSearch && matchesDate;
     });
+  }, [search, selectedDate, allblogItems, blogs.data]);
+
 
   const handlePageChange = (url: string | null) => {
     if (url) router.visit(url, { preserveScroll: true });
@@ -101,8 +101,8 @@ export default function Blogs() {
 
     {/* Résultat des Blogs */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {filteredBlogs.length > 0 ? (
-        filteredBlogs.map((blog) => (
+    {(hasSearch ? filteredBlogs : blogs.data).length > 0 ? (
+(hasSearch ? filteredBlogs : blogs.data).map((blog: BlogType) => (
           <BlogCard
             key={blog.id}
             id={blog.id}
@@ -126,17 +126,20 @@ export default function Blogs() {
     </div>
 
     {/* Pagination */}
-    <div className="flex justify-center gap-2 mt-12">
-      {blogs.links.map((link, idx) => (
-        <Button
-          key={idx}
-          variant={link.active ? 'default' : 'outline'}
-          disabled={!link.url}
-          dangerouslySetInnerHTML={{ __html: link.label }}
-          onClick={() => handlePageChange(link.url)}
-        />
-      ))}
-    </div>
+ {/* Pagination */}
+ {!hasSearch && (
+          <div className="flex justify-center gap-2 mt-12">
+            {blogs.links.map((link, idx) => (
+              <Button
+                key={idx}
+                variant={link.active ? 'default' : 'outline'}
+                disabled={!link.url}
+                dangerouslySetInnerHTML={{ __html: link.label }}
+                onClick={() => handlePageChange(link.url)}
+              />
+            ))}
+          </div>
+  )}
 
   </div>
 </section>

@@ -26,6 +26,7 @@ class UtilisateurController extends Controller
         $users = User::whereNotIn('role', ['admin'])->latest()->paginate(10);
         return Inertia::render('auth/utilisateur-manager', [
             'utilisateurs' => $users,
+            'allutilisateursItems' => User::whereNotIn('role', ['admin'])->latest()->get(),
         ]);
     }
 

@@ -19,6 +19,7 @@ class CategoryController extends Controller
 
         return Inertia::render('auth/gallery-category', [
             'categories' => $categories,
+            'allCategories' => Category::latest()->get(),
         ]);
     }
 

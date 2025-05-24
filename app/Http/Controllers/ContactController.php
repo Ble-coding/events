@@ -18,10 +18,11 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $faqs = Faq::latest()->paginate(3);
+        $faqs = Faq::latest()->paginate(5);
 
         return Inertia::render('auth/contact-faq', [
             'faqs' => $faqs,
+            'allfaqItems' => Faq::latest()->get(),
         ]);
     }
 
@@ -55,10 +56,12 @@ class ContactController extends Controller
             'phone' => 'nullable|string|max:20',
             'message' => 'required|string',
         ]);
+
+        $contact = Contact::first();
+        $emails = $contact->email ?? [config('mail.from.address')];
         \Log::info('Formulaire reçu', $validated);
 
-
-        Mail::to('levisble@gmail.com')->send(new ContactMessageMail($validated));
+        Mail::to($emails)->send(new ContactMessageMail($validated));
 
         return redirect()->back()->with('success', 'Nous vous répondrons dans les plus brefs délais.');
 
@@ -93,7 +96,10 @@ class ContactController extends Controller
      {
          $validated = $request->validate([
              'address' => 'nullable|string|max:255',
-             'phone' => 'nullable|string|max:50',
+             'text_footer' => 'nullable|string|max:255',
+              'copyright' => 'nullable|string|max:255',
+              'phone' => 'nullable|array',
+              'phone.*' => 'nullable|string|max:50',
              'email' => 'nullable|email|max:255',
              'weekday_hours' => 'nullable|string|max:100',
              'saturday_hours' => 'nullable|string|max:100',
@@ -102,6 +108,8 @@ class ContactController extends Controller
              'social_links' => 'nullable|array',
              'social_links.*' => 'nullable|url|max:2048',
          ]);
+
+         $validated['phones'] = $validated['phone'] ?? [];
 
          Contact::create($validated);
 
@@ -145,7 +153,10 @@ class ContactController extends Controller
     {
         $validated = $request->validate([
             'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:50',
+            'text_footer' => 'nullable|string|max:255',
+            'copyright' => 'nullable|string|max:255',
+            'phones' => 'nullable|array',
+            'phones.*' => 'nullable|string|max:50',
             'email' => 'nullable|email|max:255',
             'weekday_hours' => 'nullable|string|max:100',
             'saturday_hours' => 'nullable|string|max:100',
@@ -154,6 +165,9 @@ class ContactController extends Controller
             'social_links' => 'nullable|array',
             'social_links.*' => 'nullable|url|max:2048',
         ]);
+
+
+        $validated['phones'] = $validated['phones'] ?? [];
 
         $contact = Contact::latest()->first();
 

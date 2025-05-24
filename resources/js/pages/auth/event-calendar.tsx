@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+    useState,
+    //  useEffect,
+      useMemo
+     } from 'react';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { useRef } from 'react';
 import AppLayout from '@/layouts/app-layout';
@@ -16,7 +20,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch'; // import du Switch
-import { useToast } from '@/components/ui/use-toast';
+// import { useToast } from '@/components/ui/use-toast';
 import { Edit, Trash2, Upload, LoaderCircle, Plus } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
 
@@ -50,19 +54,29 @@ interface PageProps {
   auth: { user: { role: 'admin' | 'editor' | 'viewer' } };
   flash: { success?: string };
   [key: string]: unknown;
+  alleventItems: EventType[]
+  errors?: Record<string, string>;
 }
 
 export default function EventManager() {
-  const { toast } = useToast();
-  const { events, flash, auth, categories } = usePage<PageProps>().props;
+//   const { toast } = useToast();
+  const { events, flash, auth, categories, errors, alleventItems } = usePage<PageProps>().props;
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'expired'>('all');
-  const [search, setSearch] = useState('');
   const [openMonths, setOpenMonths] = useState<Record<string, boolean>>({});
   const [selectedCategory, setSelectedCategory] = useState<number | 'all'>('all');
   const [editingEvent, setEditingEvent] = useState<EventType | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<number | null>(null);
-  const { data, setData, reset, processing } = useForm<{
+      const [flashSuccess, setFlashSuccess] = useState<string | null>(null);
+      const [flashError, setFlashError] = useState<string | null>(null);
+   const [isSubmitting, setIsSubmitting] = useState(false);
+   const [search, setSearch] = useState('');
+      const hasSearch = search.trim().length > 0;
+   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { data, setData, reset
+    // , processing
+} = useForm<{
     title: string;
     date: string;
     location: string;
@@ -96,14 +110,42 @@ export default function EventManager() {
     { title: 'Événements', href: '/events-dashboard' },
   ];
 
-  useEffect(() => {
+//   useEffect(() => {
+//     if (flash?.success) {
+//       toast({ title: flash.success });
+//     }
+//   }, [flash, toast]);
+
+
+useMemo(() => {
     if (flash?.success) {
-      toast({ title: flash.success });
+      setFlashSuccess(flash.success);
+      setTimeout(() => setFlashSuccess(null), 4000); // Masquer après 4s
     }
-  }, [flash, toast]);
+
+    if (errors?.file) {
+      setFlashError(errors.file);
+      setTimeout(() => setFlashError(null), 5000); // Masquer après 5s
+    }
+  }, [flash?.success, errors?.file]);
+
+//    const filtered = useMemo(() => {
+//       const term = search.trim().toLowerCase();
+
+//       const list = alleventItems ?? events.data; // ✅ fallback sécurisé
+
+//       if (!term) return events.data;
+
+//       return list.filter((p) =>
+//         p.title.toLowerCase().includes(term) ||
+//       p.location.toLowerCase().includes(term)
+
+//       );
+//     }, [search, events.data, alleventItems]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('category_id', data.category_id.toString())
@@ -123,18 +165,25 @@ export default function EventManager() {
       router.post(`/events-dashboard/${editingEvent.id}`, formData, {
         forceFormData: true,
         onSuccess: () => {
-          toast({ title: 'Événement modifié avec succès' });
-          resetForm();
-          router.reload();
-        },
+            // closeModal();
+            setIsSubmitting(false);
+            resetForm();
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
       });
     } else {
       router.post('/events-dashboard', formData, {
         forceFormData: true,
         onSuccess: () => {
-          toast({ title: 'Événement ajouté avec succès' });
-          resetForm();
-        },
+            // closeModal();
+            setIsSubmitting(false);
+            resetForm();
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
       });
     }
   };
@@ -182,7 +231,13 @@ export default function EventManager() {
   const confirmDelete = () => {
     if (eventToDelete !== null) {
       router.delete(`/events-dashboard/${eventToDelete}`, {
-        onSuccess: () => toast({ title: 'Événement supprimé' }),
+        onSuccess: () => {
+            // closeModal();
+            setIsSubmitting(false);
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
       });
       setShowConfirmModal(false);
       setEventToDelete(null);
@@ -196,12 +251,16 @@ export default function EventManager() {
     const today = new Date();
     const eventDate = new Date(editingEvent?.date || data.date); // 👉 prend la date existante au besoin
 
+
+
+
     if (checked && eventDate < today) {
-      toast({
-        title: "Attention",
-        description: "La date de l'événement est déjà passée. L'événement sera affiché comme expiré.",
-        variant: "destructive",
-      });
+        setErrorMessage(null); // reset
+
+
+            setErrorMessage('La date de l\'événement est déjà passée. L\'événement sera affiché comme expiré.');
+            setIsSubmitting(false);
+
     }
   };
 
@@ -219,21 +278,45 @@ export default function EventManager() {
     return eventDate < today;
   };
 
-  const filteredEvents = events.data
-  .filter((event) => {
-    if (statusFilter === 'active') return isEventCurrentlyActive(event);
-    if (statusFilter === 'expired') return !isEventCurrentlyActive(event);
-    return true;
-  })
-  .filter((event) => {
-    if (selectedCategory === 'all') return true;
-    return event.category_id === selectedCategory;
-  })
-  .filter(
-    (event) =>
-      event.title.toLowerCase().includes(search.toLowerCase()) ||
-      event.location.toLowerCase().includes(search.toLowerCase())
-  );
+//   const filteredEvents = events.data
+//   .filter((event) => {
+//     if (statusFilter === 'active') return isEventCurrentlyActive(event);
+//     if (statusFilter === 'expired') return !isEventCurrentlyActive(event);
+//     return true;
+//   })
+//   .filter((event) => {
+//     if (selectedCategory === 'all') return true;
+//     return event.category_id === selectedCategory;
+//   })
+//   .filter(
+//     (event) =>
+//       event.title.toLowerCase().includes(search.toLowerCase()) ||
+//       event.location.toLowerCase().includes(search.toLowerCase())
+//   );
+
+const filteredEvents = useMemo(() => {
+    const term = search.trim().toLowerCase();
+
+    const source = alleventItems ?? events.data;
+
+    return source.filter((event) => {
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter === 'active' && isEventCurrentlyActive(event)) ||
+        (statusFilter === 'expired' && !isEventCurrentlyActive(event));
+
+      const matchesCategory =
+        selectedCategory === 'all' || event.category_id === selectedCategory;
+
+      const matchesSearch =
+        event.title.toLowerCase().includes(term) ||
+        event.location.toLowerCase().includes(term);
+
+      return matchesStatus && matchesCategory && matchesSearch;
+    });
+  }, [search, statusFilter, selectedCategory, alleventItems, events.data]);
+
+  const eventsToDisplay = hasSearch ? filteredEvents : events.data;
 
   const activeEventsCount = events.data.filter((event) => isEventCurrentlyActive(event)).length;
     const expiredEventsCount = events.data.filter((event) => !isEventCurrentlyActive(event)).length;
@@ -311,11 +394,7 @@ export default function EventManager() {
     setData('highlights', updated);
   };
 
-//   const filteredEvents = events.data.filter(
-//     (event) =>
-//       event.title.toLowerCase().includes(search.toLowerCase()) ||
-//       event.location.toLowerCase().includes(search.toLowerCase())
-//   );
+
 
 const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -325,6 +404,30 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
       <Head title="Événements" />
 
       <div className="flex flex-col gap-4 p-4">
+      {flashSuccess && (
+
+<div className="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
+<svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z"/></svg>
+<p> {flashSuccess}</p>
+</div>
+)}
+
+{flashError && (
+    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+  {/* <strong class="font-bold">Holy smokes!</strong> */}
+  <span className="block sm:inline">{flashError}</span>
+  <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+    <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+  </span>
+</div>
+)}
+
+
+{errorMessage && (
+  <div className="text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded mb-4">
+    {errorMessage}
+  </div>
+)}
         <div className="flex justify-end">
           <Input
             placeholder="Rechercher par titre ou lieu..."
@@ -366,13 +469,16 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div><Label>Titre</Label><Input
                     placeholder="Journée Portes Ouvertes"
-                    value={data.title} onChange={(e) => setData('title', e.target.value)} required /></div>
+                    value={data.title} onChange={(e) => setData('title', e.target.value)}  />
+                          {errors?.title && <p className="text-red-500">{errors.title}</p>}</div>
                     <div><Label>Date</Label><Input
                     placeholder="10 Juillet 2024"
-                    value={data.date} type="date" onChange={(e) => setData('date', e.target.value)} required /></div>
+                    value={data.date} type="date" onChange={(e) => setData('date', e.target.value)}  />
+                          {errors?.date && <p className="text-red-500">{errors.date}</p>}</div>
                     <div><Label>Lieu</Label><Input
                     placeholder="Siège Guil'O Services"
-                    value={data.location} onChange={(e) => setData('location', e.target.value)} required /></div>
+                    value={data.location} onChange={(e) => setData('location', e.target.value)}  />
+                          {errors?.location && <p className="text-red-500">{errors.location}</p>}</div>
                     <div>
                       <Label>Type</Label>
                       <Select value={data.type} onValueChange={(value) => setData('type', value as 'image' | 'video')}>
@@ -388,13 +494,16 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
                      accept={data.type === 'image' ? 'image/*' : 'video/*'} onChange={(e) => setData('file', e.target.files?.[0] || null)} /></div>
                     <div><Label>Ou URL</Label><Input
                     placeholder="URL de l'image ou de la vidéo"
-                    value={data.url} onChange={(e) => setData('url', e.target.value)} /></div>
+                    value={data.url} onChange={(e) => setData('url', e.target.value)} />
+                          {errors?.url && <p className="text-red-500">{errors.url}</p>}
+                    </div>
                     <div><Label>Description</Label> <Textarea
-                        id="description" required
+                        id="description"
                         value={data.description}
                         onChange={(e) => setData('description', e.target.value)}
                         placeholder="Venez découvrir nos locaux, rencontrer notre équipe et explorer nos services."
                     />
+                          {errors?.description && <p className="text-red-500">{errors.description}</p>}
                     </div>
 
                     <div>
@@ -519,7 +628,20 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
 
 <div className="flex gap-2 pt-2">
-<Button type="submit" className="flex-1" disabled={processing}>
+
+     <Button type="submit" className="flex-1"  disabled={isSubmitting}>
+                            {editingEvent ? (
+                              <><Edit className="h-4 w-4 mr-2" />
+                              {isSubmitting && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                               Modifier</>
+                            ) : (
+                              <><Plus className="h-4 w-4 mr-2" />
+                              {isSubmitting && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                              Ajouter</>
+                            )}
+                          </Button>
+
+{/* <Button type="submit" className="flex-1" disabled={processing}>
   {processing ? (
     <LoaderCircle className="h-4 w-4 animate-spin mx-auto" />
   ) : editingEvent ? (
@@ -531,7 +653,7 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
       <Plus className="w-4 h-4 mr-2" /> Ajouter
     </>
   )}
-</Button>
+</Button> */}
 
                     </div>
 
@@ -623,7 +745,7 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
           {openMonths[monthYear] &&
             (events.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {events.map((event) => (
+                {eventsToDisplay.map((event) => (
                   <div key={event.id} className="border rounded-lg overflow-hidden
                    dark:bg-accent/10     bg-white shadow relative">
                     <div className="aspect-video relative">
@@ -681,13 +803,14 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
     ))}
 </div>
 
-
+{!hasSearch && (
 
                <div className="flex justify-center gap-2 mt-6">
                       {events.links.map((link, idx) => (
                         <Button key={idx} variant={link.active ? 'default' : 'outline'} disabled={!link.url} dangerouslySetInnerHTML={{ __html: link.label }} onClick={() => handlePageChange(link.url)} />
                       ))}
                     </div>
+                )}
                   </CardContent>
                 </Card>
               )}

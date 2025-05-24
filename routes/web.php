@@ -35,7 +35,7 @@ Route::fallback(function () {
 //     return Inertia::render('home');
 // })->name('home');
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Route::get('/services', function () {
 //     return Inertia::render('services');
@@ -111,3 +111,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+
+
+// npm install @radix-ui/react-toast

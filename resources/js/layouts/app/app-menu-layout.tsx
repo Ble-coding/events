@@ -10,7 +10,9 @@ import { usePage } from '@inertiajs/react';
 // Tu peux déclarer ContactInfo ici ou l'importer depuis '@/types'
 interface ContactInfo {
   address: string;
-  phone: string;
+  phones: [];
+  text_footer: string;
+  copyright: string;
   email: string;
   social_links: {
     [key: string]: string; // ✅ rend les plateformes dynamiques

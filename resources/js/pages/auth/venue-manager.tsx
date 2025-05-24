@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+    // useEffect,
+    useState,
+useMemo } from 'react';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
@@ -10,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import ConfirmModal from '@/components/confirm-modal'
 import { Edit, Trash2, LoaderCircle, Plus, Film, Image, Upload } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+// import { useToast } from '@/components/ui/use-toast';
 import type { BreadcrumbItem } from '@/types';
 
 interface VenueType {
@@ -40,6 +43,8 @@ interface PageProps {
   auth: { user: { role: 'admin' | 'editor' | 'viewer' } };
   flash?: { success?: string };
   [key: string]: unknown;
+  allvenuItems: VenueType[]
+  errors?: Record<string, string>;
 }
 
 
@@ -49,20 +54,26 @@ interface PageProps {
 
 
 export default function VenueManager() {
-  const { venues, auth, flash } = usePage<PageProps>().props;
-  const { toast } = useToast();
+  const { venues, auth, flash, allvenuItems, errors } = usePage<PageProps>().props;
+//   const { toast } = useToast();
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'expired'>('all');
   const isAdmin = auth.user.role === 'admin';
   const isEditor = auth.user.role === 'editor';
   const [minCapacity, setMinCapacity] = useState<number | ''>('');
   const [maxCapacity, setMaxCapacity] = useState<number | ''>('');
+   const [flashSuccess, setFlashSuccess] = useState<string | null>(null);
+        const [flashError, setFlashError] = useState<string | null>(null);
+     const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [search, setSearch] = useState('');
+  const hasSearch = search.trim().length > 0;
   const [editingVenue, setEditingVenue] = useState<VenueType | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [venueToDelete, setVenueToDelete] = useState<number | null>(null);
 
-  const { data, setData, processing, reset } = useForm<{
+  const { data, setData,
+    // processing,
+    reset } = useForm<{
     name: string;
     capacity: number;
     location: string;
@@ -91,15 +102,28 @@ export default function VenueManager() {
     { title: 'Salles', href: '/venues-dashboard' },
   ];
 
-  useEffect(() => {
+//   useEffect(() => {
+//     if (flash?.success) {
+//       toast({ title: flash.success });
+//     }
+//   }, [flash, toast]);
+
+
+useMemo(() => {
     if (flash?.success) {
-      toast({ title: flash.success });
+      setFlashSuccess(flash.success);
+      setTimeout(() => setFlashSuccess(null), 4000); // Masquer après 4s
     }
-  }, [flash, toast]);
+
+    if (errors?.file) {
+      setFlashError(errors.file);
+      setTimeout(() => setFlashError(null), 5000); // Masquer après 5s
+    }
+  }, [flash?.success, errors?.file]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+ setIsSubmitting(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('capacity', data.capacity.toString());
@@ -117,18 +141,25 @@ export default function VenueManager() {
       router.post(`/venues-dashboard/${editingVenue.id}`, formData, {
         forceFormData: true,
         onSuccess: () => {
-          toast({ title: 'Salle modifiée avec succès' });
-          resetForm();
-          router.reload();
-        },
+            // closeModal();
+            setIsSubmitting(false);
+            resetForm();
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
       });
     } else {
       router.post('/venues-dashboard', formData, {
         forceFormData: true,
         onSuccess: () => {
-          toast({ title: 'Salle ajoutée avec succès' });
-          resetForm();
-        },
+            // closeModal();
+            setIsSubmitting(false);
+            resetForm();
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
       });
     }
   };
@@ -175,32 +206,62 @@ export default function VenueManager() {
   const confirmDelete = () => {
     if (venueToDelete !== null) {
         router.delete(`/venues-dashboard/${venueToDelete}`, {
+        // onSuccess: () => {
+        //   toast({ title: 'Salle supprimée' });
+        //   setShowConfirmModal(false);
+        //   setVenueToDelete(null);
+        // },
         onSuccess: () => {
-          toast({ title: 'Salle supprimée' });
-          setShowConfirmModal(false);
-          setVenueToDelete(null);
-        },
+            // closeModal();
+            setIsSubmitting(false);
+            setShowConfirmModal(false);
+            setVenueToDelete(null);
+          },
+          onError: () => {
+            setIsSubmitting(false);
+            setShowConfirmModal(false);
+            setVenueToDelete(null);
+          },
       });
     }
   };
-  const filteredVenues = venues.data.filter((venue) => {
-    const matchesSearch =
-      venue.name.toLowerCase().includes(search.toLowerCase()) ||
-      venue.location.toLowerCase().includes(search.toLowerCase());
+//   const filteredVenues = venues.data.filter((venue) => {
+//     const matchesSearch =
+//       venue.name.toLowerCase().includes(search.toLowerCase()) ||
+//       venue.location.toLowerCase().includes(search.toLowerCase());
 
-    const matchesMinCapacity = minCapacity === '' || venue.capacity >= minCapacity;
-    const matchesMaxCapacity = maxCapacity === '' || venue.capacity <= maxCapacity;
+//     const matchesMinCapacity = minCapacity === '' || venue.capacity >= minCapacity;
+//     const matchesMaxCapacity = maxCapacity === '' || venue.capacity <= maxCapacity;
 
 
-    // Ajoute la logique de filtrage par statut
-  const matchesStatusFilter =
-  statusFilter === 'all' ||
-  (statusFilter === 'active' && venue.is_active) ||
-  (statusFilter === 'expired' && !venue.is_active);
+//     // Ajoute la logique de filtrage par statut
+//   const matchesStatusFilter =
+//   statusFilter === 'all' ||
+//   (statusFilter === 'active' && venue.is_active) ||
+//   (statusFilter === 'expired' && !venue.is_active);
 
-return matchesSearch && matchesMinCapacity && matchesMaxCapacity && matchesStatusFilter;
-});
+// return matchesSearch && matchesMinCapacity && matchesMaxCapacity && matchesStatusFilter;
+// });
+const venuesToFilter = hasSearch ? allvenuItems : venues.data;
+const filteredVenues = useMemo(() => {
+    const term = search.trim().toLowerCase();
 
+    return venuesToFilter.filter((venue) => {
+      const matchesSearch =
+        venue.name.toLowerCase().includes(term) ||
+        venue.location.toLowerCase().includes(term);
+
+      const matchesMinCapacity = minCapacity === '' || venue.capacity >= Number(minCapacity);
+      const matchesMaxCapacity = maxCapacity === '' || venue.capacity <= Number(maxCapacity);
+
+      const matchesStatusFilter =
+        statusFilter === 'all' ||
+        (statusFilter === 'active' && venue.is_active) ||
+        (statusFilter === 'expired' && !venue.is_active);
+
+      return matchesSearch && matchesMinCapacity && matchesMaxCapacity && matchesStatusFilter;
+    });
+  }, [venuesToFilter, search, minCapacity, maxCapacity, statusFilter]);
 const activeVenuesCount = venues.data.filter((venue) => venue.is_active).length;
 const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).length;
   const addFeature = () => setData('features', [...data.features, '']);
@@ -232,6 +293,23 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
       <Head title="Gestion des Salles" />
 
       <div className="flex flex-col gap-4 p-4">
+      {flashSuccess && (
+
+<div className="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
+<svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z"/></svg>
+<p> {flashSuccess}</p>
+</div>
+)}
+
+{flashError && (
+    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+  {/* <strong class="font-bold">Holy smokes!</strong> */}
+  <span className="block sm:inline">{flashError}</span>
+  <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+    <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+  </span>
+</div>
+)}
         <div className="flex justify-end mb-4">
           <Input
             placeholder="Rechercher par nom ou lieu..."
@@ -265,25 +343,38 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
             <CardContent>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+
+                <div>
                 <Label>Nom</Label>
                 <Input
                 placeholder="Le Domaine Viticole"
-                value={data.name} onChange={(e) => setData('name', e.target.value)} required />
+                value={data.name} onChange={(e) => setData('name', e.target.value)}  />
 
-                <Label>Capacité</Label>
+                {errors?.name && <p className="text-red-500">{errors.name}</p>}
+                </div>
+
+               <div>
+               <Label>Capacité</Label>
                 <Input
                   type="number" placeholder="250 personnes"
                   value={data.capacity}
                   onChange={(e) => setData('capacity', Number(e.target.value))}
                   min={0}
-                  required
+
                 />
+ {errors?.capacity && <p className="text-red-500">{errors.capacity}</p>}
+               </div>
 
-                <Label>Lieu</Label>
+               <div>
+               <Label>Lieu</Label>
                 <Input  placeholder='Le Domaine Viticole, 123 Rue de la Vigne, 75000 Paris'
-                value={data.location} onChange={(e) => setData('location', e.target.value)} required />
+                value={data.location} onChange={(e) => setData('location', e.target.value)}  /> {errors?.location && <p className="text-red-500">{errors.location}</p>}
 
-                <Label>Type</Label>
+               </div>
+
+
+               <div>
+               <Label>Type</Label>
                 <Select value={data.type} onValueChange={(val) => setData('type', val as 'image' | 'video')}>
                   <SelectTrigger>
                     <SelectValue placeholder="Type" />
@@ -293,26 +384,37 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
                     <SelectItem value="video">Vidéo</SelectItem>
                   </SelectContent>
                 </Select>
+               </div>
 
-                <Label>Fichier</Label>
+<div>
+<Label>Fichier</Label>
                 <Input
                   type="file"
                   accept={data.type === 'image' ? 'image/*' : 'video/*'}
                   onChange={(e) => setData('file', e.target.files?.[0] || null)}
                 />
+</div>
 
-                <Label>Ou URL</Label>
+
+<div>
+<Label>Ou URL</Label>
                 <Input  placeholder="https://example"
                 value={data.url} onChange={(e) => setData('url', e.target.value)} />
+{errors?.url && <p className="text-red-500">{errors.url}</p>}
+</div>
 
-                <Label>Description</Label>
+<div>
+<Label>Description</Label>
                 <Textarea
                 placeholder="Un domaine viticole prestigieux offrant un cadre authentique entre vignes et chais historiques. La salle de réception en pierre et bois allie charme rustique et élégance."
                  value={data.description} onChange={(e) => setData('description', e.target.value)} />
+{errors?.description && <p className="text-red-500">{errors.description}</p>}
+</div>
 
 
-            {/* FEATURES */}
-        <div className="space-y-2 pt-4">
+
+    {/* FEATURES */}
+    <div className="space-y-2 pt-4">
         <Label>Caractéristiques</Label>
         {data.features.length === 0 ? (
             <div className="flex gap-2">
@@ -403,9 +505,22 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
                   <Label htmlFor="isActive">Salle active ?</Label>
                 </div>
 
-                <Button type="submit" disabled={processing} className="w-full">
+                {/* <Button type="submit" disabled={processing} className="w-full">
                   {processing ? <LoaderCircle className="h-4 w-4 animate-spin mx-auto" /> : editingVenue ? <><Edit className="h-4 w-4 mr-2" />Modifier</> : <><Plus className="h-4 w-4 mr-2" />Ajouter</>}
-                </Button>
+                   </Button>*/}
+
+                    <Button type="submit" className="flex-1"  disabled={isSubmitting}>
+                                              {editingVenue ? (
+                                                <><Edit className="h-4 w-4 mr-2" />
+                                                {isSubmitting && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                                 Modifier</>
+                                              ) : (
+                                                <><Plus className="h-4 w-4 mr-2" />
+                                                {isSubmitting && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                                Ajouter</>
+                                              )}
+                                            </Button>
+
               </form>
             </CardContent>
           </Card>
@@ -491,12 +606,13 @@ const expiredVenuesCount = venues.data.filter((venue) => !venue.is_active).lengt
                     ))}
                   </div>
                 )}
-
+{!hasSearch && (
                                <div className="flex justify-center gap-2 mt-6">
                                       {venues.links.map((link, idx) => (
                                         <Button key={idx} variant={link.active ? 'default' : 'outline'} disabled={!link.url} dangerouslySetInnerHTML={{ __html: link.label }} onClick={() => handlePageChange(link.url)} />
                                       ))}
                                     </div>
+                                       )}
               </CardContent>
             </Card>
           </div>

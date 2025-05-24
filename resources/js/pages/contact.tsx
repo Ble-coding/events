@@ -15,7 +15,7 @@ interface Faq {
 
 interface ContactInfo {
     address: string;
-    phone: string;
+    phones: []
     email: string;
     weekday_hours: string;
     saturday_hours: string;
@@ -95,7 +95,7 @@ export default function ContactPage() {
                   <Phone className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
                     <h4 className="font-medium mb-1">Téléphone</h4>
-                    <p className="text-muted-foreground">{contact?.phone ?? 'Téléphone non disponible'}</p>
+                    <p className="text-muted-foreground">{contact?.phones?.length ? contact.phones.join(', ') : 'Téléphone non disponible'}</p>
                   </div>
                 </div>
 

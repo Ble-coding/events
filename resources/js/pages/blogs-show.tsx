@@ -21,6 +21,8 @@ interface OtherBlogType {
     id: number;
     title: string;
     date: string; // ✅ On précise bien que `date` existe !
+    status: boolean;
+    category?: { id: number; name: string };
   }
 
 
@@ -29,6 +31,10 @@ interface PageProps {
   otherBlogs: OtherBlogType[];
   [key: string]: unknown;
 }
+
+
+
+
 
 export default function BlogShow() {
   const { blog, otherBlogs } = usePage<PageProps>().props;
@@ -117,11 +123,19 @@ export default function BlogShow() {
                     <Calendar className="h-5 w-5 text-primary" />
                     {formatDateToFrench(blog.date)}
                   </span>
-                  {blog.category && (
-                    <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
-                      {blog.category.name}
-                    </span>
-                  )}
+               {/* Catégorie */}
+{blog.category ? (
+  <div className="flex items-center gap-2 text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-md">
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M2.003 5.884L10 9.882l7.997-3.998A1 1 0 0017 5H3a1 1 0 00-.997.884z" />
+      <path d="M18 8.118l-8 4-8-4V14a1 1 0 001 1h14a1 1 0 001-1V8.118z" />
+    </svg>
+    <span>{blog.category.name}</span>
+  </div>
+) : (
+  <span className="text-sm text-red-500 italic">Catégorie introuvable</span>
+)}
+
                 </div>
 
                 {/* Excerpt */}

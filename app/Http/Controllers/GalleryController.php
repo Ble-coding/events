@@ -23,6 +23,7 @@ class GalleryController extends Controller
 
         return Inertia::render('auth/gallery-manager', [
             'categories' => $categories,
+            'allgalleryItems' => Gallery::with('category')->latest()->get(),
             'items' => $galleryItems,
         ]);
     }

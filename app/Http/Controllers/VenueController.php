@@ -21,6 +21,7 @@ class VenueController extends Controller
 
         return Inertia::render('auth/venue-manager', [
             'venues' => $venueItems,
+            'allvenuItems' => Venue::latest()->get(),
         ]);
     }
 
@@ -33,6 +34,7 @@ class VenueController extends Controller
         return Inertia::render('venues', [
             'venues' => $venues,
             'contact' => $contact,
+            'allvenuItems' => Venue::latest()->get(),
             'servicesFooter' => $servicesFooter,
         ]);
     }

@@ -19,6 +19,7 @@ class ServiceTypeController extends Controller
 
         return Inertia::render('auth/service-type', [
             'types' => $types,
+            'allserviceItems' => ServiceType::latest()->get(),
         ]);
     }
 

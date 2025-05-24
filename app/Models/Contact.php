@@ -12,17 +12,18 @@ class Contact extends Model
 
     protected $casts = [
         'social_links' => 'array',
+        'phones' => 'array',
     ];
 
 
     protected $fillable = [
         'address',
-        'phone',
+        'phones',
         'email',
         'weekday_hours',
         'saturday_hours',
         'sunday_hours',
         'map_src', // 👈 Ajout du champ ici
-        'social_links',
+        'social_links','text_footer','copyright'
     ];
 }

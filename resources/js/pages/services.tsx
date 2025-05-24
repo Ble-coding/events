@@ -1,6 +1,6 @@
 import AppMenuLayout from '@/layouts/app/app-menu-layout';
 import { Head, Link, usePage, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { type BreadcrumbItem } from '@/types';
 // import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,7 @@ interface PageProps {
       active: boolean;
     }[];
   };
+  allserviceItems: ServiceType[];
   [key: string]: unknown;
 }
 
@@ -44,13 +45,26 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function ServicesPage() {
-  const { services } = usePage<PageProps>().props;
+  const { services, allserviceItems } = usePage<PageProps>().props;
   const [search, setSearch] = useState('');
 
-  const filteredServices = services.data.filter(service =>
-    service.title.toLowerCase().includes(search.toLowerCase()) ||
-    service.description.toLowerCase().includes(search.toLowerCase())
-  );
+
+  const hasSearch = search.trim().length > 0;
+
+  const filteredServices = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    const list = allserviceItems ?? services.data;
+
+    if (!term) return services.data;
+
+    return list.filter(service =>
+      service.title.toLowerCase().includes(term) ||
+      service.description.toLowerCase().includes(term)
+    );
+  }, [search, services.data, allserviceItems]);
+
+
+
 
   const handlePageChange = (url: string | null) => {
     if (url) router.visit(url, { preserveScroll: true });
@@ -91,7 +105,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="space-y-16">
-            {filteredServices.map((service, index) => (
+          {(hasSearch ? filteredServices : services.data).map((service, index) => (
               <div key={service.id} className="grid md:grid-cols-2 gap-8 items-center">
                 <div className={`rounded-lg overflow-hidden shadow-lg ${index % 2 === 1 ? 'md:order-2' : ''}`}>
                   <img
@@ -133,18 +147,20 @@ export default function ServicesPage() {
               </div>
             ))}
           </div>
+          {!hasSearch && (
+  <div className="flex justify-center gap-2 mt-12">
+    {services.links.map((link, idx) => (
+      <Button
+        key={idx}
+        variant={link.active ? 'default' : 'outline'}
+        disabled={!link.url}
+        dangerouslySetInnerHTML={{ __html: link.label }}
+        onClick={() => handlePageChange(link.url)}
+      />
+    ))}
+  </div>
+)}
 
-          <div className="flex justify-center gap-2 mt-12">
-            {services.links.map((link, idx) => (
-              <Button
-                key={idx}
-                variant={link.active ? 'default' : 'outline'}
-                disabled={!link.url}
-                dangerouslySetInnerHTML={{ __html: link.label }}
-                onClick={() => handlePageChange(link.url)}
-              />
-            ))}
-          </div>
         </div>
       </section>
 

@@ -22,6 +22,7 @@ class EventController extends Controller
 
          return Inertia::render('auth/event-calendar', [
             'categories' => $categories,
+            'alleventItems' => Event::with('category')->latest()->get(),
             'events' => $eventItems,
          ]);
      }
@@ -36,6 +37,7 @@ class EventController extends Controller
 
         return Inertia::render('events', [
             'events' => $events,
+            'alleventItems' => Event::with('category')->latest()->get(),
             'contact' => $contact,
             'servicesFooter' => $servicesFooter,
         ]);
@@ -47,7 +49,7 @@ class EventController extends Controller
         $servicesFooter = Service::latest()->take(4)->get(); // Services pour le footer
 
         return Inertia::render('events-show', [
-            'event' => $event,
+            'event' => $event->load('category'),
             'contact' => $contact,
             'servicesFooter' => $servicesFooter,
         ]);

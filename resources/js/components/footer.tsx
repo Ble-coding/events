@@ -6,7 +6,9 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaTelegram, FaTiktok, FaTwitter, F
 
 interface ContactInfo {
   address: string;
-  phone: string;
+  phones: [];
+  text_footer: string;
+  copyright: string;
   email: string;
   social_links: {
     [key: string]: string; // ✅ rend les plateformes dynamiques
@@ -29,7 +31,7 @@ const Footer = ({ contact, services, }: { contact: ContactInfo | null;
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">Guil'O Services</h3>
             <p className="max-w-xs">
-              Des prestations sur mesure pour vos évènements, avec une attention particulière aux détails et à vos envies.
+            {contact?.text_footer ?? 'Text de pied de page non disponible'}
             </p>
             <div className="flex space-x-4">
                 {contact?.social_links?.facebook && (
@@ -111,7 +113,7 @@ const Footer = ({ contact, services, }: { contact: ContactInfo | null;
             <div className="space-y-4">
             <h4 className="text-lg font-semibold">Contact</h4>
             <div className="space-y-2">
-              <p>Téléphone: {contact?.phone ?? 'Non disponible'}</p>
+              <p>  Téléphone : {contact?.phones?.length ? contact.phones.join(', ') : 'Téléphone non disponible'}</p>
               <p>Email: {contact?.email ?? 'Non disponible'}</p>
               <p>Adresse: {contact?.address ?? 'Non disponible'}</p>
             </div>
@@ -119,7 +121,7 @@ const Footer = ({ contact, services, }: { contact: ContactInfo | null;
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/30 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Guil'O Services. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} {contact?.copyright ?? 'Copyright non disponible'}</p>
         </div>
       </div>
     </footer>
