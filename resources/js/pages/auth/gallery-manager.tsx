@@ -73,6 +73,8 @@ export default function GalleryDashboard() {
   const hasSearch = search.trim().length > 0;
 // const hasSearch = search.trim() !== '' || selectedCategory !== 'all';
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasSearchOrFilter = search.trim() !== '' || selectedCategory !== 'all';
+
 
   const { data, setData, reset,
     // processing
@@ -232,7 +234,8 @@ const filtered = useMemo(() => {
       <Head title="Galerie" />
 
       <div className="flex flex-col gap-4 p-4">
-        <div className="flex justify-end">
+
+      <div className="flex justify-end">
           <Input
             placeholder="Rechercher par titre ..."
             className="w-full max-w-sm"
@@ -258,8 +261,6 @@ const filtered = useMemo(() => {
               </SelectContent>
             </Select>
         </div>
-
-
         {flashSuccess && (
 
 <div className="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
@@ -277,6 +278,8 @@ const filtered = useMemo(() => {
   </span>
 </div>
 )}
+
+
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Formulaire */}
@@ -369,9 +372,12 @@ const filtered = useMemo(() => {
       <CardTitle>Galerie</CardTitle>
       <CardDescription>Vos médias ajoutés</CardDescription>
     </CardHeader>
+
+
     <CardContent>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {(hasSearch ? filtered : items.data).map((item) => (
+      {(hasSearchOrFilter ? filtered : items.data).map((item) => (
+
           <div
             key={item.id}
             className="border rounded-lg overflow-hidden bg-white dark:bg-accent/10 shadow"
@@ -413,7 +419,7 @@ const filtered = useMemo(() => {
       </div>
 
       {/* Pagination uniquement si pas de recherche */}
-      {!hasSearch && (
+      {!hasSearchOrFilter && (
         <div className="flex justify-center gap-2 mt-6">
           {items.links.map((link, idx) => (
             <Button

@@ -19,7 +19,7 @@ class GalleryController extends Controller
     {
         $categories = Category::all();
         // ✅ Paginer les médias à 5 par page
-       $galleryItems = Gallery::with('category')->latest()->paginate(6);
+       $galleryItems = Gallery::with('category')->latest()->paginate(1);
 
         return Inertia::render('auth/gallery-manager', [
             'categories' => $categories,
