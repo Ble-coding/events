@@ -43,7 +43,7 @@ const EventCard = ({
   };
 
   return (
-    <div className="bg-white dark:bg-black rounded-xl overflow-hidden shadow-lg card-hover">
+    <div className="bg-white dark:bg-white rounded-xl overflow-hidden shadow-lg card-hover">
     {/* Media (Image ou Vidéo) */}
     <div className="relative h-48">
       {type === 'image' ? (
@@ -80,7 +80,7 @@ const EventCard = ({
       )}
 
       {/* Date affichée sur l'image */}
-      <div className="absolute top-4 left-4 bg-white dark:bg-black text-black dark:text-white rounded-lg px-3 py-1.5 text-sm font-medium flex items-center">
+      <div className="absolute top-4 left-4 bg-white dark:bg-white text-black dark:text-black rounded-lg px-3 py-1.5 text-sm font-medium flex items-center">
         <Calendar className="h-4 w-4 mr-1 text-primary" />
         <span>{date}</span>
       </div>
@@ -88,11 +88,11 @@ const EventCard = ({
       {/* Badge Actif/Inactif */}
       <div className="absolute top-4 right-4">
         {isActive ? (
-          <div className="flex items-center gap-1 text-green-600 bg-white dark:bg-black rounded-full px-2 py-1 text-xs">
+          <div className="flex items-center gap-1 text-green-600 bg-white dark:bg-white rounded-full px-2 py-1 text-xs">
             <CheckCircle className="h-4 w-4" /> Actif
           </div>
         ) : (
-          <div className="flex items-center gap-1 text-red-600 bg-white dark:bg-black rounded-full px-2 py-1 text-xs">
+          <div className="flex items-center gap-1 text-red-600 bg-white dark:bg-white rounded-full px-2 py-1 text-xs">
             <XCircle className="h-4 w-4" /> Inactif
           </div>
         )}
@@ -101,7 +101,7 @@ const EventCard = ({
 
     {/* Informations principales */}
     <div className="p-5 space-y-2">
-      <h3 className="font-bold text-xl text-black dark:text-white">{title}</h3>
+      <h3 className="font-bold text-xl text-black dark:text-black">{title}</h3>
       <p className="paragraph text-sm">{location}</p>
       <p className="paragraph line-clamp-2">{description}</p>
 

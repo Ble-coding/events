@@ -41,3 +41,16 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface InsurancePolicy {
+    id: string;
+    provider: string;
+    policy_number: string;
+    coverage: string;
+    valid_until: string;
+    created_at: string;
+    updated_at: string;
+    patient_id?: string;
+    is_cmu?: boolean;
+    [key: string]: unknown;
+  }

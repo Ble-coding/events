@@ -77,7 +77,9 @@ export default function VenueDetails() {
 
             {/* Détails de la salle */}
             <div className="space-y-6">
-              <h1 className="text-4xl font-bold">{venue.name}</h1>
+              <h1 className="text-4xl
+              text-black dark:text-black
+              font-bold">{venue.name}</h1>
 
               {/* Badge Disponible / Indisponible */}
               {venue.is_active ? (
@@ -96,7 +98,7 @@ export default function VenueDetails() {
                   <Building className="h-5 w-5 text-primary" />
                   {venue.capacity} personnes
                 </span>
-                <span>{venue.location}</span>
+                <span className='text-gray-500 dark:text-gray-500'>{venue.location}</span>
               </div>
 
               {/* Description */}
@@ -104,7 +106,7 @@ export default function VenueDetails() {
 
               {/* Bouton Réserver (si disponible) */}
               {venue.is_active && (
-                <Button asChild variant="outline" className="bg-orange-gk text-white mt-4">
+                <Button asChild variant="outline" className="bg-orange-gk text-white  dark:border-none mt-4">
                   <Link href="/contact">
                     <Calendar className="mr-2 h-4 w-4" />
                     Réserver cette salle
@@ -119,7 +121,9 @@ export default function VenueDetails() {
 
             {/* Caractéristiques */}
             {venue.features && venue.features.length > 0 && (
-              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
+              <div className="bg-white dark:bg-white
+              text-black dark:text-black
+              rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Caractéristiques</h2>
                 <ul className="space-y-4">
                   {venue.features.map((feature, index) => (
@@ -146,7 +150,8 @@ export default function VenueDetails() {
 
             {/* Services Disponibles */}
             {venue.availables && venue.availables.length > 0 && (
-              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
+              <div className="bg-white dark:bg-white
+              text-black dark:text-black rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Services Disponibles</h2>
                 <ul className="space-y-4">
                   {venue.availables.map((service, index) => (

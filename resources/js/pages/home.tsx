@@ -163,8 +163,6 @@ export default function Home() {
       <Head title="Accueil" />
 
       <Hero
-        title="Créez des moments inoubliables"
-        description="Nous concevons des événements personnalisés qui reflètent votre style et votre vision. Pour chaque occasion importante de votre vie, nous créons des expériences uniques."
       />
 
        {/* About Section */}
@@ -183,13 +181,13 @@ export default function Home() {
               <p className="paragraph">
                 Notre équipe créative et dévouée travaille sans relâche pour transformer vos envies en réalités exceptionnelles, qu'il s'agisse d'un mariage élégant, d'une fête d'anniversaire inoubliable ou d'une cérémonie solennelle.
               </p>
-              <p className="font-medium mb-6">
+              <p className="font-medium text-black dark:text-black mb-6">
                 Nos valeurs : <span>Excellence, Créativité, Personnalisation</span>
 
               </p>
             </div>
             {services?.data?.length > 0 && (
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-6">
+                <div className="border-sidebar-border/70 dark:border-gray-100 dark:bg-gray-50 relative rounded-xl border p-6">
 
 
                     {/* Images de services */}
@@ -236,7 +234,7 @@ export default function Home() {
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
         {/* Section Services */}
         {services?.data?.length > 0 && (
-        <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-6">
+        <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl  p-6">
           <SectionHeading
             title="Nos Services"
             subtitle="Des prestations personnalisées pour vos événements"
@@ -267,7 +265,7 @@ export default function Home() {
 
         {/* Section Galerie dynamique */}
         {items?.data?.length > 0 && (
-        <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-6 bg-secondary/40">
+        <div className="border-sidebar-border/70  relative rounded-xl border dark:border-gray-100 dark:bg-gray-50  p-6 bg-secondary/40">
           <SectionHeading
             title="Notre Galerie"
             subtitle="Aperçu de nos créations et réalisations"
@@ -290,8 +288,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div className="text-center mt-12">
-            <Button asChild variant="outline">
+          <div className="text-center  text-dark  mt-12">
+            <Button className='bg-white dark:bg-white
+            dark:border-gray-100 text-black dark:text-black
+            dark:hover:bg-gray-100/15' asChild variant="outline">
               <Link href="/galerie" className="inline-flex items-center">
                 Explorer la galerie <ChevronRight className="ml-2 h-4 w-4" />
               </Link>
@@ -304,7 +304,7 @@ export default function Home() {
         {/* Testimonials Section */}
 
         {testimonials?.data?.length > 0 && (
-        <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-6 bg-secondary/40">
+        <div className="border-sidebar-border/70 dark:border-gray-100 dark:bg-gray-50 relative rounded-xl border p-6 bg-secondary/40">
           <SectionHeading
             title="Ce que nos clients disent"
             subtitle="Des témoignages authentiques de clients satisfaits de nos services."
@@ -325,9 +325,14 @@ export default function Home() {
             />
             ))}
           </div>
-          <div className="text-center mt-12">
+          <div className="text-center mt-12
+          ">
           {testimonials.links.map((link, idx) => (
-            <Button
+            <Button className='bg-gray-100 dark:bg-gray-100
+             text-black dark:text-black
+            border-gray-150 dark:border-gray-50
+            hover:bg-black hover:text-white
+             dark:hover:bg-black dark:hover:text-white'
             key={idx}
             variant={link.active ? 'default' : 'outline'}
             disabled={!link.url}
@@ -340,7 +345,7 @@ export default function Home() {
 
         {/* Section Événements */}
         {events?.data?.length > 0 && (
-        <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border p-6 bg-secondary/40">
+        <div className="border-sidebar-border/70 dark:border-gray-100 dark:bg-gray-50  relative rounded-xl border p-6 bg-secondary/40">
           <SectionHeading
             title="Nos Événements"
             subtitle="Découvrez nos événements passés et à venir"
@@ -368,8 +373,10 @@ export default function Home() {
   ))}
 </div>
 
-          <div className="text-center mt-12">
-            <Button asChild variant="outline">
+<div className="text-center  text-dark  mt-12">
+            <Button className='bg-white dark:bg-white
+            dark:border-gray-100 text-black dark:text-black
+            dark:hover:bg-gray-100/15' asChild variant="outline">
               <Link href="/events" className="inline-flex items-center">
                 Explorer tous les événements <ChevronRight className="ml-2 h-4 w-4" />
               </Link>
@@ -380,11 +387,11 @@ export default function Home() {
 
 
  {/* Info Section */}
-<section className="py-16 bg-gray-50 dark:bg-black">
+<section className="py-16 bg-gray-50 dark:bg-gray-50">
   <div className="container mx-auto px-4">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <div>
-        <h2 className="font-bold text-xl mb-2 text-black dark:text-white">
+        <h2 className="font-bold text-xl mb-2 text-black dark:text-black">
           Comment choisir la salle idéale ?
         </h2>
         <p className="paragraph mb-6">
@@ -407,7 +414,7 @@ export default function Home() {
               />
             </svg>
             <div>
-              <h3 className="text-lg font-medium text-black dark:text-white">Définir vos besoins</h3>
+              <h3 className="text-lg font-medium text-black dark:text-black">Définir vos besoins</h3>
               <p className="paragraph">
                 Nombre d'invités, style d'événement, budget, localisation et services requis.
               </p>
@@ -428,7 +435,7 @@ export default function Home() {
               />
             </svg>
             <div>
-              <h3 className="text-lg font-medium text-black dark:text-white">Visiter plusieurs options</h3>
+              <h3 className="text-lg font-medium text-black dark:text-black">Visiter plusieurs options</h3>
               <p className="paragraph">
                 Nous organisons des visites des lieux qui correspondent à vos critères.
               </p>
@@ -449,7 +456,7 @@ export default function Home() {
               />
             </svg>
             <div>
-              <h3 className="text-lg font-medium text-black dark:text-white">Vérifier la disponibilité</h3>
+              <h3 className="text-lg font-medium text-black dark:text-black">Vérifier la disponibilité</h3>
               <p className="paragraph">
                 Réservez suffisamment à l'avance pour sécuriser votre date idéale.
               </p>

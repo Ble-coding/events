@@ -80,7 +80,7 @@ export default function EventDetails() {
                     loop
                   />
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <Film className="w-10 h-10 text-white opacity-50" />
+                    <Film className="w-10 h-10 text-white dark:text-white opacity-50" />
                   </div>
                 </div>
               )}
@@ -88,7 +88,9 @@ export default function EventDetails() {
 
             {/* Détails de l'événement */}
             <div className="space-y-6">
-              <h1 className="text-4xl font-bold">{event.title}</h1>
+              <h1 className="text-4xl
+              text-black dark:text-black
+              font-bold">{event.title}</h1>
 
               {/* Badge Actif/Inactif */}
               {isEventCurrentlyActive(event) ? (
@@ -109,18 +111,25 @@ export default function EventDetails() {
                 </span>
                 <span>{event.location}</span>
                 {event.category && (
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
-                    {event.category.name}
-                  </span>
+                <div className="flex items-center gap-2 text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A1 1 0 0017 5H3a1 1 0 00-.997.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a1 1 0 001 1h14a1 1 0 001-1V8.118z" />
+                </svg>
+                <span>{event.category.name}</span>
+              </div>
                 )}
               </div>
 
               {/* Description */}
-              <p className="paragraph text-lg">{event.description}</p>
+              <p className="paragraph
+              text-black dark:text-black
+              text-lg">{event.description}</p>
 
               {/* Bouton Réserver (si actif uniquement) */}
               {isEventCurrentlyActive(event) && (
-                <Button asChild variant="outline" className="bg-orange-gk text-white mt-4">
+                <Button asChild variant="outline" className="bg-orange-gk
+                dark:border-none text-white mt-4">
                   <Link href="/contact">
                     <Calendar className="mr-2 h-4 w-4" />
                     Réserver ma place
@@ -131,11 +140,12 @@ export default function EventDetails() {
           </div>
 
           {/* Programme et Points forts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2  gap-8 mt-16">
 
             {/* Programme */}
             {event.schedule && event.schedule.length > 0 && (
-              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
+              <div className="bg-white dark:bg-white
+              text-black dark:text-black rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Programme</h2>
                 <ul className="space-y-4">
                   {event.schedule.map((item, index) => (
@@ -162,7 +172,7 @@ export default function EventDetails() {
 
             {/* Points forts */}
             {event.highlights && event.highlights.length > 0 && (
-              <div className="bg-white dark:bg-accent/10 rounded-xl p-8">
+              <div className="bg-white dark:bg-white text-black dark:text-black rounded-xl p-8">
                 <h2 className="text-2xl font-bold mb-6">Points forts</h2>
                 <ul className="space-y-4">
                   {event.highlights.map((highlight, index) => (

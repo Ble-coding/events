@@ -38,9 +38,9 @@ export default function AppMenuLayout({ children }: PropsWithChildren<{ breadcru
     const { contact, servicesFooter } = usePage<PageProps>().props;
 
   return (
-    <AppShell>
+    <AppShell >
       <AppMenu />
-      <AppContent>{children}</AppContent>
+      <AppContent className="dark:bg-white px-4">{children}</AppContent>
       <Footer contact={contact} services={servicesFooter} />
     </AppShell>
   );

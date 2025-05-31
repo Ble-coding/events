@@ -71,8 +71,10 @@ export default function EventManager() {
       const [flashError, setFlashError] = useState<string | null>(null);
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [search, setSearch] = useState('');
-      const hasSearch = search.trim().length > 0;
+    //   const hasSearch = search.trim().length > 0;
    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+   const hasSearchOrFilter =
+   search.trim() !== '' || selectedCategory !== 'all' || statusFilter !== 'all';
 
   const { data, setData, reset
     // , processing
@@ -129,19 +131,6 @@ useMemo(() => {
     }
   }, [flash?.success, errors?.file]);
 
-//    const filtered = useMemo(() => {
-//       const term = search.trim().toLowerCase();
-
-//       const list = alleventItems ?? events.data; // ✅ fallback sécurisé
-
-//       if (!term) return events.data;
-
-//       return list.filter((p) =>
-//         p.title.toLowerCase().includes(term) ||
-//       p.location.toLowerCase().includes(term)
-
-//       );
-//     }, [search, events.data, alleventItems]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -277,46 +266,31 @@ useMemo(() => {
     const today = new Date();
     return eventDate < today;
   };
-
-//   const filteredEvents = events.data
-//   .filter((event) => {
-//     if (statusFilter === 'active') return isEventCurrentlyActive(event);
-//     if (statusFilter === 'expired') return !isEventCurrentlyActive(event);
-//     return true;
-//   })
-//   .filter((event) => {
-//     if (selectedCategory === 'all') return true;
-//     return event.category_id === selectedCategory;
-//   })
-//   .filter(
-//     (event) =>
-//       event.title.toLowerCase().includes(search.toLowerCase()) ||
-//       event.location.toLowerCase().includes(search.toLowerCase())
-//   );
-
-const filteredEvents = useMemo(() => {
+  const filteredEvents = useMemo(() => {
     const term = search.trim().toLowerCase();
 
-    const source = alleventItems ?? events.data;
+    return alleventItems.filter((event) => {
+      const matchesSearch =
+        !term ||
+        event.title.toLowerCase().includes(term) ||
+        event.location.toLowerCase().includes(term) ||
+        event.category?.name?.toLowerCase().includes(term);
 
-    return source.filter((event) => {
+      const matchesCategory =
+        selectedCategory === 'all' ||
+        Number(event.category_id) === Number(selectedCategory);
+
       const matchesStatus =
         statusFilter === 'all' ||
         (statusFilter === 'active' && isEventCurrentlyActive(event)) ||
         (statusFilter === 'expired' && !isEventCurrentlyActive(event));
 
-      const matchesCategory =
-        selectedCategory === 'all' || event.category_id === selectedCategory;
-
-      const matchesSearch =
-        event.title.toLowerCase().includes(term) ||
-        event.location.toLowerCase().includes(term);
-
-      return matchesStatus && matchesCategory && matchesSearch;
+      return matchesSearch && matchesCategory && matchesStatus;
     });
-  }, [search, statusFilter, selectedCategory, alleventItems, events.data]);
+  }, [search, selectedCategory, statusFilter, alleventItems]);
 
-  const eventsToDisplay = hasSearch ? filteredEvents : events.data;
+
+//   const eventsToDisplay = hasSearch ? filteredEvents : events.data;
 
   const activeEventsCount = events.data.filter((event) => isEventCurrentlyActive(event)).length;
     const expiredEventsCount = events.data.filter((event) => !isEventCurrentlyActive(event)).length;
@@ -327,14 +301,15 @@ const filteredEvents = useMemo(() => {
         const date = new Date(dateString);
         return date.toLocaleDateString('fr-FR', options); // "Juillet 2024"
       };
-      const groupedEvents = filteredEvents.reduce<Record<string, EventType[]>>((groups, event) => {
-        const monthYear = formatMonthYear(event.date);
-        if (!groups[monthYear]) {
-          groups[monthYear] = [];
-        }
-        groups[monthYear].push(event);
-        return groups;
-      }, {});
+    //   const groupedEvents = filteredEvents.reduce<Record<string, EventType[]>>((groups, event) => {
+    //     const monthYear = formatMonthYear(event.date);
+    //     if (!groups[monthYear]) {
+    //       groups[monthYear] = [];
+    //     }
+    //     groups[monthYear].push(event);
+    //     return groups;
+    //   }, {});
+
 
 
       const toggleMonth = (monthYear: string) => {
@@ -398,6 +373,16 @@ const filteredEvents = useMemo(() => {
 
 const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+const eventsToDisplay = hasSearchOrFilter ? filteredEvents : events.data;
+
+const groupedEvents = eventsToDisplay.reduce<Record<string, EventType[]>>((groups, event) => {
+    const monthYear = formatMonthYear(event.date);
+    if (!groups[monthYear]) {
+      groups[monthYear] = [];
+    }
+    groups[monthYear].push(event);
+    return groups;
+  }, {});
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -666,7 +651,8 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
         )}
             {/* List events */}
             <div className="md:col-span-2">
-              {filteredEvents.length === 0 ? (
+              {/* {filteredEvents.length === 0 ? ( */}
+              {(hasSearchOrFilter ? filteredEvents : events.data).length === 0 ? (
                 <div className="text-center py-10 border rounded-xl">
                   <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
                   <h3 className="text-lg font-medium">Aucun événement</h3>
@@ -745,7 +731,8 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
           {openMonths[monthYear] &&
             (events.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {eventsToDisplay.map((event) => (
+              {/* {hasSearchOrFilter.map((event: EventType) => ( */}
+              {events.map((event: EventType) => (
                   <div key={event.id} className="border rounded-lg overflow-hidden
                    dark:bg-accent/10     bg-white shadow relative">
                     <div className="aspect-video relative">
@@ -803,7 +790,7 @@ const monthRefs = useRef<Record<string, HTMLDivElement | null>>({});
     ))}
 </div>
 
-{!hasSearch && (
+{!hasSearchOrFilter && (
 
                <div className="flex justify-center gap-2 mt-6">
                       {events.links.map((link, idx) => (

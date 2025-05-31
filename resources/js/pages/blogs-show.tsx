@@ -96,7 +96,7 @@ export default function BlogShow() {
                       loop
                     />
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <Film className="w-10 h-10 text-white opacity-50" />
+                      <Film className="w-10 h-10 text-white dark:text-white opacity-50" />
                     </div>
                   </div>
                 )}
@@ -104,7 +104,8 @@ export default function BlogShow() {
 
               {/* Détails */}
               <div className="space-y-6">
-                <h1 className="text-4xl font-bold">{blog.title}</h1>
+                <h1 className="text-4xl
+                text-black dark:text-black font-bold">{blog.title}</h1>
 
                 {/* Badge Publication */}
                 {/* {blog.is_active ? (
@@ -150,7 +151,8 @@ export default function BlogShow() {
               </div>
 
               {/* Contenu complet */}
-              <div className="bg-white dark:bg-accent/10 rounded-xl p-8 mt-16 prose dark:prose-invert max-w-full">
+              <div className="bg-white dark:bg-white
+              text-black dark:text-black rounded-xl p-8 mt-16 prose dark:prose-invert max-w-full">
                 <div dangerouslySetInnerHTML={{ __html: blog.content }} />
               </div>
 
@@ -158,19 +160,21 @@ export default function BlogShow() {
 
                 {/* Aside */}
             <aside className="lg:col-span-1">
-            <div className="sticky top-28 space-y-4">
+            <div className="sticky top-28
+            space-y-4">
 
-                <h2 className="text-lg font-semibold mb-4">Articles récents</h2>
+                <h2 className="text-lg text-black dark:text-black font-semibold mb-4">Articles récents</h2>
                 {otherBlogs.length > 0 ? (
                 otherBlogs
                     .filter(otherBlog => otherBlog.id !== blog.id)
                     .map(otherBlog => (
-                    <div key={otherBlog.id} className="p-4 border rounded-lg bg-white dark:bg-accent/10">
+                    <div key={otherBlog.id} className="p-4 border rounded-lg bg-white
+                    dark:border-gray-100 dark:bg-white ">
                         <Link
                         href={`/blogs/${otherBlog.id}`}
                         className="block hover:text-guilo-orange transition-colors"
                         >
-                        <h3 className="font-medium line-clamp-2 mb-2">
+                        <h3 className="font-medium text-black dark:text-black  line-clamp-2 mb-2">
                             {otherBlog.title}
                         </h3>
                         <p className="text-sm paragraph">

@@ -314,6 +314,9 @@ export default function BlogManager() {
     if (url) router.visit(url, { preserveScroll: true });
   };
 
+
+  const blogsToDisplay = isFiltering ? filtered : blogs.data;
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Gestion des Blogs" />
@@ -579,62 +582,47 @@ export default function BlogManager() {
 </div>
 
 
+{blogsToDisplay.length === 0 ? (
+  <div className="text-center py-10">
+    <Upload className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+    <h3 className="text-lg font-medium">Aucun blog trouvé</h3>
+  </div>
+) : (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {blogsToDisplay.map((blog) => (
+      <div key={blog.id} className="border rounded-lg p-4 shadow">
+        <div className="aspect-video relative">
+          {blog.type === 'image' ? (
+            <img src={blog.url} alt={blog.title} className="w-full h-full object-cover" />
+          ) : (
+            <video src={blog.url} controls className="w-full h-full object-cover" />
+          )}
+          <div className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full">
+            {blog.type === 'image' ? <Image className="h-4 w-4" /> : <Film className="h-4 w-4" />}
+          </div>
+        </div>
+        <h3 className="font-bold">{blog.title}</h3>
+        <p className="text-xs text-primary">{blog.category?.name}</p>
+        <p className="text-sm text-muted-foreground">{formatDateToFrench(blog.date)}</p>
+        <p className="text-xs" dangerouslySetInnerHTML={{ __html: blog.excerpt }}></p>
 
-{(isFiltering ? filtered : blogs.data).length === 0 ? (
-                    <div className="text-center py-10">
-                      <Upload className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-                      <h3 className="text-lg font-medium">Aucun blog trouvé</h3>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {(isFiltering ? filtered : blogs.data).map((blog) => (
-                        <div key={blog.id} className="border rounded-lg p-4 shadow">
-                                <div className="aspect-video relative">
-                                                        {blog.type === 'image' ? (
-                                                            <img
-                                                            src={blog.url}
-                                                            alt={blog.title}
-                                                            className="w-full h-full object-cover"
-                                                            />
-                                                        ) : (
-                                                            <video
-                                                            src={blog.url}
-                                                            controls
-                                                            className="w-full h-full object-cover"
-                                                            />
-                                                        )}
-                                                        <div className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full">
-                                                            {blog.type === 'image' ? (
-                                                            <Image className="h-4 w-4" />
-                                                            ) : (
-                                                            <Film className="h-4 w-4" />
-                                                            )}
-                                                        </div>
-                                                        </div>
-                          <h3 className="font-bold">{blog.title}</h3>
-                          <p className="text-xs text-primary">
-                                {blog.category?.name}
-                                </p>
-                                <p className="text-sm text-muted-foreground">{formatDateToFrench(blog.date)}</p>
-                          <p className="text-xs" dangerouslySetInnerHTML={{ __html: blog.excerpt }}></p>
+        {(isAdmin || isEditor) && (
+          <div className="flex gap-2 mt-2">
+            <Button variant="ghost" size="icon" onClick={() => handleEdit(blog)}>
+              <Edit className="h-4 w-4" />
+            </Button>
+            {isAdmin && (
+              <Button variant="ghost" size="icon" onClick={() => openDeleteModal(blog.id)}>
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+)}
 
-                          {(isAdmin || isEditor) && (
-                            <div className="flex gap-2 mt-2">
-                              <Button variant="ghost" size="icon" onClick={() => handleEdit(blog)}>
-                                <Edit className="h-4 w-4" />
-                              </Button>
-
-                              {isAdmin && (
-                                <Button variant="ghost" size="icon" onClick={() => openDeleteModal(blog.id)}>
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
 {!isFiltering && (
   <div className="flex justify-center gap-2 mt-6">
     {blogs.links.map((link, idx) => (

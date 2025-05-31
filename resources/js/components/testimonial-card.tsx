@@ -7,7 +7,7 @@ interface TestimonialCardProps {
 
   const TestimonialCard = ({ content, author, role, avatarSrc }: TestimonialCardProps) => {
     return (
-        <div className="bg-white dark:bg-accent/10 p-6 rounded-xl shadow-md">
+        <div className="bg-white dark:bg-white p-6 rounded-xl shadow-md">
           <div className="flex items-center mb-4">
             <div className="h-12 w-12 rounded-full overflow-hidden bg-guilo-orange flex items-center justify-center text-white">
               {avatarSrc ? (

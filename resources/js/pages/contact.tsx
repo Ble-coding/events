@@ -63,7 +63,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form & Info Section */}
-      <section className="py-20 bg-white dark:bg-accent/10">
+      <section className="py-20 bg-white dark:bg-white">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-12">
             <div>
@@ -86,32 +86,36 @@ export default function ContactPage() {
                 <div className="flex items-start">
                   <MapPin className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
-                    <h4 className="font-medium mb-1">Adresse</h4>
-                    <p className="text-muted-foreground">{contact?.address ?? 'Adresse non disponible'}</p>
+                    <h4 className="font-medium
+                    text-black dark:text-black mb-1">Adresse</h4>
+                    <p className="text-gray-500 dark:text-gray-500">{contact?.address ?? 'Adresse non disponible'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
                   <Phone className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
-                    <h4 className="font-medium mb-1">Téléphone</h4>
-                    <p className="text-muted-foreground">{contact?.phones?.length ? contact.phones.join(', ') : 'Téléphone non disponible'}</p>
+                    <h4 className="font-medium
+                    text-black dark:text-black mb-1">Téléphone</h4>
+                    <p className="text-gray-500 dark:text-gray-500">{contact?.phones?.length ? contact.phones.join(', ') : 'Téléphone non disponible'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
                   <Mail className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
-                    <h4 className="font-medium mb-1">Email</h4>
-                    <p className="text-muted-foreground">{contact?.email ?? 'Email non disponible'}</p>
+                    <h4 className="font-medium
+                    text-black dark:text-black mb-1">Email</h4>
+                    <p className="text-gray-500 dark:text-gray-500">{contact?.email ?? 'Email non disponible'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
                   <Clock className="h-6 w-6 text-accent mr-4 mt-1" />
                   <div>
-                    <h4 className="font-medium mb-1">Horaires</h4>
-                    <p className="text-muted-foreground">
+                    <h4 className="font-medium
+                    text-black dark:text-black mb-1">Horaires</h4>
+                    <p className="text-gray-500 dark:text-gray-500">
                         Lundi - Vendredi: {contact?.weekday_hours ?? 'N/A'}<br />
                         Samedi: {contact?.saturday_hours ?? 'N/A'}<br />
                         Dimanche: {contact?.sunday_hours ?? 'N/A'}
@@ -121,7 +125,7 @@ export default function ContactPage() {
               </div>
 
               <div className="mt-8">
-                <h4 className="font-medium mb-4">Nous trouver</h4>
+                <h4 className="font-medium text-black dark:text-black mb-4">Nous trouver</h4>
                 <div className="h-64 rounded-lg overflow-hidden shadow-md">
                   <iframe
                         title="Map"
@@ -140,7 +144,7 @@ export default function ContactPage() {
 
       {/* FAQ Section dynamique si données disponibles */}
       {faqs?.data?.length > 0 && (
-        <section className="py-20 bg-secondary/50">
+        <section className="py-20 bg-gray-100 dark:bg-gray-100 ">
           <div className="container">
             <SectionHeading
               subtitle="FAQ"
@@ -151,15 +155,18 @@ export default function ContactPage() {
 
             <div className="max-w-3xl mx-auto mt-10 space-y-6">
               {faqs.data.map((faq) => (
-                <div key={faq.id} className="bg-white dark:bg-accent/10 p-6 rounded-lg shadow-sm">
-                  <h4 className="font-medium mb-2">{faq.question}</h4>
-                  <p className="text-muted-foreground">{faq.answer}</p>
+                <div key={faq.id} className="bg-white dark:bg-white p-6 rounded-lg shadow-sm">
+                  <h4 className="font-medium text-black dark:text-black mb-2">{faq.question}</h4>
+                  <p className="text-gray-500 dark:text-gray-500">{faq.answer}</p>
                 </div>
               ))}
 
               <div className="flex justify-center gap-2 mt-6">
                 {faqs.links.map((link, idx) => (
                   <Button
+                  className='bg-white dark:bg-white
+                  dark:border-gray-100 text-black dark:text-black
+                  dark:hover:bg-gray-100/15'
                     key={idx}
                     variant={link.active ? 'default' : 'outline'}
                     disabled={!link.url}

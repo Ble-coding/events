@@ -79,25 +79,34 @@ export default function Blogs() {
           </div>
         </div>
       </section>
-      <section className="py-20 bg-white dark:bg-accent/10 text-black dark:text-white transition-colors duration-300">
+      <section className="py-20 bg-white dark:bg-white text-black dark:text-black transition-colors duration-300">
   <div className="container">
 
     {/* Barre de Filtres */}
-    <div className="flex flex-col md:flex-row gap-4 mb-6">
-      <Input
-        placeholder="Recherche par titre..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full md:w-1/3 bg-white dark:bg-black border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
-      />
-                 <Input
-        type="month"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-        className="w-full md:w-1/4"
-      />
+{/* Barre de filtres */}
+<div className="flex flex-col md:flex-row gap-4 mb-6">
+  {/* Recherche par titre */}
+  <Input
+    placeholder="Recherche par titre..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="w-full md:w-1/3
+      border border-gray-300 text-black placeholder:text-gray-500
+      dark:border-gray-300 dark:bg-white dark:text-black dark:placeholder:text-gray-500"
+  />
 
-    </div>
+  {/* Sélection par date (mois) */}
+  <Input
+    type="month"
+    value={selectedDate}
+    onChange={(e) => setSelectedDate(e.target.value)}
+    className="w-full md:w-1/4
+      border border-gray-300 text-black placeholder:text-gray-500
+      dark:border-gray-300 dark:bg-white dark:text-black dark:placeholder:text-gray-500"
+  />
+
+
+</div>
 
     {/* Résultat des Blogs */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -131,6 +140,11 @@ export default function Blogs() {
           <div className="flex justify-center gap-2 mt-12">
             {blogs.links.map((link, idx) => (
               <Button
+              className='bg-gray-100 dark:bg-gray-100
+              text-black dark:text-black
+             border-gray-150 dark:border-gray-50
+             hover:bg-black hover:text-white
+              dark:hover:bg-black dark:hover:text-white'
                 key={idx}
                 variant={link.active ? 'default' : 'outline'}
                 disabled={!link.url}

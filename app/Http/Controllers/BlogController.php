@@ -32,12 +32,14 @@ class BlogController extends Controller
     $blogs = Blog::with('category')->where('is_active', true)->latest()->paginate(6);
     $contact = Contact::latest()->first();
     $servicesFooter = Service::latest()->take(6)->get();
+    $categories     = Category::all();
 
     return Inertia::render('blogs', [
         'blogs' => $blogs,
         'contact' => $contact,
         'allblogItems' => Blog::latest()->get(),
         'servicesFooter' => $servicesFooter,
+        'categories'    => $categories,
     ]);
 }
 

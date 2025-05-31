@@ -10,7 +10,7 @@ import {
     Folder, HelpCircle,
      LayoutGrid,
       Book,
-    //   User,
+      File,
        Calendar,
      QuoteIcon, Handshake, Building2, Newspaper ,
     //  PhoneCall
@@ -63,6 +63,12 @@ const mainNavItems: NavItem[] = [
         title: 'Témoignages',
         href: '/testimonials-dashboard',
         icon: QuoteIcon,
+    },
+
+    {
+        title: 'Gestion des slides',
+        href: '/heroes-dashboard',
+        icon: File,
     },
     // {
     //     title: 'Faqs',

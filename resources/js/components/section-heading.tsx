@@ -26,7 +26,9 @@ const SectionHeading = ({
     >
       {subtitle && (
         <div className="inline-block px-4 py-1 bg-banner">
-          <p className="text-accent font-medium text-sm uppercase tracking-wider">
+          <p className=" font-medium text-sm uppercase
+          text-[#EA7A0B]  dark:text-[#EA7A0B]
+          tracking-wider">
             {subtitle}
           </p>
           <div className="bar-bottom" />
@@ -36,7 +38,7 @@ const SectionHeading = ({
         {title}
       </h2>
       {description && (
-        <p className="text-muted-foreground text-lg">{description}</p>
+        <p className="text-gray-500 dark:text-gray-500 text-lg">{description}</p>
       )}
     </div>
   );

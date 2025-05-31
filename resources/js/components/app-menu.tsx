@@ -56,8 +56,8 @@ export function AppMenu() {
   className={cn(
     'fixed top-0 left-0 right-0 z-50 py-3 transition-all duration-300',
     isScrolled
-      ? 'bg-white/90 dark:bg-[#070504]/90 backdrop-blur-md shadow-sm'
-      : 'bg-white dark:bg-[#070504]'
+      ? 'bg-white/90 dark:bg-white/90 backdrop-blur-md shadow-sm'
+      : 'bg-white/90 dark:bg-white/90 backdrop-blur-md shadow-sm'
   )}
 >
 
@@ -100,7 +100,7 @@ export function AppMenu() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden text-guilo hover:bg-guilo/10"
+          className="md:hidden text-black dark:text-black hover:bg-gray-100"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -111,7 +111,7 @@ export function AppMenu() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0
-        dark:bg-[#070504]/95 bg-white/95 backdrop-blur-lg shadow-md animate-fade-in">
+        dark:bg-white/98 bg-white/98 text-[#EA7A0B] dark:text-[#EA7A0B] backdrop-blur-lg shadow-md animate-fade-in">
         <nav className="container py-6 flex flex-col space-y-4">
   {navLinks.map((link) => (
     <Link

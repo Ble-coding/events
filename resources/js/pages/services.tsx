@@ -44,6 +44,8 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
+
+
 export default function ServicesPage() {
   const { services, allserviceItems } = usePage<PageProps>().props;
   const [search, setSearch] = useState('');
@@ -86,7 +88,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-white dark:bg-accent/10 ">
+      <section className="py-20 bg-white dark:bg-white  ">
         <div className="container">
           <SectionHeading
             subtitle="Ce que nous proposons"
@@ -100,12 +102,17 @@ export default function ServicesPage() {
               placeholder="Rechercher un service..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border rounded px-4 py-2 w-full max-w-md"
+              className="border rounded px-4 py-2
+              text-black dark:text-black
+              dark:border-gray-100 dark:bg-white dark:placeholder:text-gray-500
+              w-full max-w-md"
             />
           </div>
 
           <div className="space-y-16">
-          {(hasSearch ? filteredServices : services.data).map((service, index) => (
+          {(hasSearch ? filteredServices : services.data).length === 0 ? (
+  <p className="text-center text-gray-500 dark:text-gray-500 mt-10">Aucun résultat trouvé.</p>
+) : (hasSearch ? filteredServices : services.data).map((service, index) => (
               <div key={service.id} className="grid md:grid-cols-2 gap-8 items-center">
                 <div className={`rounded-lg overflow-hidden shadow-lg ${index % 2 === 1 ? 'md:order-2' : ''}`}>
                   <img
@@ -116,11 +123,11 @@ export default function ServicesPage() {
                 </div>
                 <div className="space-y-4 animate-slide-in" style={{ animationDelay: '0.2s' }}>
                   <h3 className="text-2xl font-medium text-primary">{service.title}</h3>
-                  <p className="text-muted-foreground">{service.description}</p>
+                  <p className="text-gray-500 dark:text-gray-500">{service.description}</p>
                   {service.features && service.features.length > 0 && (
   <ul className="list-none mt-4 space-y-2">
     {service.features.map((feature, idx) => (
-      <li key={idx} className="flex items-start text-muted-foreground text-sm">
+      <li key={idx} className="flex items-start text-gray-500 dark:text-gray-500 text-sm">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0"
@@ -133,13 +140,15 @@ export default function ServicesPage() {
             clipRule="evenodd"
           />
         </svg>
-        <span>{feature}</span>
+        <span className="text-gray-500 dark:text-gray-500">{feature}</span>
       </li>
     ))}
   </ul>
 )}
 
-                  <Button asChild variant="outline">
+                  <Button  className='bg-white dark:bg-white
+            dark:border-gray-100 text-black dark:text-black
+            dark:hover:bg-gray-100/15' asChild variant="outline">
                     <Link href="/contact">Demander plus d'informations
                     <ChevronRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
@@ -150,7 +159,11 @@ export default function ServicesPage() {
           {!hasSearch && (
   <div className="flex justify-center gap-2 mt-12">
     {services.links.map((link, idx) => (
-      <Button
+      <Button className='bg-gray-100 dark:bg-gray-100
+      text-black dark:text-black
+     border-gray-150 dark:border-gray-50
+     hover:bg-black hover:text-white
+      dark:hover:bg-black dark:hover:text-white'
         key={idx}
         variant={link.active ? 'default' : 'outline'}
         disabled={!link.url}
@@ -164,7 +177,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-secondary/50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-50">
         <div className="container">
           <SectionHeading
             subtitle="Notre processus"
@@ -179,8 +192,8 @@ export default function ServicesPage() {
                 <div className="w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center text-2xl font-semibold mx-auto mb-4">
                   {index + 1}
                 </div>
-                <h4 className="text-xl font-semibold mb-3">{title}</h4>
-                <p className="text-muted-foreground">
+                <h4 className="text-xl text-black dark:text-black font-semibold mb-3">{title}</h4>
+                <p className="text-gray-500 dark:text-gray-500">
                   {index === 0 && 'Nous commençons par comprendre vos besoins et vos envies pour votre événement.'}
                   {index === 1 && 'Nous élaborons un plan détaillé et un devis personnalisé pour votre projet.'}
                   {index === 2 && 'Nous prenons en charge l\'organisation et la mise en place de votre événement avec soin.'}

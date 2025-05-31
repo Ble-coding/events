@@ -20,7 +20,7 @@ class ServiceController extends Controller
     {
 
         $types = ServiceType::all();
-        $serviceItems = Service::with('type')->latest()->paginate(5);
+        $serviceItems = Service::with('type')->latest()->paginate(6);
 
         return Inertia::render('auth/gallery-service', [
             'types' => $types,

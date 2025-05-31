@@ -100,48 +100,83 @@ const filteredVenues = useMemo(() => {
       </section>
 
       {/* Section Salles */}
-      <section className="py-20 bg-white dark:bg-accent/10">
+      <section className="py-20 bg-white dark:bg-white">
         <div className="container">
 
-          {/* Barre de Filtres */}
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <Input
-              placeholder="Recherche par nom ou lieu..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full md:w-1/3"
-            />
+        {/* Barre de filtres */}
+<div className="flex flex-col md:flex-row gap-4 mb-6">
+  {/* Champ de recherche */}
+  <Input
+    placeholder="Recherche par nom ou lieu..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="w-full md:w-1/3
+      border-gray-300 text-black placeholder:text-gray-500
+      dark:border-gray-300 dark:bg-white dark:text-gray-500
+      dark:placeholder:text-gray-600"
+  />
 
-            <Input
-              type="number" min="0"
-              placeholder="Capacité min"
-              value={minCapacity}
-              onChange={(e) => setMinCapacity(e.target.value)}
-              className="w-full md:w-1/6"
-            />
+  {/* Capacité min */}
+  <Input
+    type="number"
+    min="0"
+    placeholder="Capacité min"
+    value={minCapacity}
+    onChange={(e) => setMinCapacity(e.target.value)}
+    className="w-full md:w-1/6
+      border-gray-300 text-black placeholder:text-gray-500
+      dark:border-gray-300 dark:bg-white dark:text-gray-500
+      dark:placeholder:text-gray-600"
+  />
 
-            <Input
-              type="number" min="0"
-              placeholder="Capacité max"
-              value={maxCapacity}
-              onChange={(e) => setMaxCapacity(e.target.value)}
-              className="w-full md:w-1/6"
-            />
+  {/* Capacité max */}
+  <Input
+    type="number"
+    min="0"
+    placeholder="Capacité max"
+    value={maxCapacity}
+    onChange={(e) => setMaxCapacity(e.target.value)}
+    className="w-full md:w-1/6
+      border-gray-300 text-black placeholder:text-gray-500
+      dark:border-gray-300 dark:bg-white dark:text-gray-500
+      dark:placeholder:text-gray-600"
+  />
 
-            <Select
-              value={statusFilter}
-              onValueChange={(value) => setStatusFilter(value as 'all' | 'active' | 'inactive')}
-            >
-              <SelectTrigger className="w-full md:w-1/4">
-                <SelectValue placeholder="Filtrer par statut" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Toutes</SelectItem>
-                <SelectItem value="active">Disponibles</SelectItem>
-                <SelectItem value="inactive">Indisponibles</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+  {/* Sélecteur de statut */}
+  <Select
+    value={statusFilter}
+    onValueChange={(value) => setStatusFilter(value as 'all' | 'active' | 'inactive')}
+  >
+    <SelectTrigger
+      className="w-full md:w-1/4
+        border-gray-300 text-black
+        dark:border-gray-300 dark:bg-white dark:text-black"
+    >
+      <SelectValue placeholder="Filtrer par statut" />
+    </SelectTrigger>
+    <SelectContent className="bg-white text-black dark:bg-white dark:text-black dark:border-gray-300">
+      <SelectItem
+        value="all"
+        className="hover:bg-gray-100 text-black dark:text-black dark:hover:bg-gray-100 dark:hover:text-black"
+      >
+        Toutes
+      </SelectItem>
+      <SelectItem
+        value="active"
+        className="hover:bg-gray-100 text-black dark:text-black dark:hover:bg-gray-100 dark:hover:text-black"
+      >
+        Disponibles
+      </SelectItem>
+      <SelectItem
+        value="inactive"
+        className="hover:bg-gray-100 text-black dark:text-black dark:hover:bg-gray-100 dark:hover:text-black"
+      >
+        Indisponibles
+      </SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+
 
           {/* Résultat des salles */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -176,6 +211,11 @@ const filteredVenues = useMemo(() => {
           <div className="flex justify-center gap-2 mt-12">
             {venues.links.map((link, idx) => (
               <Button
+              className='bg-gray-100 dark:bg-gray-100
+              text-black dark:text-black
+             border-gray-150 dark:border-gray-50
+             hover:bg-black hover:text-white
+              dark:hover:bg-black dark:hover:text-white'
                 key={idx}
                 variant={link.active ? 'default' : 'outline'}
                 disabled={!link.url}

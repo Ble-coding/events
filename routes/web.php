@@ -12,6 +12,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\HeroController;
 
 
 
@@ -106,6 +107,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('events-dashboard', EventController::class);
     Route::resource('venues-dashboard', VenueController::class);
     Route::resource('blogs-dashboard', BlogController::class);
+
+    Route::resource('heroes-dashboard', HeroController::class)->parameters([
+        'heroes-dashboard' => 'slide',
+    ]);
+
 
 });
 

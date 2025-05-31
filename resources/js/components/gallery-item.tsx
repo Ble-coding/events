@@ -29,7 +29,7 @@ const GalleryItem = ({ image, title, category, className, type = 'image' }: Gall
   };
 
   return (
-    <Dialog>
+    <Dialog >
       <DialogTrigger asChild>
         <div
           className={cn(

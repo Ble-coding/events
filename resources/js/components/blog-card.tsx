@@ -32,7 +32,7 @@ const BlogCard = ({
   };
 
   return (
-    <div className="bg-white dark:bg-black rounded-xl overflow-hidden shadow-lg card-hover">
+    <div className="bg-white dark:bg-white rounded-xl overflow-hidden shadow-lg card-hover">
       {/* Media (Image ou Vidéo) */}
       <div className="relative h-48">
         {type === 'image' ? (
@@ -63,20 +63,20 @@ const BlogCard = ({
               loop
             />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <Film className="w-10 h-10 text-white opacity-50" />
+              <Film className="w-10 h-10 text-white dark:text-white opacity-50" />
             </div>
           </div>
         )}
 
         {/* Badge Date */}
-        <div className="absolute top-4 left-4 bg-white dark:bg-black text-black dark:text-white rounded-lg px-3 py-1.5 text-sm font-medium flex items-center">
+        <div className="absolute top-4 left-4 bg-white dark:bg-white text-black dark:text-black rounded-lg px-3 py-1.5 text-sm font-medium flex items-center">
           <Calendar className="h-4 w-4 mr-1 text-primary" />
           <span>{new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date))}</span>
         </div>
       </div>
 
       {/* Informations */}
-      <div className="p-5 space-y-2 text-black dark:text-white">
+      <div className="p-5 space-y-2 text-black dark:text-black">
         <h3 className="font-bold text-xl">{title}</h3>
         {categoryName && <p className="paragraph text-sm">{categoryName}</p>}
         <p className="paragraph line-clamp-3" dangerouslySetInnerHTML={{ __html: excerpt }}></p>

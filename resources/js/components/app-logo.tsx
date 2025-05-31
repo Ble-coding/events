@@ -14,7 +14,7 @@ export default function AppLogo() {
     />
   </div>
   <div className="ml-3">
-  <span className="block font-playfair text-guilo text-xs font-medium leading-none">
+  <span className="block font-playfair text-guilo dark:text-black text-xs font-medium leading-none">
     Guil'O Services
   </span>
 </div>

@@ -65,23 +65,31 @@
     color: #EA7A0B !important; /* orange en mode light */
     transition: color 0.3s ease;
   }
-  .nav-link:hover {
-    color: #EA7A0B !important;
-  }
-  .nav-link-active {
-    color: #000 !important; /* noir si actif */
-  }
+
 
   /* === Navigation en mode sombre === */
   .dark .nav-link {
-    color: white !important;
+    color: #EA7A0B !important; /* orange en mode light */
   }
+
+
+  .nav-link:hover {
+    color: #EA7A0B !important;
+  }
+
   .dark .nav-link:hover {
-    color: white !important;
+    color: #EA7A0B !important;
+  }
+
+
+
+  .nav-link-active {
+    color: #000 !important; /* noir si actif */
   }
   .dark .nav-link-active {
-    color: #EA7A0B !important; /* actif orange */
+    color: #000 !important; /* noir si actif */
   }
+
 
 
 /* Light mode — déjà ok */
@@ -97,7 +105,7 @@
   .dark .text-card-title,
   .dark .text-muted-foreground,
   .dark .text-accent {
-    color: white !important;
+    color: #FA9938 !important; /* Orange clair */
   }
   .dark .text-gray-900 {
     color: #111827 !important; /* noir Tailwind par défaut */
@@ -116,7 +124,7 @@
   }
 
   .dark .paragraph {
-    @apply text-white;
+    @apply text-gray-600;
   }
 
 
@@ -166,6 +174,10 @@
 
 /* Utilisation directe sans tailwind.config.js */
 .bg-orange-gk {
+    background-color: #EA7A0B !important;
+  }
+
+  .dark .bg-orange-gk {
     background-color: #EA7A0B !important;
   }
 

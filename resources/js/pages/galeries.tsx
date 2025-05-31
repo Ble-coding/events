@@ -76,8 +76,8 @@ export default function GalleryPage() {
               onClick={() => setFilter(category)}
               className={`px-4 py-2 rounded-full text-sm transition ${
                 filter === category
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80'
+                  ? 'bg-black text-white  dark:bg-black dark:text-white  '
+                  : ' bg-gray-100 text-black  dark:bg-gray-100 dark:text-black '
               }`}
             >
               {category === 'all'

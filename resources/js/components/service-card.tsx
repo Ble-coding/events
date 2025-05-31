@@ -15,30 +15,32 @@ const ServiceCard = ({ title, description, icon, className, features }: ServiceC
     return (
         <Card
           className={cn(
-            "overflow-hidden border border-border/40 bg-card/70 backdrop-blur-sm hover:shadow-md transition-all duration-300 group h-full",
+            "overflow-hidden border dark:border-none border-border/40 bg-card/70  dark:bg-white backdrop-blur-sm hover:shadow-md transition-all duration-300 group h-full",
             className
           )}
         >
           <CardHeader className="pb-3">
             {icon && (
-              <div className="mb-3 w-12 h-12 flex items-center justify-center rounded-md transition-colors duration-300 bg-accent/10 group-hover:bg-accent/20 text-accent dark:bg-white/10 dark:text-white">
+              <div className="mb-3 w-12 h-12 flex items-center justify-center rounded-md transition-colors duration-300 bg-accent/10 group-hover:bg-accent/20
+              dark:group-hover:bg-accent/20
+              text-accent dark:bg-accent/10 dark:text-accent">
                 {icon}
               </div>
             )}
             <Badge
               variant="outline"
-              className="w-fit mb-2 border border-border text-primary dark:text-white dark:border-white/40"
+              className="w-fit mb-2 border border-border text-primary dark:text-primary dark:border"
             >
               Service
             </Badge>
 
-            <CardTitle className="text-xl md:text-2xl font-playfair text-card-title dark:text-white">
+            <CardTitle className="text-xl md:text-2xl font-playfair text-black dark:text-black">
               {title}
             </CardTitle>
           </CardHeader>
 
           <CardContent>
-            <CardDescription className="text-base mb-4 text-muted-foreground dark:text-white">
+            <CardDescription className="text-base mb-4 text-gray-600 dark:text-gray-600">
               {description}
             </CardDescription>
 

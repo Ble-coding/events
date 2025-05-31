@@ -319,7 +319,7 @@ export default function TestimonialSection() {
                 <CardTitle>Liste des témoignages</CardTitle>
                 <div className="pt-2">
                   <Input
-                    placeholder="Rechercher..."
+                    placeholder="Rechercher par nom ou description..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
