@@ -102,7 +102,7 @@ const filteredEvents = useMemo(() => {
       <section className="py-20 md:py-28 text-white">
         <div className="bg-orange-gk container mt-3 p-6">
           <div className="max-w-2xl animate-slide-in">
-            <h1 className="text-playfair text-[60px] leading-tight mb-6">Calendrier d'Événements</h1>
+            <h1 className="text-playfair text-[60px] leading-tight mb-6">Calendrier</h1>
             <p className="text-white/90 text-[20px] mb-8">
             Découvrez nos événements à venir et restez informé de nos actualités.
             </p>

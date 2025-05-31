@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Gallery;
 use App\Models\Event;
 use App\Models\Service;
-use App\Models\hero;
+use App\Models\Hero;
 use App\Models\Testimonial;
 use Inertia\Inertia;
 use App\Models\Contact;
