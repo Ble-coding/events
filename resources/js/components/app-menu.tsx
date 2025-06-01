@@ -85,7 +85,9 @@ export function AppMenu() {
             <Button
             variant="outline"
             size="sm"
-            className="ml-4 border-guilo text-guilo hover:bg-guilo/10"
+            className="ml-4 text-black bg-white border border-gray-100
+      dark:text-black dark:bg-white dark:border-none dark:border-gray-100
+      dark:hover:bg-gray-100/35"
             asChild
             >
             <a href={route('login')} target="_blank">
